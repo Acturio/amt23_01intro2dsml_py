@@ -1,0 +1,6 @@
+book_filename: "amt23_01intro2dsml_py"
+output_dir: 'docs'
+delete_merged_file: true
+language:
+  ui:
+    chapter_name: "Capítulo "
