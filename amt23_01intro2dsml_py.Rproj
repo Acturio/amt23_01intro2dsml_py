@@ -14,6 +14,6 @@ LaTeX: pdfLaTeX
 
 BuildType: Website
 
-PythonType: system
-PythonVersion: 3.11.3
-PythonPath: /opt/homebrew/bin/python3.11
+PythonType: virtualenv
+PythonVersion: 3.10.10
+PythonPath: ~/.virtualenvs/venv_dsml_py3_10/bin/python
