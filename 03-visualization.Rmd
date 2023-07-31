@@ -1,0 +1,528 @@
+::: watermark
+<img src="img/header.png" width="400"/>
+:::
+
+# Visualización
+
+"El análisis exploratorio de datos se refiere al **proceso de realizar investigaciones iniciales sobre los datos** para descubrir patrones, detectar anomalías, probar hipótesis y verificar suposiciones con la ayuda de estadísticas resumidas y representaciones gráficas." [Towards](https://towardsdatascience.com/exploratory-data-analysis-8fc1cb20fd15)
+
+```{r echo=FALSE,fig.align='center'}
+  knitr::include_graphics("img/03-ggplot/01_investigadora.png")
+```
+
+## EDA: Análisis Exploratorio de Datos
+
+Un análisis exploratorio de datos tiene principalmente 5 objetivos:
+
+1.  Maximizar el conocimiento de un conjunto de datos
+2.  Descubrir la estructura subyacente de los datos
+3.  Extraer variables importantes
+4.  Detectar valores atípicos y anomalías
+5.  Probar los supuestos subyacentes
+
+**EDA no es idéntico a los gráficos estadísticos** aunque los dos términos se utilizan casi indistintamente. Los gráficos estadísticos son una colección de técnicas, todas basadas en gráficos y todas centradas en un aspecto de caracterización de datos. EDA abarca un lugar más grande. EDA es una filosofía sobre cómo diseccionar un conjunto de datos; lo que buscamos; cómo nos vemos; y cómo interpretamos.
+
+Los científicos de datos pueden utilizar el análisis exploratorio para garantizar que los resultados que producen sean válidos y aplicables a los resultados y objetivos comerciales deseados.
+
+EDA se utiliza principalmente para ver qué datos pueden revelar más allá del modelado formal o la tarea de prueba de hipótesis y proporciona una mejor comprensión de las variables del conjunto de datos y las relaciones entre ellas. También puede ayudar a determinar si las técnicas estadísticas que está considerando para el análisis de datos son apropiadas.
+
+```{r echo=FALSE,fig.align='center', out.width = "500pt"}
+  knitr::include_graphics("img/03-ggplot/02_meme-iniciar.jpg")
+```
+
+Dependiendo del tipo de variable queremos obtener la siguiente información:
+
+-   **Variables numéricas:**
+
+    -   Tipo de dato: float, integer
+    -   Número de observaciones
+    -   Mean
+    -   Desviación estándar
+    -   Cuartiles: 25%, 50%, 75%
+    -   Valor máximo
+    -   Valor mínimo
+    -   Número de observaciones únicos
+    -   Top 5 observaciones repetidas
+    -   Número de observaciones con valores faltantes
+    -   ¿Hay redondeos?
+
+-   **Variables categóricas**
+
+    -   Número de categorías
+    -   Valor de las categorías
+    -   Moda
+    -   Valores faltantes
+    -   Número de observaciones con valores faltantes
+    -   Proporción de observaciones por categoría
+    -   Top 1, top 2, top 3 (moda 1, moda 2, moda 3)
+    -   Faltas de ortografía ?
+
+-   **Fechas**
+
+    -   Fecha inicio
+    -   Fecha fin
+    -   Huecos en las fechas: sólo tenemos datos entre semana, etc.
+    -   Formatos de fecha (YYYY-MM-DD)
+    -   Tipo de dato: date, time, timestamp
+    -   Número de faltantes (NA)
+    -   Número de observaciones
+
+-   **Texto**
+
+    -   Longitud promedio de cada observación
+    -   Identificar el lenguaje, si es posible
+    -   Longitud mínima de cada observación
+    -   Longitud máxima de cada observación
+    -   Cuartiles de longitud: 25%, 50%, 75%
+
+-   **Coordenadas geoespaciales**
+
+    -   Primero se pone la latitud y luego la longitud
+    -   Primer decimal: 111 kms
+    -   Segundo decimal: 11.1 kms
+    -   Tercer decimal: 1.1 kms
+    -   Cuarto decimal: 11 mts
+    -   Quinto decimal: 1.1 mt
+    -   Sexto decimal: 0.11 mts
+    -   Valores que están cercanos al 100 representan la longitud
+    -   El símbolo en cada coordenada representa si estamos al norte (positivo) o sur (negativo) -en la latitud-, al este (positivo) o al - oeste (negativo) -en la longitud-.
+
+## GEDA: Análisis Exploratorio de Datos Gráficos
+
+Como complemento al EDA podemos realizar un GEDA, que es un análisis exploratorio de los datos apoyándonos de visualizaciones, la visualización de datos no trata de hacer gráficas "bonitas" o "divertidas", ni de simplificar lo complejo. Más bien, trata de aprovechar nuestra gran capacidad de procesamiento visual para exhibir de manera clara aspectos importantes de los datos.
+
+### Lo que no se debe hacer...
+
+```{r echo=FALSE,fig.align='center', out.width = "500pt"}
+  knitr::include_graphics("img/03-ggplot/03_meme-tecnicamente.png")
+```
+
+Fuentes: [WTF Visualizations](https://viz.wtf/) [Flowingdata](https://flowingdata.com/2010/05/14/wait-something-isnt-right-here/)
+
+```{r echo=FALSE,fig.align='center', out.width = "600pt"}
+  knitr::include_graphics("img/03-ggplot/04_bad_viz1.png")
+```
+
+```{r echo=FALSE,fig.align='center', out.width = "700pt"}
+  knitr::include_graphics("img/03-ggplot/05_bad_viz2.png")
+```
+
+```{r echo=FALSE,fig.align='center', out.width = "700pt"}
+  knitr::include_graphics("img/03-ggplot/06_bad_viz3.png")
+```
+
+```{r echo=FALSE,fig.align='center', out.width = "700pt"}
+  knitr::include_graphics("img/03-ggplot/07_bad_viz4.jpg")
+```
+
+```{r echo=FALSE,fig.align='center', out.width = "700pt"}
+  knitr::include_graphics("img/03-ggplot/08_bad_viz5.png")
+```
+
+```{r echo=FALSE,fig.align='center', out.width = "700pt"}
+  knitr::include_graphics("img/03-ggplot/09_bad_viz6.jpg")
+```
+
+### Principios de visualización
+
+-   El objetivo de una visualización es sintetizar información relevante al análisis presentada de manera sencilla y sin ambigüedad. **Lo usamos de apoyo para explicar a una audiencia más amplia que puede no ser tan técnica.**
+
+-   Una gráfica debe reportar el resultado de un análisis detallado, nunca lo reemplaza.
+
+-   No hacer gráficas porque se vean "cool"
+
+-   Antes de hacer una gráfica, debe pensarse en lo que se quiere expresar o representar
+
+-   Existen "reglas" o mejores gráficas para representar cierto tipo de información de acuerdo a los tipos de datos que se tienen o al objetivo se quiere lograr con la visualización. [From Data to Viz](https://www.data-to-viz.com/caveats.html)
+
+-   No utilizar pie charts
+
+
+## Ggplot / plotnine
+
+En *R* se creó una de las mejores librerías para visualizar datos. Su nombre es ggplot. Aunque python tiene sus propias librerías como matplotlib y seaborn, ninguna ha tenido tanto reconocimiento como ggplot en *R*. Por esta razón, **en python se ha desarrollado una librería que simule las ya creadas y aprobadas funciones de gglpot. El nombre de la librería es: plotnine.**
+
+En Ggplot todo funciona a través de capas. Las capas se añaden una sobre otra eligiendo y personalizando las estéticas visuales. En todo momento es posible especificar los colores, grosor, transparencia, formas, etc que cada uno de los gráficos va tomando para formar la imagen general.
+
+### Capas Estéticas
+
+En ggplot2, *aestetics* significa "algo que puedes ver".
+
+Algunos ejemplos son:
+
+-   **Posición** (por ejemplo, los ejes x e y)
+-   **Color** (color "externo")
+-   **Fill** (color de relleno)
+-   **Shape** (forma de puntos)
+-   **Linetype** (tipo de linea)
+-   **Size** (tamaño)
+-   **Alpha** (para la transparencia: los valores más altos tendrían formas opacas y los más bajos, casi transparentes).
+
+Hay que advertir que no todas las estéticas tienen la misma potencia en un gráfico. El ojo humano percibe fácilmente longitudes distintas. Pero tiene problemas para comparar áreas (que es lo que regula la estética size) o intensidades de color. Se recomienda usar las estéticas más potentes para representar las variables más importantes.
+
+Cada tipo de objeto geométrico (geom) solo acepta un subconjunto de todos los aestéticos. Puedes consultar la pagina de ayuda de geom() para ver que aestéticos acepta. El mapeo aestético se hace con la función aes().
+
+### Capas geométricas
+
+Los objetos geométricos son las formas que puede tomar un gráfico. Algunos ejemplos son:
+
+-   Barras (geom_bar(), para las variables univariados discretos o nominales)
+-   Histogramas (geom_hist() para aquellas variables univariadas continuas)
+-   Puntos (geom_point() para scatter plots, gráficos de puntos, etc...)
+-   Lineas (geom_line() para series temporales, lineas de tendencia, etc...)
+-   Cajas (geom_boxplot() para gráficos de cajas)
+-   Un gráfico debe tener al menos un geom, pero no hay limite. Puedes añadir más *geom* usando el signo +.
+
+Una vez añadida una capa al gráfico a este pueden agregarse nuevas capas
+
+```{python, warning=FALSE, message=FALSE, echo=FALSE}
+import warnings
+warnings.filterwarnings("ignore")
+
+import numpy as np
+from sklearn import datasets
+from plotnine import *
+
+# import some data to play with
+data = datasets.load_iris()
+
+iris = (pd.DataFrame(
+ data = np.c_[data['data'], data['target']],
+ columns= ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']) >>
+ mutate(species_cat = case_when(_, {
+   _.species == 0: "setosa",
+   _.species == 1: "versicolor",
+   True: "virginica"
+  }))
+  )
+iris.head()
+
+
+(
+ ggplot(iris, aes(x = "sepal_length", y = "sepal_width", color = "species_cat")) +
+   geom_point() +
+   ggtitle("Gráficos de Ggplot en python")
+)
+
+```
+
+
+```{python, warning=FALSE, message=FALSE}
+(
+ iris >>
+  ggplot(aes(x = "sepal_length", y = "sepal_width", color = "species_cat")) + 
+  geom_point() + 
+  geom_smooth()
+)
+```
+
+### Facetas
+
+Muchos de los gráficos que pueden generarse con los elementos anteriores pueden reproducirse usando los gráficos tradicionales de R, pero no los que usan facetas, que pueden permitirnos explorar las variables de diferente forma, por ejemplo:
+
+```{python, warning=FALSE, message=FALSE}
+(
+ ggplot(iris, aes(x = "sepal_length", y = "sepal_width", color = "species_cat")) + 
+  geom_point() + geom_smooth(method = "lm") + 
+  facet_wrap("species_cat")
+)
+```
+
+crea tres gráficos dispuestos horizontalmente que comparan la relación entre la anchura y la longitud del pétalo de las tres especies de iris. Una característica de estos gráficos, que es crítica para poder hacer comparaciones adecuadas, es que comparten ejes.
+
+### Más sobre estéticas
+
+Para los ejercicios en clase utilizaremos el set de datos: Diamonds:
+
+```{python}
+from plotnine import data as p9d
+
+diamonds = p9d.diamonds
+diamonds
+```
+
+
+**Descripción** Un conjunto de datos que contiene los precios y otros atributos de casi 54.000 diamantes. Las variables son las siguientes:
+
+-   **price**: precio en dólares estadounidenses ( \$ 326 -  \$ 18,823)
+-   **carat**: peso del diamante (0.2--5.01)
+-   **cut**: calidad del corte (Regular, Bueno, Muy Bueno, Premium, Ideal)
+-   **color**: color del diamante, de D (mejor) a J (peor)
+-   **clarity**: una medida de la claridad del diamante (I1 (peor), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (mejor))
+-   **x**: longitud en mm (0-10,74)
+-   **y**: ancho en mm (0--58,9) width in mm (0--58.9)
+-   **z**: profundidad en mm (0--31,8)
+-   **depth** porcentaje de profundidad total = z / media (x, y) = 2 \* z / (x + y) (43--79)
+-   **table**: ancho de la parte superior del diamante en relación con el punto más ancho (43--95)
+
+Ejemplo práctico:
+
+```{r, warning=FALSE, message= F, echo = FALSE, eval=T}
+
+library(dplyr)
+library(codehover)
+library(htmltools)
+
+result <- ch_int(type = "incremental") %>% 
+  ch_row(text = "diamonds >> ggplot() + ",
+         img = "./img/03-ggplot/10_diamonds-0.png") %>% 
+  ch_row(text = " <tab1> aes(x = cut_number('carat', 5), y = 'price') + </tab1>",
+         img = "./img/03-ggplot/11_diamonds-1.png") %>% 
+  ch_row(text = " <tab1> geom_boxplot() + </tab1>",
+         img = "./img/03-ggplot/12_diamonds-2.png") %>%   
+  ch_row(text = " <tab1> aes(color = 'cut') + </tab1>",
+         img = "./img/03-ggplot/13_diamonds-3.png") %>% 
+  ch_row(text = " <tab1> labs(title = 'Distribución de precio por categoría de corte') + </tab1>",
+         img = "./img/03-ggplot/14_diamonds-4.png") %>%   
+  ch_row(text = " <tab1> labs(caption = 'Data source:Diamont set') + </tab1>",
+         img = "./img/03-ggplot/15_diamonds-5.png") %>% 
+  ch_row(text = " <tab1> labs(x = 'Peso del diamante') + </tab1> ",
+         img = "./img/03-ggplot/16_diamonds-6.png") %>%
+  ch_row(text = " <tab1> labs(y = 'Precio') + </tab1>",
+         img = "./img/03-ggplot/17_diamonds-7.png") %>% 
+  ch_row(text = " <tab1> guides(color = guide_legend(title = 'Calidad del corte')) + </tab1>",
+         img = "./img/03-ggplot/18_diamonds-8.png") %>% 
+  ch_row(text = " <tab1> ylim(0, 20000) </tab1>",
+         img = "./img/03-ggplot/19_diamonds-9.png") %>% 
+  ch_out(img = "./img/03-ggplot/20_diamonds-10.png")
+
+htmltools::HTML(result)
+```
+
+
+## Análisis univariado
+
+El análisis univariado tiene como objetivo conocer la calidad y distribución de los datos. Se busca conocer medidas de tendencia central, variación promedio, cantidad de valores perdidos, etc. Es vital conocer los datos y su calidad antes de usarlos.
+
+### Variables numéricas
+
+Los **histogramas** son gráficas de barras que se obtienen a partir de tablas de frecuencias, donde cada barra se escala según la frecuencia relativa entre el ancho del intervalo de clase correspondiente.
+
+Un **histograma** muestra la acumulación ó tendencia, la variabilidad o dispersión y la forma de la distribución.
+
+El **Diagrama de Caja** y bigotes un tipo de gráfico que muestra un resumen de una gran cantidad de datos en cinco medidas descriptivas, además de intuir su morfología y simetría.
+
+Este tipo de gráficos nos permite identificar valores atípicos y comparar distribuciones. Además de conocer de una forma cómoda y rápida como el 50% de los valores centrales se distribuyen.
+
+Se puede detectar rápidamente los siguientes valores:
+
+-   Primer cuartil: el 25% de los valores son menores o igual a este valor (punto 2 en el gráfico anterior).
+
+-   Mediana o Segundo Cuartil: Divide en dos partes iguales la distribución. De forma que el 50% de los valores son menores o igual a este valor (punto 3 en el gráfico siguiente).
+
+-   Tercer cuartil: el 75% de los valores son menores o igual a este valor (punto 4 en el gráfico siguiente).
+
+-   Rango Intercuartílico (RIC): Diferencia entre el valor del tercer cuartil y el primer cuartil.
+
+**Tip:** *El segmento que divide la caja en dos partes es la mediana (punto 3 del gráfico), que facilitará la comprensión de si la distribución es simétrica o asimétrica, si la mediana se sitúa en el centro de la caja entonces la distribución es simétrica y tanto la media, mediana y moda coinciden.*
+
+**Precio**
+
+```{python}
+from mizani.formatters import comma_format, dollar_format
+
+(
+diamonds >>
+  ggplot(aes(x = "price")) +
+  geom_histogram(color = "pink", fill = "purple", bins=30) +
+  scale_x_continuous(labels=dollar_format()) + 
+  scale_y_continuous(labels=comma_format()) + 
+  ggtitle("Distribución d eprecio")
+)
+```
+
+```{python}
+(
+ diamonds >>
+  ggplot(aes(x = "price")) +
+  geom_histogram(aes(y='stat(density)'), bins = 30, fill = 'blue', color = "white") +
+  geom_density(colour = "black", size = 1)
+)
+```
+
+
+```{python}
+(
+diamonds >>
+ ggplot() +
+ geom_boxplot(aes(x = 0, y = "price"), color= "blue", fill= "lightblue") +
+ scale_y_continuous(labels = dollar_format(prefix='$', digits=0, big_mark=',')) +
+ theme(axis_text_x=element_blank()) +
+ ggtitle("Distribución de precio")
+)
+```
+
+
+
+**Peso del diamante**
+
+```{python}
+(
+diamonds >>
+ ggplot(aes(x = 0, y = "carat")) +
+ geom_boxplot(color= "purple", fill= "pink", alpha = 0.3) +
+ scale_y_continuous(labels = comma_format(digits=1)) +
+ theme(axis_text_y=element_blank()) +
+ coord_flip() +
+ ggtitle("Distribución del peso de los diamantes")
+)
+```
+
+### Variables nominales/categóricas
+
+**Calidad de corte**
+
+```{python, warning=FALSE, message=FALSE}
+
+(
+ diamonds >> 
+  ggplot( aes( x = "cut")) + 
+  geom_bar( color= "darkblue", fill= "cyan", alpha= 0.7) +
+  scale_y_continuous(labels = comma_format()) +
+  ggtitle("Distribución de calidad de corte") +
+  theme_dark()
+)
+
+```
+
+**Claridad**
+
+```{python, warning=FALSE, message=FALSE}
+
+(
+diamonds >> 
+  ggplot( aes( x = "clarity")) + 
+  geom_bar( fill= "darkblue", color= "black", alpha= 0.7) +
+  geom_text(
+   aes(label=after_stat('count'), group=1),
+     stat='count',
+     nudge_x=0,
+     nudge_y=0.125,
+     va='bottom',
+     format_string='{:,.0f}') +
+  scale_y_continuous(labels = comma_format()) +
+  ggtitle("Distribución claridad") 
+)
+```
+
+
+```{python}
+(
+diamonds >> 
+  ggplot( aes( x = "clarity")) + 
+  geom_bar( fill= "darkblue", color= "black", alpha= 0.9) +
+  geom_text(
+   aes(label=after_stat('count / sum(count) * 100'), group=1),
+     color = "white",
+     stat='count',
+     va='bottom',
+     ha='right',
+     format_string='{:.1f}%') +
+  scale_y_continuous(labels = comma_format()) +
+  ggtitle("Distribución claridad") +
+  coord_flip() 
+)
+```
+
+
+## Análisis multivariado
+
+Un buen análisis de datos, requiere del análisis conjunto de variables. Una sola variable es importante de analizar en cuanto a su distribución y calidad, no obstante, no dice mucho al analizarse por sí sola. Es por ello, que es indispensable analizar la covariabilidad y dependencia entre los distintos atributos de la información.
+
+En el análisis multivariado, se busca comparar la información haciendo contrastes de colores, formas, tamaños, paneles, etc.
+
+**Precio vs Calidad del corte**
+
+```{python, warning=FALSE, message=FALSE}
+(
+diamonds >> 
+  ggplot(aes(y = "price", x = "cut", color = "cut"))  + 
+  geom_jitter(size = 0.3, alpha = 0.3)
+)
+```
+
+
+```{python, warning=FALSE, message=FALSE}
+(
+diamonds >> 
+  ggplot(aes(y = "price", x = "cut", color = "cut"))  + 
+  geom_boxplot(size=1, alpha= 0.3)
+)
+```
+
+```{python, warning=FALSE, message=FALSE}
+(
+diamonds >> 
+  ggplot(aes(x = "price" ,fill = "cut"))  + 
+  geom_histogram(position = 'identity', alpha = 0.5)
+)
+```
+
+```{python, warning=FALSE, message=FALSE}
+(
+diamonds >> 
+  ggplot(aes(x= "price" ,fill = "cut"))  + 
+  geom_histogram(position = 'identity', alpha = 0.5) +
+  facet_wrap("cut", ncol = 1)
+)
+```
+
+```{python, warning=FALSE, message=FALSE}
+(
+diamonds >> 
+  ggplot( aes(x = "carat", y = "price")) +
+  geom_point(aes(color = "clarity"), size = 0.5, alpha = 0.3 ) +
+  geom_smooth() +
+  ylim(0, 20000)
+)
+```
+
+```{python, warning=FALSE, message=FALSE}
+(
+diamonds >> 
+  ggplot( aes(x = "carat", y = "price")) +
+  geom_point(aes(color = "clarity"), size = 0.3, alpha = 0.3 ) +
+  facet_wrap("clarity")+
+  geom_smooth() +
+  ylim(0, 20000)
+)
+```
+
+### Ejercicios {-}
+
+* Realiza 3 gráficas miltivariadas (involucra 4 o 5 variables). 
+
+* Interpreta resultados
+
+
+
+### ¡ Warning ! {.unnumbered}
+
+Nunca se debe olvidar que debemos de analizar los datos de manera objetiva, nuestro criterio sobre un problema o negocio no debe de tener sesgos sobre lo que "nos gustaría encontrar en los datos" o lo "que creemos que debe pasar"....
+
+```{r echo=FALSE,fig.align='center', out.width = "500pt"}
+  knitr::include_graphics("img/03-ggplot/21_datosgato.jpeg")
+```
+
+## Reporte interactivos
+
+Es posible automatizar reportes de análisis de datos. Los reportes pueden realizarse tanto en formato estático (.docx y .pdf) como en formato interactivo (.html).
+
+Existen diversos manuales sumamente amplios que permiten conocer las múltiples funcionalidades de las librerías que hacen posible la creación de documentos.
+
+Para el caso de documentos, existe la librería *Quarto*, la cual crea un documento estático o interactivo, mientras que para reportes en presentaciones existe la librería *Xaringan*, la cual sustituye a las presentaciones de *power point*.
+
+Es importante tomar en cuenta el balance entre complejidad y funcionalidad. Si bien es cierto que a través de esta herramienta pueden automatizarse reportes que consideren los resultados salientes de *python*, es importante considerar que las personas que puedan editar tal presentación serán limitadas.
+
+A continuación se enlistan los links de tutoriales para crear los documentos mencionados:
+
+-   [Quarto](https://bookdown.org/yihui/rmarkdown/)
+
+-   [Xaringan](https://bookdown.org/yihui/rmarkdown/xaringan.html)
+
+-   [Otros lenguajes](https://bookdown.org/yihui/rmarkdown/language-engines.html)
+
+-   [Tablas estáticas](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+
+-   [Tablas interactivas](https://rstudio.github.io/DT/)
+
