@@ -621,7 +621,7 @@ Si se pretenden hacer predicciones de eventos futuros (dentro de un mes), al mom
 
 
 
-## Pre-procesamiento de datos
+## Feature engineering
 
 ```{r, include=FALSE}
 library(tidyverse)
@@ -649,13 +649,13 @@ los riesgos de agregar sesgos o grandes efectos de errores metodológicos.
 
 Como punto de partida para nuestro flujo de trabajo de aprendizaje automático,
 necesitaremos datos de entrada. En la mayoría de los casos, estos datos se
-cargarán y almacenarán en forma de *data frames* o *tibbles* en R. Incluirán una
+cargarán y almacenarán en forma de *data frames*. Incluirán una
 o varias variables predictivas y, en caso de aprendizaje supervisado, también
 incluirán un resultado conocido.
 
 Sin embargo, no todos los modelos pueden lidiar con diferentes problemas de
 datos y, a menudo, necesitamos transformar los datos para obtener el mejor
-rendimiento posible del modelo. Este proceso se denomina pre-procesamiento y
+rendimiento posible del modelo. Este proceso se denomina **pre-procesamiento** y
 puede incluir una amplia gama de pasos, como:
 
 -   **Dicotomización de variables:** Variables cualitativas que solo pueden
@@ -719,9 +719,7 @@ Sin embargo, dependiendo de los pasos de pre-procesamiento elegidos, el
 rendimiento del modelo puede cambiar significativamente en pasos posteriores.
 Por lo tanto, es muy común probar varias configuraciones.
 
-## Ingeniería de datos
-
-La ingeniería de datos abarca actividades que dan formato a los valores de los
+**La ingeniería de datos** abarca actividades que dan formato a los valores de los
 predictores para que se puedan utilizar de manera eficaz para nuestro modelo.
 Esto incluye transformaciones y codificaciones de los datos para representar
 mejor sus características importantes.
@@ -770,12 +768,391 @@ contrario, los valores de distancia estarían sesgados por la escala de cada
 columna.
 
 
+## Pipeline
+
+Se le conoce como pipeline, workflow o recipe a una serie de instrucciones para el procesamiento de datos. El pipeline define los pasos sin ejecutarlos inmediatamente; es sólo una especificación de lo que se debe hacer cada vez que se entrene el modelo. Este procesamiento de datos se realiza en cada conjunto de entrenamiento, ya sea 1 solo o varios como el caso de LOOCV o KFCV. 
+
+**Ventajas de usar un pipeline:**
+
+* Los cálculos se pueden reciclar entre modelos ya que no están estrechamente acoplados a la función de modelado.
+
+* Una receta permite un conjunto más amplio de opciones de procesamiento de datos que las que pueden ofrecer las fórmulas.
+
+* La sintaxis puede ser muy compacta.
+
+* Todo el procesamiento de datos se puede capturar en un solo objeto en lugar de tener scripts que se repiten o incluso se distribuyen en diferentes archivos.
+
+
+La siguiente sección explica la estructura y flujo de transformaciones:
+
+```{python, eval=FALSE}
+from sklearn.pipeline import Pipeline
+
+# Crear el pipeline con las mismas transformaciones
+pipeline = Pipeline([
+    ('transformer_1', transformer1),
+    ('transformer_2', transformer2),
+    ('transformer_3', transformer3),
+    ('transformer_4', transformer4),
+    .
+    .
+    .
+    ('transformer_n_1', transformer_n_1),
+    ('transformer_n', transformer_n)
+])
+
+# Ajustar el pipeline al conjunto de entrenamiento
+pipeline.fit(X_train)
+
+# Aplicar el pipeline al conjunto de prueba
+X_test_transformed = pipeline.transform(X_test)
+```
+
+Existe otra función que ayuda a la creación de un pipeline, su nombre es: `make_pipeline`.
+
+Tanto la función Pipeline como la función make_pipeline en scikit-learn son utilizadas para construir pipelines de procesamiento y modelado. Sin embargo, tienen algunas diferencias clave en cuanto a cómo se definen y gestionan los nombres de los pasos en el pipeline:
+
+* **Pipeline:** Con la función Pipeline, debes proporcionar explícitamente un nombre para cada paso en el pipeline. Estos nombres son necesarios para acceder a los atributos específicos de cada paso y para referirse a ellos al realizar tareas como la búsqueda de hiperparámetros.
+
+Sintaxis:
+
+La sintaxis de la función Pipeline requiere que proporciones una lista de tuplas donde cada tupla consiste en un nombre de paso y una instancia del estimador o transformador correspondiente. 
+
+```{python, eval= FALSE}
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.svm import SVC
+
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('pca', PCA(n_components=2)),
+    ('svm', SVC())
+])
+```
+
+* **make_pipeline:** Con la función make_pipeline, los nombres de los pasos se generan automáticamente utilizando los nombres de las clases en minúsculas. Esto significa que no tienes que proporcionar nombres explícitos para cada paso, lo que puede ser conveniente para flujos de trabajo simples donde los nombres no son críticos.
+
+Sintaxis:
+
+La función make_pipeline toma una serie de argumentos que son simplemente las instancias de los estimadores o transformadores que deseas encadenar en el pipeline. Los nombres de los pasos se generan automáticamente.
+
+```{python, eval=FALSE}
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.svm import SVC
+
+pipeline = make_pipeline(
+    StandardScaler(),
+    PCA(n_components=2),
+    SVC()
+)
+```
+
+
+A continuación se muestran distintos ejemplos de transformaciones realizadas comúnmente en el pre-procesamiento de modelos predictivos. Como ejemplo, utilizaremos el subconjunto de predictores disponibles en los datos de vivienda: `Ames`
+
+
+En cuanto a las transformaciones posibles, existe una gran cantidad de funciones que soportan este proceso. En esta sección se muestran algunas de las transformación más comunes, entre ellas:
+
+-   Normalización
+-   Dicotomización
+-   Creación de nuevas columnas
+-   Datos faltantes
+-   Imputaciones
+-   Interacciones
+-   Etc.
+
+### Normalizar columnas numéricas
+
+Quizá la transformación numérica más usada en todos los modelos es la estandarización o normalización de variables numéricas. **Este proceso se realiza para homologar la escala de las variables numéricas**, de modo que no predomine una sobre otra debido a la diferencia de magnitudes o escalas. Este proceso se tiene de fondo el siguiente proceso estadístico:
+
+$$Z=\frac{X-\hat{\mu}_x}{\hat{\sigma}_x}$$
+
+**Donde:**
+
+-   X = Es una variable o columna numérica
+
+-   $\hat{\mu}_x$ = Es la estimación de la media de la variable *X*
+
+-   $\hat{\sigma}_x$ = Es la estimación de la desviación estándar de la variable
+    *X*
+
+```{python}
+from sklearn import preprocessing
+import numpy as np
+
+X_train = np.array([[ 1., -1.,  5.],
+                    [ 0.,  0., 10.],
+                    [ 1., -1.,  5.],
+                    [ 0.,  0., 10.],
+                    [ 1., -1.,  5.],
+                    [ 0.,  0., 10.],
+                    [ 1., -1.,  5.],
+                    [ 0.,  0., 10]])
+
+scaler = preprocessing.StandardScaler().fit(X_train)
+
+scaler.mean_
+
+scaler.scale_
+
+X_scaled = scaler.transform(X_train)
+X_scaled
+```
+
+Si deseamos ahora calcular la media y desviación de los datos ya escalados, obtenemos lo siguiente:
+
+```{python}
+X_scaled.mean(axis=0)
+
+X_scaled.std(axis=0)
+```
+
+::: {.infobox .important data-latex="{important}"}
+**¡¡ R E C O R D A R !!**
+
+Los transformadores que se incluyen en el pipeline se ajustan al conjunto de entrenamiento utilizando el método **.fit()**, lo que permite que las transformaciones se calculen basándose en los datos de entrenamiento. 
+
+Luego, aplicamos el mismo pipeline ajustado al conjunto de prueba utilizando el método **.transform()** para obtener los datos transformados de manera coherente.
+:::
+
+```{python, highlight=TRUE}
+X_test = np.array([[ 0., 1.,  1.],
+                   [ 2., 0.,  1.],
+                   [ 0., 1.,  1.]])
+
+X_test_scaled = scaler.transform(X_test)
+X_test_scaled
+```
+
+
+
+
+### Dicotomización de categorías
+
+Otra transformación necesaria en la mayoría de los modelos predictivos es la creación de las variables dummy. Se mencionó anteriormente que los modelos requieren de una matriz numérica de características explicativas que permita calcular patrones estadísticos para predecir la variable de respuesta. El proceso de dicotomización consiste en crear una variable dicotómica por cada categoría de una columna con valores nominales.
+
+
+```{python}
+from sklearn.preprocessing import OneHotEncoder
+
+# Datos de entrenamiento (reemplaza 'X_train_cat' con tus datos)
+X_train_cat = np.array([['A'], ['B'], ['A'], ['C'], ['B'], ['B']])
+
+# Crear una instancia de OneHotEncoder
+encoder = OneHotEncoder(drop=None, handle_unknown='ignore', sparse_output=False)
+
+# Ajustar y transformar el encoder en los datos de entrenamiento
+X_train_encoded = encoder.fit_transform(X_train_cat)
+X_train_encoded
+
+# Datos de prueba (reemplaza 'X_test_cat' con tus datos)
+X_test_cat = np.array([['A'], ['C'], ['B']])
+
+# Transformar los datos de prueba utilizando el encoder ajustado
+X_test_encoded = encoder.transform(X_test_cat)
+X_test_encoded
+
+```
+
+
+
+### Imputación de datos faltantes
+
+La función `SimpleImputer` crea una imputación sobre los datos faltantes. Las imputaciones o sustituciones más comunes son realizadas a través de medidas de tendencia central tales como la media y mediana. Para poder usar una transformación distinta a cada una de las columnas vamos a hacer uso de una función auxiliar muuuuuuy importante. Su nombre es: `ColumnTransformer`.
+
+El **ColumnTransformer** es una clase en scikit-learn que permite aplicar diferentes transformaciones a diferentes columnas o conjuntos de columnas en los datos de manera independiente y luego combinar los resultados en un solo conjunto de datos. 
+
+El **ColumnTransformer** es útil cuando tienes un conjunto de datos que contiene diferentes tipos de características (numéricas, categóricas, texto, etc.) y deseas aplicar diferentes transformaciones a cada tipo de característica de manera eficiente.
+
+A continuación se muestra un ejemplo para el **caso numérico**:
+
+```{python}
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+
+# Datos de ejemplo con valores faltantes (reemplaza con tus datos)
+data = np.array([[1, 1, 3, np.nan],
+                 [2, 2, np.nan, 1],
+                 [1, np.nan, 6, 5],
+                 [2, 3, 6, 5],
+                 [np.nan, 4, 9, 0]])
+
+data
+```
+
+```{python}
+# Definir las estrategias de imputación
+
+imputer_mean = SimpleImputer(strategy='mean')  # Imputación con la media
+imputer_median = SimpleImputer(strategy='median')  # Imputación con la mediana
+imputer_mode = SimpleImputer(strategy='most_frequent')  # Imputación con la moda
+imputer_arbitrary = SimpleImputer(strategy='constant', fill_value=0)  # Imputación constante
+
+# Crear un ColumnTransformer para aplicar diferentes estrategias a diferentes columnas
+column_transformer = ColumnTransformer(transformers=[
+    ('mean_imputer', imputer_mean, [0]),
+    ('median_imputer', imputer_median, [1]),
+    ('mode_imputer', imputer_mode, [2]),
+    ('arbitrary_imputer', imputer_arbitrary, [3]) 
+])
+
+# Crear el pipeline con el ColumnTransformer
+pipeline = Pipeline(steps=[
+    ('column_transformer', column_transformer)
+])
+
+# Aplicar el pipeline a los datos
+imputed_data = pipeline.fit_transform(data)
+imputed_data
+```
+
+A continuación se muestra un ejemplo para el **caso categórico**:
+
+
+```{python}
+import pandas as pd
+from sklearn.impute import SimpleImputer
+
+# Datos de ejemplo con valores faltantes (reemplaza con tus datos)
+data = pd.DataFrame({
+    'Columna1': ['A', 'A', 'A', np.nan, 'B'],
+    'Columna2': ['X', np.nan, 'Y', 'Z', 'Z']
+})
+
+# Definir las estrategias de imputación
+imputer_most_frequent = SimpleImputer(strategy='most_frequent')
+imputer_constant = SimpleImputer(strategy='constant', fill_value='Unknown')
+
+# Crear un ColumnTransformer para aplicar diferentes estrategias a diferentes columnas
+column_transformer = ColumnTransformer(transformers=[
+    ('most_frequent_imputer', imputer_most_frequent, ['Columna1']),  
+    ('constant_imputer', imputer_constant, ['Columna2']) 
+])
+
+# Aplicar el ColumnTransformer a los datos
+imputed_data = column_transformer.fit_transform(data)
+imputed_data
+```
 
 
 
 
 
+```{python, eval=FALSE}
+from sklearn.preprocessing import FunctionTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
 
+# Datos de ejemplo en forma de DataFrame (reemplaza con tus datos)
+data = pd.DataFrame({
+    'Column1': [1, 5, 9],
+    'Column2': [2, 6, 10],
+    'Column3': [3, 7, 11],
+    'Column4': [4, 8, 12]
+})
+
+# Definir una función personalizada que suma dos columnas y divide por una tercera
+def custom_function(X, col1, col2, col3):
+    result = (X[col1] + X[col2])/ X[col3]
+    return result.values.reshape(-1, 1)
+
+# Nombres de las columnas a operar
+col1 = 'Column1'
+col2 = 'Column2'
+col3 = 'Column3'
+
+# Crear el transformador de función personalizada
+custom_transformer = FunctionTransformer(
+ custom_function, 
+ validate=False, kw_args={
+    'col1': col1,
+    'col2': col2,
+    'col3': col3
+})
+
+# Crear un ColumnTransformer para aplicar el transformador personalizado a las columnas
+column_transformer = ColumnTransformer(transformers=[
+    ('custom', custom_transformer, [col1, col2, col3])  # Indica las columnas a transformar
+])
+
+# Crear el pipeline con el ColumnTransformer
+pipeline = Pipeline(steps=[
+    ('column_transformer', column_transformer)
+])
+
+# Aplicar el pipeline a los datos
+new_column = pipeline.fit_transform(data)
+new_column
+```
+
+
+
+
+
+```{python}
+import pandas as pd
+from sklearn.preprocessing import FunctionTransformer
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# Datos de ejemplo en forma de DataFrame (reemplaza con tus datos)
+data = pd.DataFrame({
+    'Column1': [1, 5, 9, 3, 7],
+    'Column2': [2, 6, 10, 4, 8],
+    'Column3': [3, 7, 11, 5, 9],
+    'Column4': [4, 8, 12, 6, 10]
+})
+
+# Definir una función personalizada que suma dos columnas y divide por una tercera
+def custom_function(X, col1, col2, col3):
+    result = (X[col1] + X[col2])/ X[col3]
+    return result.values.reshape(-1, 1)
+
+# Nombres de las columnas a operar
+col1 = 'Column1'
+col2 = 'Column2'
+col3 = 'Column3'
+
+# Crear el transformador de función personalizada
+custom_transformer = FunctionTransformer(custom_function, validate=False, kw_args={
+    'col1': col1,
+    'col2': col2,
+    'col3': col3
+})
+
+# Crear un ColumnTransformer para aplicar el transformador personalizado a las columnas
+column_transformer = ColumnTransformer(transformers=[
+    ('custom', custom_transformer, [col1, col2, col3])  # Indica las columnas a transformar
+], remainder='passthrough')  # Mantener las columnas no transformadas
+
+# Crear el pipeline con el ColumnTransformer
+pipeline = Pipeline(steps=[
+    ('column_transformer', column_transformer)
+])
+
+
+# Aplicar el pipeline a los datos de entrenamiento
+X_train_transformed = pipeline.fit_transform(data)
+
+# Aplicar el pipeline a los datos de prueba
+X_test_transformed = pipeline.transform(data)
+
+# Crear y entrenar un modelo de ML (por ejemplo, Regresión Lineal) en los datos de entrenamiento transformados
+model = LinearRegression()
+model.fit(X_train_transformed, y_train)
+
+# Realizar predicciones en el conjunto de prueba transformado
+y_pred = model.predict(X_test_transformed)
+
+# Imprimir las predicciones
+print(y_pred)
+```
 
 
 
