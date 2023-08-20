@@ -913,7 +913,7 @@ X_scaled.std(axis=0)
 ::: {.infobox .important data-latex="{important}"}
 **¡¡ R E C O R D A R !!**
 
-Los transformadores que se incluyen en el pipeline se ajustan al conjunto de entrenamiento utilizando el método **.fit()**, lo que permite que las transformaciones se calculen basándose en los datos de entrenamiento. 
+Los transformadores que se incluyen en el pipeline se ajustan al conjunto de entrenamiento utilizando el método **.fit()**, lo que permite que las transformaciones posteriores se calculen basándose en los datos de entrenamiento. 
 
 Luego, aplicamos el mismo pipeline ajustado al conjunto de prueba utilizando el método **.transform()** para obtener los datos transformados de manera coherente.
 :::
@@ -938,23 +938,29 @@ Otra transformación necesaria en la mayoría de los modelos predictivos es la c
 ```{python}
 from sklearn.preprocessing import OneHotEncoder
 
-# Datos de entrenamiento (reemplaza 'X_train_cat' con tus datos)
-X_train_cat = np.array([['A'], ['B'], ['A'], ['C'], ['B'], ['B']])
+# Datos de entrenamiento
+
+X_train_cat = pd.DataFrame({
+ "Cat": ['A', 'B', 'A', 'C', 'B', 'B']
+})
+X_train_cat
 
 # Crear una instancia de OneHotEncoder
 encoder = OneHotEncoder(drop=None, handle_unknown='ignore', sparse_output=False)
 
 # Ajustar y transformar el encoder en los datos de entrenamiento
 X_train_encoded = encoder.fit_transform(X_train_cat)
+X_train_encoded = pd.DataFrame(X_train_encoded, columns = ['A', 'B', 'C'])
 X_train_encoded
 
-# Datos de prueba (reemplaza 'X_test_cat' con tus datos)
-X_test_cat = np.array([['A'], ['C'], ['B']])
+# Datos de prueba
+X_test_cat = pd.DataFrame({
+ "Cat": ['A', 'C', 'B']
+})
 
 # Transformar los datos de prueba utilizando el encoder ajustado
-X_test_encoded = encoder.transform(X_test_cat)
+X_test_encoded = pd.DataFrame(encoder.transform(X_test_cat), columns = ['A', 'B', 'C'])
 X_test_encoded
-
 ```
 
 
@@ -965,16 +971,16 @@ La función `SimpleImputer` crea una imputación sobre los datos faltantes. Las 
 
 El **ColumnTransformer** es una clase en scikit-learn que permite aplicar diferentes transformaciones a diferentes columnas o conjuntos de columnas en los datos de manera independiente y luego combinar los resultados en un solo conjunto de datos. 
 
-El **ColumnTransformer** es útil cuando tienes un conjunto de datos que contiene diferentes tipos de características (numéricas, categóricas, texto, etc.) y deseas aplicar diferentes transformaciones a cada tipo de característica de manera eficiente.
+Es útil cuando tienes un conjunto de datos que contiene diferentes tipos de características (numéricas, categóricas, texto, etc.) y deseas aplicar diferentes transformaciones a cada tipo de característica de manera eficiente.
 
-A continuación se muestra un ejemplo para el **caso numérico**:
+#### Caso numérico: {-}
 
 ```{python}
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 
-# Datos de ejemplo con valores faltantes (reemplaza con tus datos)
+# Datos de ejemplo con valores faltantes
 data = np.array([[1, 1, 3, np.nan],
                  [2, 2, np.nan, 1],
                  [1, np.nan, 6, 5],
@@ -1010,14 +1016,13 @@ imputed_data = pipeline.fit_transform(data)
 imputed_data
 ```
 
-A continuación se muestra un ejemplo para el **caso categórico**:
-
+#### Caso categórico: {-}
 
 ```{python}
 import pandas as pd
 from sklearn.impute import SimpleImputer
 
-# Datos de ejemplo con valores faltantes (reemplaza con tus datos)
+# Datos de ejemplo con valores faltantes
 data = pd.DataFrame({
     'Columna1': ['A', 'A', 'A', np.nan, 'B'],
     'Columna2': ['X', np.nan, 'Y', 'Z', 'Z']
@@ -1039,20 +1044,22 @@ imputed_data
 ```
 
 
+### Transformaciones personalizadas
 
+Podría pensarse en una infinidad de transformaciones a aplicar a los datos. Transformaciones de escala, de suavizamiento, estadísticas e incluso personalizadas. Existen métodos simples y métodos avanzados para realizar este proceso. A continuación, se muestra el método simple:
 
-
-```{python, eval=FALSE}
-from sklearn.preprocessing import FunctionTransformer
-from sklearn.pipeline import Pipeline
+```{python}
+import pandas as pd
+from sklearn.preprocessing import FunctionTransformer, StandardScaler
 from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
-# Datos de ejemplo en forma de DataFrame (reemplaza con tus datos)
+# Datos de ejemplo en forma de DataFrame
 data = pd.DataFrame({
-    'Column1': [1, 5, 9],
-    'Column2': [2, 6, 10],
-    'Column3': [3, 7, 11],
-    'Column4': [4, 8, 12]
+    'Column1': [-1, -5,   0,  3,  7],
+    'Column2': [ 2,  6,  10, -4, -8],
+    'Column3': [-3,  7, -11,  5, -9],
+    'Column4': [ 4,  8,  12,  6, 10]
 })
 
 # Definir una función personalizada que suma dos columnas y divide por una tercera
@@ -1068,95 +1075,73 @@ col3 = 'Column3'
 # Crear el transformador de función personalizada
 custom_transformer = FunctionTransformer(
  custom_function, 
- validate=False, kw_args={
-    'col1': col1,
-    'col2': col2,
-    'col3': col3
-})
+ validate=False, 
+ feature_names_out = 'one-to-one',
+ kw_args={
+  'col1': col1, 'col2': col2, 'col3': col3
+ })
 
 # Crear un ColumnTransformer para aplicar el transformador personalizado a las columnas
-column_transformer = ColumnTransformer(transformers=[
-    ('custom', custom_transformer, [col1, col2, col3])  # Indica las columnas a transformar
-])
+column_transformer = ColumnTransformer(
+ transformers=[
+    ('custom', custom_transformer, [col1, col2, col3]),  # Indica las columnas a transformar
+    ('scaler', StandardScaler(), [col1, col2, col3])], 
+ remainder='passthrough',
+ verbose = False
+ )  # Mantener las columnas no transformadas
 
-# Crear el pipeline con el ColumnTransformer
-pipeline = Pipeline(steps=[
-    ('column_transformer', column_transformer)
-])
+column_transformer.fit(data) 
+transformed = column_transformer.transform(data) 
+transformed
 
-# Aplicar el pipeline a los datos
-new_column = pipeline.fit_transform(data)
-new_column
-```
-
-
-
-
-
-```{python}
-import pandas as pd
-from sklearn.preprocessing import FunctionTransformer
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-
-# Datos de ejemplo en forma de DataFrame (reemplaza con tus datos)
-data = pd.DataFrame({
-    'Column1': [1, 5, 9, 3, 7],
-    'Column2': [2, 6, 10, 4, 8],
-    'Column3': [3, 7, 11, 5, 9],
-    'Column4': [4, 8, 12, 6, 10]
+test = pd.DataFrame({
+    'Column1': [-1, -5, 9, -3, -7],
+    'Column2': [25, 6, -10, 4, -8],
+    'Column3': [31, -7, 11, -5, 9],
+    'Column4': [-4, 8, -12, 6, -10]
 })
-
-# Definir una función personalizada que suma dos columnas y divide por una tercera
-def custom_function(X, col1, col2, col3):
-    result = (X[col1] + X[col2])/ X[col3]
-    return result.values.reshape(-1, 1)
-
-# Nombres de las columnas a operar
-col1 = 'Column1'
-col2 = 'Column2'
-col3 = 'Column3'
-
-# Crear el transformador de función personalizada
-custom_transformer = FunctionTransformer(custom_function, validate=False, kw_args={
-    'col1': col1,
-    'col2': col2,
-    'col3': col3
-})
-
-# Crear un ColumnTransformer para aplicar el transformador personalizado a las columnas
-column_transformer = ColumnTransformer(transformers=[
-    ('custom', custom_transformer, [col1, col2, col3])  # Indica las columnas a transformar
-], remainder='passthrough')  # Mantener las columnas no transformadas
-
-# Crear el pipeline con el ColumnTransformer
-pipeline = Pipeline(steps=[
-    ('column_transformer', column_transformer)
-])
-
-
-# Aplicar el pipeline a los datos de entrenamiento
-X_train_transformed = pipeline.fit_transform(data)
 
 # Aplicar el pipeline a los datos de prueba
-X_test_transformed = pipeline.transform(data)
+X_test_transformed = column_transformer.transform(test)
+X_test_transformed
 
-# Crear y entrenar un modelo de ML (por ejemplo, Regresión Lineal) en los datos de entrenamiento transformados
-model = LinearRegression()
-model.fit(X_train_transformed, y_train)
-
-# Realizar predicciones en el conjunto de prueba transformado
-y_pred = model.predict(X_test_transformed)
-
-# Imprimir las predicciones
-print(y_pred)
 ```
 
 
+### Renombramiento de nuevos datos
 
+Para concluir el proceso de transformación de datos en un dataframe luego de haber sido procesados por un transformador de columnas, es importante obtener uno nuevo con sus respectivos nombres de columnas. 
 
+Para lograrlo, se realiza lo siguiente:
+
+```{python}
+data = pd.DataFrame({
+ 'edad': [20, 30, 40], 
+ 'ingreso': [50000, 60000, 70000],
+ 'sexo': ['M', 'F', 'M'],
+ 'educacion': ['secundaria', 'universidad', 'preparatoria']
+ })
+
+# ColumnTransformer para características numéricas y categóricas
+ct = ColumnTransformer(
+ transformers=[ 
+  ('num', StandardScaler(), ['edad', 'ingreso']),
+  ('cat', OneHotEncoder(drop='first'), ['sexo', 'educacion'])],
+  verbose_feature_names_out = False
+  ) 
+
+# Ajuste y transformación en data
+transformed_data = ct.fit_transform(data)
+
+# Abtener los nombres de las características de salida del transformador
+new_column_names = ct.get_feature_names_out()
+
+# Crear un DataFrame con los datos transformados y los nuevos nombres de las columnas
+transformed_df = pd.DataFrame(transformed_data, columns=new_column_names)
+
+# Imprimir el DataFrame resultante
+print(transformed_df)
+```
 
 
 

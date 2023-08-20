@@ -58,5 +58,10 @@ conjunto-de-validación
 leave-one-out-cross-validation
 k-fold-cross-validation
 validación-cruzada-para-series-de-tiempo
-pre-procesamiento-de-datos
-ingeniería-de-datos
+feature-engineering
+pipeline
+normalizar-columnas-numéricas
+dicotomización-de-categorías
+imputación-de-datos-faltantes
+transformaciones-personalizadas
+renombramiento-de-nuevos-datos

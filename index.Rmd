@@ -47,20 +47,19 @@ knitr::include_graphics("img/00-presentacion/arturo.png")
 **ACT. KARINA LIZETTE GAMBOA** 
 
 **LinkedIn:** [KaLizzyGam ](https://www.linkedin.com/in/kalizzygam/)
-**Email:**  lizzygamboa@ciencias.unam.mx
+**Email:**  lizzygamboap@gmail.com
 
 Actuaria egresada de la Facultad de Ciencias y candidata a Maestra en
 Ciencia de Datos por el ITAM.
 
-Experiencia en áreas de analítica predictiva e inteligencia del negocio. Lead y Senior
+Experiencia en áreas de analítica predictiva e inteligencia del negocio. Manager y Senior
 Data Scientist en consultoría en diferentes sectores como tecnología, asegurador,
 financiero y bancario. Es experta en entendimiento de negocio para la correcta
-implementación de algoritmos de inteligencia y explotación de datos.
-Actualmente se desarrolla como lead data specialist en Merama,
+implementación de algoritmos de análisis de datos, desde la ingenieria y arquitectura de datos hasta BI y modelos de Machine Learning. 
+Actualmente se desarrolla como Data Analytics Manager para México, Chile y Colombia en Merama,
 startup mexicana clasificada como uno de los nuevos unicornios de Latinoamérica.
-Senior Data Scientist en CLOSTER y como profesora del diplomado de Metodología
-de la Investigación Social por la UNAM así como instructora de cursos de Ciencia de
-Datos en AMAT.
+
+Adicionalmente participa en proyectos como Senior Data Scientist en CLOSTER, como profesora del diplomado de Metodología de la Investigación Social por la UNAM y como instructora de cursos de Ciencia de Datos en AMAT.
 
 Empresas anteriores: GNP, Actinver Banco y Casa de Bolsa, PlayCity Casinos,
 RakenDataGroup Consulting, entre otros.
