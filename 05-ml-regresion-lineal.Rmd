@@ -1,0 +1,208 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+::: watermark
+<img src="img/header.png" width="400"/>
+:::
+
+# Regresión Lineal
+
+En esta sección aprenderemos sobre _**regresión lineal simple y múltiple**_, como se ajusta un modelo de regresión en *python*, las métricas de desempeño para problemas de regresión y como podemos comparar modelos con estas métricas. Existen dos tipos de modelos de regresión lineal: 
+
+* **Regresión lineal simple:** En la regresión lineal simple se utiliza **una variable independiente o explicativa "X"** (numérica o categórica) para estimar una variable dependiente o de respuesta numérica _**"Y"**_ mediante el ajuste de una recta permita conocer la relación existente entre ambas variables. Dicha relación entre variables se expresa como:
+
+$$Y = \beta_0 + \beta_1X_1 + \epsilon \approx b + mx$$
+**Donde:**
+
+> $\epsilon \sim Norm(0,\sigma^2)$ (error aleatorio)
+>
+> $\beta_0$ = Coeficiente de regresión 0 (Ordenada al origen o intercepto)
+>
+> $\beta_1$ = Coeficiente de regresión 1 (Pendiente o regresor de variable $X_1$)
+>
+> $X_1$ = Variable explicativa observada
+>
+> $Y$ = Respuesta numérica
+
+Debido a que los valores reales de $\beta_0$ y $\beta_1$ son desconocidos, procedemos a estimarlos estadísticamente:
+
+$$\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1X_1$$
+Con $\hat{\beta}_0$ el estimado de la ordenada al origen y $\hat{\beta}_1$ el estimado de la pendiente.
+
+```{r, echo=FALSE, warning=FALSE, message=F}
+library(plotly)
+
+airq <- airquality %>% 
+  filter(!is.na(Ozone))
+
+fit <- lm(Ozone ~ Wind, data = airq)
+
+airq %>% 
+  plot_ly(x = ~Wind) %>% 
+  add_markers(y = ~Ozone) %>% 
+  add_lines(x = ~Wind, y = fitted(fit))
+```
+
+* **Regresión lineal múltiple:** Cuando se utiliza **más de una** variable independiente, el proceso se denomina regresión lineal múltiple. En este escenario no es una recta sino un hiper-plano lo que se ajusta a partir de las covariables explicativas $\{X_1, X_2, X_3, ...,X_n\}$
+
+El objetivo de un modelo de regresión múltiple es tratar de explicar la relación que existe entre una
+variable dependiente (variable respuesta) $"Y"$ un conjunto de variables independientes (variables
+explicativas) $\{X1,..., Xm\}$, el modelo es de la forma:
+
+$$Y = \beta_0 + \beta_1X_1 + \cdot \cdot \cdot + \beta_mX_m + \epsilon$$
+
+* **Donde:**
+
+- $Y$ como variable respuesta.
+
+- $X_1,X_2,...,X_m$ como las variables explicativas, independientes o regresoras.
+
+- $\beta_1, \beta_2,...,\beta_m$ Se conocen como coeficientes parciales de regresión. Cada una de ellas puede interpretarse como el efecto promedio que tiene el incremento de una unidad de la variable predictora $X_i$ sobre la variable dependiente $Y$, manteniéndose constantes el resto de variables.
+
+```{r, warning=FALSE,message=FALSE, echo=FALSE}
+library(reshape2)
+
+
+my_df <- iris
+petal_lm <- lm(Petal.Length ~ 0 + Sepal.Length + Sepal.Width,data = my_df)
+graph_reso <- 0.05
+
+#Setup Axis
+axis_x <- seq(min(my_df$Sepal.Length), max(my_df$Sepal.Length), by = graph_reso)
+axis_y <- seq(min(my_df$Sepal.Width), max(my_df$Sepal.Width), by = graph_reso)
+
+#Sample points
+petal_lm_surface <- expand.grid(Sepal.Length = axis_x,Sepal.Width = axis_y,KEEP.OUT.ATTRS = F)
+petal_lm_surface$Petal.Length <- predict.lm(petal_lm, newdata = petal_lm_surface)
+petal_lm_surface <- acast(petal_lm_surface, Sepal.Width ~ Sepal.Length, value.var = "Petal.Length") #y ~ x
+
+hcolors=c("red","blue","green")[my_df$Species]
+iris_plot <- plot_ly(my_df, 
+                     x = ~Sepal.Length, 
+                     y = ~Sepal.Width, 
+                     z = ~Petal.Length,
+                     text = ~Species, # EDIT: ~ added
+                     type = "scatter3d", 
+                     mode = "markers",
+                     size = 1,
+                     marker = list(color = hcolors))
+iris_plot <- add_trace(p = iris_plot,
+                       z = petal_lm_surface,
+                       x = axis_x,
+                       y = axis_y,
+                       type = "surface")
+
+iris_plot
+```
+
+
+## Ajuste de modelo
+
+### Estimación de parámetros: Regresión lineal simple
+
+En la gran mayoría de casos, los valores $\beta_0$ y $\beta_1$ poblacionales son desconocidos, por lo que, a partir de una muestra, se obtienen sus estimaciones $\hat{\beta_0}$ y $\hat{\beta_1}$. Estas estimaciones se conocen como coeficientes de regresión o *least square coefficient estimates*, ya que toman aquellos valores que minimizan la suma de cuadrados residuales, dando lugar a la recta que pasa más cerca de todos los puntos.
+
+```{r, fig.align='center', out.height='250pt', out.width='500pt', echo=F, include=TRUE}
+knitr::include_graphics("img/05-ml-lineal/501_ajuste_lineal.svg")
+```
+
+En términos analíticos, la expresión matemática a optimizar y solución están dadas por:
+
+$$min(\epsilon) \Rightarrow min(y-\hat{y}) = min\{y -(\hat{\beta}_0 + \hat{\beta}_1x)\}$$
+
+\begin{aligned}
+
+\hat{\beta}_0 &= \overline{y} - \hat{\beta}_1\overline{x} \\
+
+\hat{\beta}_1 &= \frac{\sum^n_{i=1}(x_i - \overline{x})(y_i - \overline{y})}{\sum^n_{i=1}(x_i - \overline{x})^2} =\frac{S_{xy}}{S^2_x}
+
+\end{aligned}
+
+
+
+**Donde:**
+
+> - $S_{xy}$ es la covarianza entre $x$ y $y$. 
+>
+> - $S_{x}^{2}$ es la varianza de $x$. 
+>
+> - $\hat{\beta}_0$ es el valor esperado la variable $Y$ cuando $X = 0$, es decir, la intersección de la recta con el eje y.
+
+
+
+### Estimación de parámetros: Regresión lineal múltiple
+
+En el caso de múltiples parámetros, la notación se vuelve más sencilla al expresar el modelo mediante una combinación lineal dada por la multiplicación de matrices (álgebra lineal).
+
+$$Y = X\beta + \epsilon$$
+
+**Donde:** 
+
+$$Y = \begin{pmatrix}y_1\\y_2\\.\\.\\.\\y_n\end{pmatrix} \quad \beta = \begin{pmatrix}\beta_0\\\beta_1\\.\\.\\.\\\beta_m\end{pmatrix} \quad \epsilon = \begin{pmatrix}\epsilon_1\\\epsilon_2\\.\\.\\.\\\epsilon_n\end{pmatrix} \quad \quad X = \begin{pmatrix}1 & x_{11} & x_{12} & ... & x_{1m}\\1 & x_{21} & x_{22} & ... & x_{2m}\\\vdots & \vdots & \vdots & \ddots & \vdots\\ 1 & x_{n1} & x_{n2} & ... & x_{nm}\end{pmatrix}\\$$
+
+El estimador por mínimos cuadrados está dado por:
+
+$$\hat{\beta} = (X^TX)^{-1}X^TY$$
+
+---
+
+**IMPORTANTE:** Es necesario entender que para cada uno de los coeficientes de regresión se realiza una prueba de hipótesis. Una vez calculado el valor estimado, se procede a determinar si este valor es significativamente distinto de cero, por lo que la hipótesis de cada coeficiente se plantea de la siguiente manera:
+
+$$H_0:\beta_i=0 \quad Vs \quad H_1:\beta_i\neq0$$
+El software *R* nos devuelve el p-value asociado a cada coeficiente de regresión. Recordemos que valores pequeños de *p* sugieren que al rechazar $H_0$, la probabilidad de equivocarnos es baja, por lo que procedemos a rechazar la hipótesis nula.
+
+## Residuos del modelo
+
+El residuo de una estimación se define como la diferencia entre el valor observado y el valor esperado acorde al modelo. 
+
+$$\epsilon_i= y_i -\hat{y}_i$$
+
+A la hora de contemplar el conjunto de residuos hay dos posibilidades:
+
+- La suma del valor absoluto de cada residuo.
+
+$$RAS=\sum_{i=1}^{n}{|e_i|}=\sum_{i=1}^{n}{|y_i-\hat{y}_i|}$$
+
+- La suma del cuadrado de cada residuo (RSS). Esta es la aproximación más empleada (mínimos cuadrados) ya que magnifica las desviaciones más extremas.
+
+$$RSS=\sum_{i=1}^{n}{e_i^2}=\sum_{i=1}^{n}{(y_i-\hat{y}_i)^2}$$
+
+Los residuos son muy importantes puesto que en ellos se basan las diferentes métricas de desempeño del modelo.
+
+```{r, echo=FALSE}
+library(ggplot2)
+library(ggimage)
+
+set.seed(123)
+iris2 <- iris[sample(1:nrow(iris), 30),]
+model <- lm(Petal.Length ~ Sepal.Length, data=iris2)
+iris2$fitted <- predict(model)
+
+ggplot(iris2, aes(x = Sepal.Length, y = Petal.Length)) +
+  geom_linerange(aes(ymin = fitted, ymax = Petal.Length),
+                 colour = "purple") +
+  geom_abline(intercept = model$coefficients[1],
+              slope = model$coefficients[2]) +
+    geom_emoji(aes(image = ifelse(abs(Petal.Length-fitted) > 0.5, '1f622', '1f600')))
+```
+
+
+### Condiciones para el ajuste de una regresión lineal: {-}
+
+
+Existen ciertas condiciones o supuestos que deben ser validados para el correcto ajuste de un modelo de regresión lineal, los cuales se enlistan a continuación: 
+
+- **Linealidad**: La relación entre ambas variables debe ser lineal.
+
+- **Distribución normal de los residuos**: Los residuos se tiene que distribuir de forma normal, con media igual a 0.
+
+- **Varianza de residuos constante (homocedasticidad)**: La varianza de los residuos tiene que ser aproximadamente constante.
+
+- **Independencia**: Las observaciones deben ser independientes unas de otras.
+
+Dado que las condiciones se verifican a partir de los residuos, primero se suele generar el modelo y después se valida. 
+
+
