@@ -64,4 +64,11 @@ normalizar-columnas-numéricas
 dicotomización-de-categorías
 imputación-de-datos-faltantes
 transformaciones-personalizadas
+interacciones
 renombramiento-de-nuevos-datos
+actividad-de-refuerzo
+regresión-lineal
+ajuste-de-modelo
+estimación-de-parámetros-regresión-lineal-simple
+estimación-de-parámetros-regresión-lineal-múltiple
+residuos-del-modelo

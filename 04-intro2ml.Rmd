@@ -1107,6 +1107,73 @@ X_test_transformed
 
 ```
 
+### Interacciones
+
+Entre las transformaciones más útiles que pueden implementarse en el proceso de ingeniería de datos se encuentran las interacciones. 
+
+Estas se refieren a las relaciones combinadas entre dos o más variables que pueden afectar a la variable objetivo de un modelo. En otras palabras, **una interacción ocurre cuando el efecto de una característica en la variable objetivo depende de los valores combinados de otra(s) característica(s).**
+
+```{python}
+from plotnine import *
+from mizani.formatters import comma_format, dollar_format
+
+(
+ggplot(ames, aes(x = "Gr_Liv_Area", y = "Sale_Price") ) + 
+  geom_point(alpha = .2) +
+  facet_wrap("Bldg_Type") + 
+  geom_smooth(method = "lm", se = False, color = "red", alpha = 0.1)  + 
+  scale_x_log10(labels = comma_format()) + 
+  scale_y_log10(labels = dollar_format(prefix='$', digits=0, big_mark=',')) + 
+  labs(
+   title = "Relación entre precio y tamaño con tipo de vivienda",
+   x = "Gross Living Area", 
+   y = "Sale Price (USD)")
+)
+```
+
+
+
+Las interacciones son útiles porque muchas veces las relaciones entre características y la variable objetivo no son lineales ni independientes. La presencia de interacciones puede capturar patrones más complejos y proporcionar una mejor representación de los datos, lo que lleva a modelos más precisos y ajustados. 
+
+Las interacciones pueden mejorar la calidad de las predicciones y el entendimiento de los factores que influyen en el resultado deseado.
+
+
+```{python}
+from sklearn.preprocessing import PolynomialFeatures
+
+# Ejemplo de datos
+data = pd.DataFrame({
+    'C1': [1, 0,  1, 0, -1, 2,  -2, 5],
+    'C2': [1, 5, -5, 3, -1, 0.5, 1, 10]
+})
+
+# Crear interacciones polinómicas
+interaction_transformer = PolynomialFeatures(
+ degree = 2, 
+ interaction_only = True, 
+ include_bias = False
+ )
+
+# ColumnTransformer para aplicar transformaciones
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('interactions', interaction_transformer, ['C1', 'C2'])
+    ],
+    remainder='passthrough'  # Mantener las columnas restantes sin cambios
+)
+
+# Ajustar el pipeline y transformar a los datos
+preprocessor.fit_transform(data)
+
+test = pd.DataFrame({
+    'C1': [1,  2, 3, -4, 5],
+    'C2': [5, -4, 3, -2, 1]
+})
+
+# aplicar en el conjunto de prueba
+preprocessor.transform(test)
+```
+
 
 ### Renombramiento de nuevos datos
 
@@ -1142,6 +1209,28 @@ transformed_df = pd.DataFrame(transformed_data, columns=new_column_names)
 # Imprimir el DataFrame resultante
 print(transformed_df)
 ```
+
+### Actividad de refuerzo
+
+Al hacer un modelo de machine learning es importante tener un dominio del fenómeno que se está analizando. Ya sea un tema médico, bancario, asegurador, comercial, demográfico, etc. 
+
+Los mejores modelos de ML suelen tener diversas características e interacciones creadas en la ingeniería de variables.
+
+Para reforzar lo aprendido, deberá realizar los siguientes ejercicios:
+
+1. Crear e integrar a un pipeline una función que agrupe todas las categorías que tengan **menos del 10%** de representación sobre el total de categorías. Nombrar a esta nueva categoría: "otros". Esta función debe ser útil para cualquier columna categórica que sea elegida.
+
+2. Crear e integrar a un pipeline una función que **agrupe arbitrariamente dos o más categorías** definidas dentro de una lista y posteriormente deberán ser recodificadas en una nueva etiqueta. Esta función debe ser útil para cualquier columna categórica que sea elegida con sus respectivas categorías. *Hint: estudiar la función FunctionTransformer y usar el parámetro 'kw_args'.*
+
+3. Aplicar a 2 columnas categóricas cada uno de los pasos creados anteriormente.
+
+4. Para cada una de las columnas reagrupadas anteriormente, realizar un gráfico de barras que refleje el antes y después en la distribución de las categorías.
+
+5. Revisar la documentación de los transformadores predefinidos en sklearn: [link](https://scikit-learn.org/stable/modules/preprocessing.html#).
+
+
+
+
 
 
 
