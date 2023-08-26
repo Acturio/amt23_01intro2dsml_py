@@ -134,11 +134,11 @@ data_csv.head(5)
 data_csv.describe()
 ```
 
-La base de datos llamada [AmesHousing](https://drive.google.com/file/d/1pCHFeF8rtQiUcip9zf4Xtk0pAQ-5Om-r/view?usp=sharing) contiene un conjunto de datos con información de la Oficina del Tasador de Ames utilizada para calcular los valores tasados para las propiedades residenciales individuales vendidas en Ames, Iowa, de 2006 a 2010. FUENTES: Ames, Oficina del Tasador de Iowa.
+La base de datos llamada [AmesHousing](https://1drv.ms/t/s!AuOiA083gYHmhKkcN26pn1mXQvqNAg?e=o5nhG7) contiene un conjunto de datos con información de la Oficina del Tasador de Ames utilizada para calcular los valores tasados para las propiedades residenciales individuales vendidas en Ames, Iowa, de 2006 a 2010. FUENTES: Ames, Oficina del Tasador de Iowa.
 
-Pueden descargar los datos para la clase [aquí](https://drive.google.com/drive/folders/1sNlUWIvKHOTt7qywhPIyl1X00do_Y6Zo?usp=sharing)
+Pueden descargar los datos para la clase [aquí](https://1drv.ms/f/s!AuOiA083gYHmhKkZSv6N1bux0cYoAg)
 
-¿Y si el archivo que necesitamos leer esta en excel?
+¿Y si el archivo que necesitamos leer está en excel?
 
 ### Archivos txt
 
