@@ -72,3 +72,4 @@ ajuste-de-modelo
 estimación-de-parámetros-regresión-lineal-simple
 estimación-de-parámetros-regresión-lineal-múltiple
 residuos-del-modelo
+implementación-con-python

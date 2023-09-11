@@ -147,8 +147,10 @@ En esta clase estaremos usando:
   - Pulgar arriba: Voy bien, estoy entendiendo! 
   - Pulgar abajo: Eso no quedó muy claro
   - Mano arriba: Quiero participar/preguntar ó Ya estoy listo para iniciar 
-* [One Drive](https://1drv.ms/f/s!AuOiA083gYHmhKkSSv6N1bux0cYoAg?e=pKmcG7)
+* [One Drive](https://1drv.ms/f/s!AuOiA083gYHmhKkSqFQPpDQq8dfG5A)
 * Notas de clase [Revisame si quieres aprender](https://acturio.github.io/amt23_01intro2dsml_py/) 
+
+
 
 
 ## Asesorías {-}

@@ -59,9 +59,11 @@ library(reticulate)
 
 install_python(list = TRUE)
 
+use_python("C:/Program Files/Python310/python.exe")
+
 #### Conda ####
 # Creación de ambiente virtual de python 3.10 con conda
-conda_create(envname = "conda_dsml_py3_10", python = "python3.10")
+conda_create(envname = "conda_dsml_py3_10")
 
 # Consultar la lista de ambientes creados
 conda_list()
@@ -75,8 +77,7 @@ pandas <- import("pandas")
 
 #### VirtualEnv ####
 # Creación de ambiente virtual de python 3.10 con virtualenv 
-virtualenv_create(envname = "venv_dsml_py3_10", python = "python3.10")
-virtualenv_create(envname = "venv_dsml_py3_11", python = "python3.11")
+virtualenv_create(envname = "venv_dsml_py3_10")
 
 virtualenv_list()
 
@@ -84,9 +85,6 @@ use_virtualenv("venv_dsml_py3_10")
 
 # install pandas
 virtualenv_install("venv_dsml_py3_10", "pandas")
-
-# import pandas 
-pandas <- import("pandas")
 ```
 
 

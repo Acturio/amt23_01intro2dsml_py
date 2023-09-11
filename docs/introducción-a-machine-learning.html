@@ -273,6 +273,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="regresión-lineal.html"><a href="regresión-lineal.html#condiciones-para-el-ajuste-de-una-regresión-lineal"><i class="fa fa-check"></i>Condiciones para el ajuste de una regresión lineal:</a></li>
 </ul></li>
+<li class="chapter" data-level="5.3" data-path="regresión-lineal.html"><a href="regresión-lineal.html#implementación-con-python"><i class="fa fa-check"></i><b>5.3</b> Implementación con Python</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="./"><img src="img/amat-logo.png" width="280"></a></li>
@@ -625,25 +626,24 @@ múltiples iteraciones de remuestreo.</p>
 <p>Con <em>sklearn</em>, un conjunto de validación es como cualquier otro objeto de
 remuestreo; este tipo es diferente solo en que tiene una sola iteración</p>
 <p><img src="img/04-ml/3-5-3-conjunto-validacion-2.png" width="500pt" height="350pt" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb113-1"><a href="introducción-a-machine-learning.html#cb113-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb113-2"><a href="introducción-a-machine-learning.html#cb113-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividir los datos en entrenamiento (60%) y el resto (40%)</span></span>
-<span id="cb113-3"><a href="introducción-a-machine-learning.html#cb113-3" aria-hidden="true" tabindex="-1"></a>X_train, X_temp, y_train, y_temp <span class="op">=</span> train_test_split(</span>
-<span id="cb113-4"><a href="introducción-a-machine-learning.html#cb113-4" aria-hidden="true" tabindex="-1"></a> X, y, </span>
-<span id="cb113-5"><a href="introducción-a-machine-learning.html#cb113-5" aria-hidden="true" tabindex="-1"></a> test_size <span class="op">=</span> <span class="fl">0.4</span>, </span>
-<span id="cb113-6"><a href="introducción-a-machine-learning.html#cb113-6" aria-hidden="true" tabindex="-1"></a> random_state <span class="op">=</span> <span class="dv">12345</span></span>
-<span id="cb113-7"><a href="introducción-a-machine-learning.html#cb113-7" aria-hidden="true" tabindex="-1"></a> )</span>
-<span id="cb113-8"><a href="introducción-a-machine-learning.html#cb113-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb113-9"><a href="introducción-a-machine-learning.html#cb113-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividir el resto en conjuntos de prueba (15%) y validación (25%)</span></span>
-<span id="cb113-10"><a href="introducción-a-machine-learning.html#cb113-10" aria-hidden="true" tabindex="-1"></a>X_test, X_val, y_test, y_val <span class="op">=</span> train_test_split(</span>
-<span id="cb113-11"><a href="introducción-a-machine-learning.html#cb113-11" aria-hidden="true" tabindex="-1"></a> X_temp, y_temp, </span>
-<span id="cb113-12"><a href="introducción-a-machine-learning.html#cb113-12" aria-hidden="true" tabindex="-1"></a> test_size <span class="op">=</span> <span class="fl">0.625</span>, </span>
-<span id="cb113-13"><a href="introducción-a-machine-learning.html#cb113-13" aria-hidden="true" tabindex="-1"></a> random_state <span class="op">=</span> <span class="dv">42</span></span>
-<span id="cb113-14"><a href="introducción-a-machine-learning.html#cb113-14" aria-hidden="true" tabindex="-1"></a> )</span>
-<span id="cb113-15"><a href="introducción-a-machine-learning.html#cb113-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb113-16"><a href="introducción-a-machine-learning.html#cb113-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Training (60%), testing (15%), validation (25%)</span></span>
-<span id="cb113-17"><a href="introducción-a-machine-learning.html#cb113-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb113-18"><a href="introducción-a-machine-learning.html#cb113-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Imprimir los tamaños de los conjuntos resultantes</span></span>
-<span id="cb113-19"><a href="introducción-a-machine-learning.html#cb113-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Tamaño de conjunto de entrenamiento: &quot;</span>, X_train.shape)</span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb113-1"><a href="introducción-a-machine-learning.html#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividir los datos en entrenamiento (60%) y el resto (40%)</span></span>
+<span id="cb113-2"><a href="introducción-a-machine-learning.html#cb113-2" aria-hidden="true" tabindex="-1"></a>X_train, X_temp, y_train, y_temp <span class="op">=</span> train_test_split(</span>
+<span id="cb113-3"><a href="introducción-a-machine-learning.html#cb113-3" aria-hidden="true" tabindex="-1"></a> X, y, </span>
+<span id="cb113-4"><a href="introducción-a-machine-learning.html#cb113-4" aria-hidden="true" tabindex="-1"></a> test_size <span class="op">=</span> <span class="fl">0.4</span>, </span>
+<span id="cb113-5"><a href="introducción-a-machine-learning.html#cb113-5" aria-hidden="true" tabindex="-1"></a> random_state <span class="op">=</span> <span class="dv">12345</span></span>
+<span id="cb113-6"><a href="introducción-a-machine-learning.html#cb113-6" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb113-7"><a href="introducción-a-machine-learning.html#cb113-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-8"><a href="introducción-a-machine-learning.html#cb113-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividir el resto en conjuntos de prueba (15%) y validación (25%)</span></span>
+<span id="cb113-9"><a href="introducción-a-machine-learning.html#cb113-9" aria-hidden="true" tabindex="-1"></a>X_test, X_val, y_test, y_val <span class="op">=</span> train_test_split(</span>
+<span id="cb113-10"><a href="introducción-a-machine-learning.html#cb113-10" aria-hidden="true" tabindex="-1"></a> X_temp, y_temp, </span>
+<span id="cb113-11"><a href="introducción-a-machine-learning.html#cb113-11" aria-hidden="true" tabindex="-1"></a> test_size <span class="op">=</span> <span class="fl">0.625</span>, </span>
+<span id="cb113-12"><a href="introducción-a-machine-learning.html#cb113-12" aria-hidden="true" tabindex="-1"></a> random_state <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb113-13"><a href="introducción-a-machine-learning.html#cb113-13" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb113-14"><a href="introducción-a-machine-learning.html#cb113-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-15"><a href="introducción-a-machine-learning.html#cb113-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Training (60%), testing (15%), validation (25%)</span></span>
+<span id="cb113-16"><a href="introducción-a-machine-learning.html#cb113-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-17"><a href="introducción-a-machine-learning.html#cb113-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Imprimir los tamaños de los conjuntos resultantes</span></span>
+<span id="cb113-18"><a href="introducción-a-machine-learning.html#cb113-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Tamaño de conjunto de entrenamiento: &quot;</span>, X_train.shape)</span></code></pre></div>
 <pre><code>## Tamaño de conjunto de entrenamiento:  (1758, 73)</code></pre>
 <div class="sourceCode" id="cb115"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb115-1"><a href="introducción-a-machine-learning.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Tamaño de conjunto de prueba: &quot;</span>, X_test.shape)</span></code></pre></div>
 <pre><code>## Tamaño de conjunto de prueba:  (439, 73)</code></pre>
@@ -1122,9 +1122,7 @@ columna.</p>
 <span id="cb146-5"><a href="introducción-a-machine-learning.html#cb146-5" aria-hidden="true" tabindex="-1"></a>X_train_cat <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb146-6"><a href="introducción-a-machine-learning.html#cb146-6" aria-hidden="true" tabindex="-1"></a> <span class="st">&quot;Cat&quot;</span>: [<span class="st">&#39;A&#39;</span>, <span class="st">&#39;B&#39;</span>, <span class="st">&#39;A&#39;</span>, <span class="st">&#39;C&#39;</span>, <span class="st">&#39;B&#39;</span>, <span class="st">&#39;B&#39;</span>]</span>
 <span id="cb146-7"><a href="introducción-a-machine-learning.html#cb146-7" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb146-8"><a href="introducción-a-machine-learning.html#cb146-8" aria-hidden="true" tabindex="-1"></a>X_train_cat</span>
-<span id="cb146-9"><a href="introducción-a-machine-learning.html#cb146-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb146-10"><a href="introducción-a-machine-learning.html#cb146-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear una instancia de OneHotEncoder</span></span></code></pre></div>
+<span id="cb146-8"><a href="introducción-a-machine-learning.html#cb146-8" aria-hidden="true" tabindex="-1"></a>X_train_cat</span></code></pre></div>
 <pre><code>##   Cat
 ## 0   A
 ## 1   B
@@ -1132,14 +1130,13 @@ columna.</p>
 ## 3   C
 ## 4   B
 ## 5   B</code></pre>
-<div class="sourceCode" id="cb148"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb148-1"><a href="introducción-a-machine-learning.html#cb148-1" aria-hidden="true" tabindex="-1"></a>encoder <span class="op">=</span> OneHotEncoder(drop<span class="op">=</span><span class="va">None</span>, handle_unknown<span class="op">=</span><span class="st">&#39;ignore&#39;</span>, sparse_output<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb148-2"><a href="introducción-a-machine-learning.html#cb148-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb148-3"><a href="introducción-a-machine-learning.html#cb148-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar y transformar el encoder en los datos de entrenamiento</span></span>
-<span id="cb148-4"><a href="introducción-a-machine-learning.html#cb148-4" aria-hidden="true" tabindex="-1"></a>X_train_encoded <span class="op">=</span> encoder.fit_transform(X_train_cat)</span>
-<span id="cb148-5"><a href="introducción-a-machine-learning.html#cb148-5" aria-hidden="true" tabindex="-1"></a>X_train_encoded <span class="op">=</span> pd.DataFrame(X_train_encoded, columns <span class="op">=</span> [<span class="st">&#39;A&#39;</span>, <span class="st">&#39;B&#39;</span>, <span class="st">&#39;C&#39;</span>])</span>
-<span id="cb148-6"><a href="introducción-a-machine-learning.html#cb148-6" aria-hidden="true" tabindex="-1"></a>X_train_encoded</span>
-<span id="cb148-7"><a href="introducción-a-machine-learning.html#cb148-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb148-8"><a href="introducción-a-machine-learning.html#cb148-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos de prueba</span></span></code></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb148-1"><a href="introducción-a-machine-learning.html#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear una instancia de OneHotEncoder</span></span>
+<span id="cb148-2"><a href="introducción-a-machine-learning.html#cb148-2" aria-hidden="true" tabindex="-1"></a>encoder <span class="op">=</span> OneHotEncoder(drop<span class="op">=</span><span class="va">None</span>, handle_unknown<span class="op">=</span><span class="st">&#39;ignore&#39;</span>, sparse_output<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb148-3"><a href="introducción-a-machine-learning.html#cb148-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb148-4"><a href="introducción-a-machine-learning.html#cb148-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar y transformar el encoder en los datos de entrenamiento</span></span>
+<span id="cb148-5"><a href="introducción-a-machine-learning.html#cb148-5" aria-hidden="true" tabindex="-1"></a>X_train_encoded <span class="op">=</span> encoder.fit_transform(X_train_cat)</span>
+<span id="cb148-6"><a href="introducción-a-machine-learning.html#cb148-6" aria-hidden="true" tabindex="-1"></a>X_train_encoded <span class="op">=</span> pd.DataFrame(X_train_encoded, columns <span class="op">=</span> [<span class="st">&#39;A&#39;</span>, <span class="st">&#39;B&#39;</span>, <span class="st">&#39;C&#39;</span>])</span>
+<span id="cb148-7"><a href="introducción-a-machine-learning.html#cb148-7" aria-hidden="true" tabindex="-1"></a>X_train_encoded</span></code></pre></div>
 <pre><code>##      A    B    C
 ## 0  1.0  0.0  0.0
 ## 1  0.0  1.0  0.0
@@ -1147,13 +1144,14 @@ columna.</p>
 ## 3  0.0  0.0  1.0
 ## 4  0.0  1.0  0.0
 ## 5  0.0  1.0  0.0</code></pre>
-<div class="sourceCode" id="cb150"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb150-1"><a href="introducción-a-machine-learning.html#cb150-1" aria-hidden="true" tabindex="-1"></a>X_test_cat <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb150-2"><a href="introducción-a-machine-learning.html#cb150-2" aria-hidden="true" tabindex="-1"></a> <span class="st">&quot;Cat&quot;</span>: [<span class="st">&#39;A&#39;</span>, <span class="st">&#39;C&#39;</span>, <span class="st">&#39;B&#39;</span>]</span>
-<span id="cb150-3"><a href="introducción-a-machine-learning.html#cb150-3" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb150-4"><a href="introducción-a-machine-learning.html#cb150-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb150-5"><a href="introducción-a-machine-learning.html#cb150-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformar los datos de prueba utilizando el encoder ajustado</span></span>
-<span id="cb150-6"><a href="introducción-a-machine-learning.html#cb150-6" aria-hidden="true" tabindex="-1"></a>X_test_encoded <span class="op">=</span> pd.DataFrame(encoder.transform(X_test_cat), columns <span class="op">=</span> [<span class="st">&#39;A&#39;</span>, <span class="st">&#39;B&#39;</span>, <span class="st">&#39;C&#39;</span>])</span>
-<span id="cb150-7"><a href="introducción-a-machine-learning.html#cb150-7" aria-hidden="true" tabindex="-1"></a>X_test_encoded</span></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb150-1"><a href="introducción-a-machine-learning.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos de prueba</span></span>
+<span id="cb150-2"><a href="introducción-a-machine-learning.html#cb150-2" aria-hidden="true" tabindex="-1"></a>X_test_cat <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb150-3"><a href="introducción-a-machine-learning.html#cb150-3" aria-hidden="true" tabindex="-1"></a> <span class="st">&quot;Cat&quot;</span>: [<span class="st">&#39;A&#39;</span>, <span class="st">&#39;C&#39;</span>, <span class="st">&#39;B&#39;</span>]</span>
+<span id="cb150-4"><a href="introducción-a-machine-learning.html#cb150-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb150-5"><a href="introducción-a-machine-learning.html#cb150-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-6"><a href="introducción-a-machine-learning.html#cb150-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformar los datos de prueba utilizando el encoder ajustado</span></span>
+<span id="cb150-7"><a href="introducción-a-machine-learning.html#cb150-7" aria-hidden="true" tabindex="-1"></a>X_test_encoded <span class="op">=</span> pd.DataFrame(encoder.transform(X_test_cat), columns <span class="op">=</span> [<span class="st">&#39;A&#39;</span>, <span class="st">&#39;B&#39;</span>, <span class="st">&#39;C&#39;</span>])</span>
+<span id="cb150-8"><a href="introducción-a-machine-learning.html#cb150-8" aria-hidden="true" tabindex="-1"></a>X_test_encoded</span></code></pre></div>
 <pre><code>##      A    B    C
 ## 0  1.0  0.0  0.0
 ## 1  0.0  0.0  1.0
@@ -1291,7 +1289,7 @@ columna.</p>
 <pre><code>## ColumnTransformer(remainder=&#39;passthrough&#39;,
 ##                   transformers=[(&#39;custom&#39;,
 ##                                  FunctionTransformer(feature_names_out=&#39;one-to-one&#39;,
-##                                                      func=&lt;function custom_function at 0x2960ec8b0&gt;,
+##                                                      func=&lt;function custom_function at 0x2a2dc6290&gt;,
 ##                                                      kw_args={&#39;col1&#39;: &#39;Column1&#39;,
 ##                                                               &#39;col2&#39;: &#39;Column2&#39;,
 ##                                                               &#39;col3&#39;: &#39;Column3&#39;}),
