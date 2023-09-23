@@ -12,7 +12,9 @@ editor_options:
 
 En esta sección aprenderemos sobre _**regresión lineal simple y múltiple**_, como se ajusta un modelo de regresión en *python*, las métricas de desempeño para problemas de regresión y como podemos comparar modelos con estas métricas. Existen dos tipos de modelos de regresión lineal: 
 
-* **Regresión lineal simple:** En la regresión lineal simple se utiliza **una variable independiente o explicativa "X"** (numérica o categórica) para estimar una variable dependiente o de respuesta numérica _**"Y"**_ mediante el ajuste de una recta permita conocer la relación existente entre ambas variables. Dicha relación entre variables se expresa como:
+## Regresión lineal simple
+
+En la regresión lineal simple se utiliza **una variable independiente o explicativa "X"** (numérica o categórica) para estimar una variable dependiente o de respuesta numérica _**"Y"**_ mediante el ajuste de una recta permita conocer la relación existente entre ambas variables. Dicha relación entre variables se expresa como:
 
 $$Y = \beta_0 + \beta_1X_1 + \epsilon \approx b + mx$$
 **Donde:**
@@ -44,20 +46,49 @@ didi %>%
   plot_ly(x = ~ Horas) %>% 
   add_markers(y = ~ Ganancias) %>% 
   add_lines(x = ~ Horas, y = fitted(fit))
-
-#airq <- airquality %>% 
-#  filter(!is.na(Ozone))
-
-#fit <- lm(Ozone ~ Wind, data = airq)
-
-#airq %>% 
-#  plot_ly(x = ~Wind) %>% 
-#  add_markers(y = ~Ozone) %>% 
-#  add_lines(x = ~Wind, y = fitted(fit))
-
 ```
 
-* **Regresión lineal múltiple:** Cuando se utiliza **más de una** variable independiente, el proceso se denomina regresión lineal múltiple. En este escenario no es una recta sino un hiper-plano lo que se ajusta a partir de las covariables explicativas $\{X_1, X_2, X_3, ...,X_n\}$
+
+### Interpretación
+
+Una de las bondades de los modelos lineales es la interpretabilidad de los elementos que lo componen. Los coeficientes de regresión.
+
+Los coeficientes de regresión representan el **cambio medio en la variable de respuesta para una unidad de cambio en la variable predictora.** Este control estadístico que ofrece la regresión es importante, porque aísla el rol de una variable del resto de las variables incluidas en el modelo.
+
+La clave para entender los coeficientes es pensar en ellos como pendientes, y con frecuencia se les llama coeficientes de pendiente. Ilustremos lo anterior con el siguiente ejemplo de Didi:
+
+\begin{align}
+\hat{Y} &= \hat{\beta}_0 \quad + \hat{\beta}_1X_1 \\
+
+& = 108.6 + 156X_1
+\end{align}
+
+$\hat{\beta}_0$ = Es el valor esperado en la variable de respuesta cuando $\beta_1$ es cero.
+
+$\hat{\beta}_1$ = Es el cambio esperado en la variable de respuesta por cada unidad de cambio en $X_1$.
+
+
+
+::: {.infobox .important data-latex="{important}"}
+**¡¡ IMPORTANTE !!**
+
+Al analizar la interpretación de los coeficientes de regresión es importante tomar en cuenta que esta interpretación se realiza sobre la estructura predictiva de un modelo y no sobre el fenómeno en sí mismo.
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+## Regresión lineal múltiple 
+
+Cuando se utiliza **más de una** variable independiente, el proceso se denomina regresión lineal múltiple. En este escenario no es una recta sino un hiper-plano lo que se ajusta a partir de las covariables explicativas $\{X_1, X_2, X_3, ...,X_n\}$
 
 El objetivo de un modelo de regresión múltiple es tratar de explicar la relación que existe entre una
 variable dependiente (variable respuesta) $"Y"$ un conjunto de variables independientes (variables
@@ -73,41 +104,76 @@ $$Y = \beta_0 + \beta_1X_1 + \cdot \cdot \cdot + \beta_mX_m + \epsilon$$
 
 - $\beta_1, \beta_2,...,\beta_m$ Se conocen como coeficientes parciales de regresión. Cada una de ellas puede interpretarse como el efecto promedio que tiene el incremento de una unidad de la variable predictora $X_i$ sobre la variable dependiente $Y$, manteniéndose constantes el resto de variables.
 
+
 ```{r, warning=FALSE,message=FALSE, echo=FALSE}
 library(reshape2)
 
+my_df <- iris %>% rename(
+  Daily_hrs = Sepal.Length,
+  Income = Petal.Length,
+  Travels_by_hr = Sepal.Width,
+  Turn = Species) %>% 
+  select(-Petal.Width) %>% 
+  mutate(Turn = factor(case_when(
+    Turn == "setosa" ~ "afternoon",
+    Turn == "versicolor" ~ "morning",
+    T ~ "night")),
+    Income = Income * 150
+  )
 
-my_df <- iris
-petal_lm <- lm(Petal.Length ~ 0 + Sepal.Length + Sepal.Width,data = my_df)
+didi_lm <- lm(Income ~  Daily_hrs + Travels_by_hr, data = my_df)
 graph_reso <- 0.05
 
 #Setup Axis
-axis_x <- seq(min(my_df$Sepal.Length), max(my_df$Sepal.Length), by = graph_reso)
-axis_y <- seq(min(my_df$Sepal.Width), max(my_df$Sepal.Width), by = graph_reso)
+axis_x <- seq(min(my_df$Daily_hrs), max(my_df$Daily_hrs), by = graph_reso)
+axis_y <- seq(min(my_df$Travels_by_hr), max(my_df$Travels_by_hr), by = graph_reso)
 
 #Sample points
-petal_lm_surface <- expand.grid(Sepal.Length = axis_x,Sepal.Width = axis_y,KEEP.OUT.ATTRS = F)
-petal_lm_surface$Petal.Length <- predict.lm(petal_lm, newdata = petal_lm_surface)
-petal_lm_surface <- acast(petal_lm_surface, Sepal.Width ~ Sepal.Length, value.var = "Petal.Length") #y ~ x
+didi_lm_surface <- expand.grid(Daily_hrs = axis_x, Travels_by_hr = axis_y, KEEP.OUT.ATTRS = F)
+didi_lm_surface$Income <- predict.lm(didi_lm, newdata = didi_lm_surface)
+didi_lm_surface <- acast(didi_lm_surface, Travels_by_hr ~ Daily_hrs, value.var = "Income") #y ~ x
 
-hcolors=c("red","blue","green")[my_df$Species]
-iris_plot <- plot_ly(my_df, 
-                     x = ~Sepal.Length, 
-                     y = ~Sepal.Width, 
-                     z = ~Petal.Length,
-                     text = ~Species, # EDIT: ~ added
+hcolors = c("red", "blue", "green")[my_df$Turn]
+didi_plot <- plot_ly(my_df, 
+                     x = ~Daily_hrs, 
+                     y = ~Travels_by_hr, 
+                     z = ~Income,
+                     text = ~Turn, # EDIT: ~ added
                      type = "scatter3d", 
                      mode = "markers",
                      size = 1,
                      marker = list(color = hcolors))
-iris_plot <- add_trace(p = iris_plot,
-                       z = petal_lm_surface,
+didi_plot <- add_trace(p = didi_plot,
+                       z = didi_lm_surface,
                        x = axis_x,
                        y = axis_y,
                        type = "surface")
 
-iris_plot
+didi_plot
 ```
+
+### Interpretación
+
+De la misma manera en que se interpretan los coeficientes de regresión en el caso simple, también se interpretan los coeficientes en el caso múltiple.
+
+En el ejemplo anterior, se tienen 3 variables explicativas, las cuales son:
+
+* **Horas diarias**: Se refiere al número de horas trabajadas por día.
+
+Interpretación: Por cada hora adicional de trabajo al día, en promedio aumenta $\$97$ el ingreso, manteniendo el resto de variables constantes.
+
+* **Viajes por hr**: Es el número de viajes terminados por hora (en promedio).
+
+Interpretación: Por cada viaje adicional en una hora, en promedio se reduce el ingreso en $\$6.08$, manteniendo el resto de variables constantes.
+
+* **Turno**: Es el turno en que se trabaja (mañana, tarde, noche).  Al ser una variable categórica, cada categoría produce un efecto distinto sobre la variable de respuesta.
+
+  * Mañana (4:00am - 12:00pm): Cuando se trabaja en la mañana, se obtiene en promedio $\$325.5$ más ingresos, **en comparación con trabajar en la tarde**.
+
+  * Noche (8:00pm - 4:00am): Cuando se trabaja en la noche, se obtiene en promedio $\$457.4$ más ingresos, **en comparación con trabajar en la tarde**.
+
+* **Intercepto**: Es el ingreso promedio cuando todas las variables son cero, en promedio y se trabaja en la tarde $-\$245.145$.
+
 
 
 ## Ajuste de modelo

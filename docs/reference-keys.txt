@@ -68,6 +68,10 @@ interacciones
 renombramiento-de-nuevos-datos
 actividad-de-refuerzo
 regresión-lineal
+regresión-lineal-simple
+interpretación
+regresión-lineal-múltiple
+interpretación-1
 ajuste-de-modelo
 estimación-de-parámetros-regresión-lineal-simple
 estimación-de-parámetros-regresión-lineal-múltiple

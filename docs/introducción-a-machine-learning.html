@@ -264,16 +264,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="regresión-lineal.html"><a href="regresión-lineal.html"><i class="fa fa-check"></i><b>5</b> Regresión Lineal</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#ajuste-de-modelo"><i class="fa fa-check"></i><b>5.1</b> Ajuste de modelo</a>
+<li class="chapter" data-level="5.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#regresión-lineal-simple"><i class="fa fa-check"></i><b>5.1</b> Regresión lineal simple</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#estimación-de-parámetros-regresión-lineal-simple"><i class="fa fa-check"></i><b>5.1.1</b> Estimación de parámetros: Regresión lineal simple</a></li>
-<li class="chapter" data-level="5.1.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#estimación-de-parámetros-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>5.1.2</b> Estimación de parámetros: Regresión lineal múltiple</a></li>
+<li class="chapter" data-level="5.1.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#interpretación"><i class="fa fa-check"></i><b>5.1.1</b> Interpretación</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#residuos-del-modelo"><i class="fa fa-check"></i><b>5.2</b> Residuos del modelo</a>
+<li class="chapter" data-level="5.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#regresión-lineal-múltiple"><i class="fa fa-check"></i><b>5.2</b> Regresión lineal múltiple</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#interpretación-1"><i class="fa fa-check"></i><b>5.2.1</b> Interpretación</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="regresión-lineal.html"><a href="regresión-lineal.html#ajuste-de-modelo"><i class="fa fa-check"></i><b>5.3</b> Ajuste de modelo</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#estimación-de-parámetros-regresión-lineal-simple"><i class="fa fa-check"></i><b>5.3.1</b> Estimación de parámetros: Regresión lineal simple</a></li>
+<li class="chapter" data-level="5.3.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#estimación-de-parámetros-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>5.3.2</b> Estimación de parámetros: Regresión lineal múltiple</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="regresión-lineal.html"><a href="regresión-lineal.html#residuos-del-modelo"><i class="fa fa-check"></i><b>5.4</b> Residuos del modelo</a>
 <ul>
 <li class="chapter" data-level="" data-path="regresión-lineal.html"><a href="regresión-lineal.html#condiciones-para-el-ajuste-de-una-regresión-lineal"><i class="fa fa-check"></i>Condiciones para el ajuste de una regresión lineal:</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="regresión-lineal.html"><a href="regresión-lineal.html#implementación-con-python"><i class="fa fa-check"></i><b>5.3</b> Implementación con Python</a></li>
+<li class="chapter" data-level="5.5" data-path="regresión-lineal.html"><a href="regresión-lineal.html#implementación-con-python"><i class="fa fa-check"></i><b>5.5</b> Implementación con Python</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="./"><img src="img/amat-logo.png" width="280"></a></li>
@@ -1289,7 +1297,7 @@ columna.</p>
 <pre><code>## ColumnTransformer(remainder=&#39;passthrough&#39;,
 ##                   transformers=[(&#39;custom&#39;,
 ##                                  FunctionTransformer(feature_names_out=&#39;one-to-one&#39;,
-##                                                      func=&lt;function custom_function at 0x2a2dc6290&gt;,
+##                                                      func=&lt;function custom_function at 0x290d3a290&gt;,
 ##                                                      kw_args={&#39;col1&#39;: &#39;Column1&#39;,
 ##                                                               &#39;col2&#39;: &#39;Column2&#39;,
 ##                                                               &#39;col3&#39;: &#39;Column3&#39;}),
