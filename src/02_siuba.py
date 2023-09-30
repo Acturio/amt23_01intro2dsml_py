@@ -1,8 +1,10 @@
 import pandas as pd
 from siuba import *
+import os
 
 
 ames_housing = pd.read_csv("data/ames.csv")
+
 
 ames_housing.info()
 ames_housing.describe()

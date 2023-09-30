@@ -12,6 +12,7 @@ virtualenv_create(envname = "venv_dsml_py3_11", python = "python3.11")
 
 virtualenv_list()
 
+use_python("/Users/mi20447/.virtualenvs/venv_dsml_py3_10/bin/python")
 use_virtualenv("venv_dsml_py3_10")
 
 # import pandas 
@@ -25,7 +26,7 @@ virtualenv_install("venv_dsml_py3_10", "siuba")
 virtualenv_install("venv_dsml_py3_10", "plydata")
 virtualenv_install("venv_dsml_py3_10", "scikit-learn")
 virtualenv_install("venv_dsml_py3_10", "plotnine")
-virtualenv_install("venv_dsml_py3_10", "mizani")
+virtualenv_install("venv_dsml_py3_10", "mizani==0.9.2")
 
 
 # import pandas 

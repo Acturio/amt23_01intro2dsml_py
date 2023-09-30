@@ -63,10 +63,8 @@ pipeline
 normalizar-columnas-numéricas
 dicotomización-de-categorías
 imputación-de-datos-faltantes
-transformaciones-personalizadas
 interacciones
 renombramiento-de-nuevos-datos
-actividad-de-refuerzo
 regresión-lineal
 regresión-lineal-simple
 interpretación
@@ -77,3 +75,8 @@ estimación-de-parámetros-regresión-lineal-simple
 estimación-de-parámetros-regresión-lineal-múltiple
 residuos-del-modelo
 implementación-con-python
+carga-y-partición-de-datos
+pipeline-de-transformación-de-datos
+creación-y-ajuste-de-modelo
+predicción-con-nuevos-datos
+extracción-de-coeficientes

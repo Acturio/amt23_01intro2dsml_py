@@ -2,7 +2,10 @@ from siuba import *
 from plotnine import data as p9d
 from plotnine import *
 from mizani.formatters import comma_format, dollar_format
+#, dollar_format
+from sklearn import datasets
 
+# import some data to play with
 diamonds = p9d.diamonds
 diamonds
 
@@ -10,10 +13,11 @@ diamonds
 (
 diamonds >>
   ggplot(aes(x = "price")) +
-  geom_histogram(color = "pink", fill = "purple", bins=30) +
-  scale_x_continuous(labels=dollar_format()) + 
+  geom_histogram(color = "pink", fill = "purple", bins=100) +
+  scale_x_continuous(labels=dollar_format(big_mark=',')) + 
   scale_y_continuous(labels=comma_format()) + 
-  ggtitle("Distribución d eprecio")
+  ggtitle("Distribución de precio") +
+  theme(axis_text_x=element_text(angle=90))
 )
 
 
@@ -22,7 +26,7 @@ diamonds >>
 (
  diamonds >>
   ggplot(aes(x = "price")) +
-  geom_histogram(aes(y='stat(density)'), bins = 30, fill = 'blue', color = "white") +
+  geom_histogram(aes(y='stat(density)'), bins = 30, fill = 'purple', color = "red") +
   geom_density(colour = "black", size = 1)
 )
 
@@ -44,7 +48,7 @@ diamonds >>
 (
 diamonds >>
  ggplot(aes(x = 0, y = "carat")) +
- geom_boxplot(color= "purple", fill= "pink", alpha = 0.3) +
+ geom_boxplot(color= "purple", fill= "pink", alpha = 0.1) +
  scale_y_continuous(labels = comma_format(digits=1)) +
  theme(axis_text_y=element_blank()) +
  coord_flip() +

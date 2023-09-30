@@ -1044,68 +1044,68 @@ imputed_data
 ```
 
 
-### Transformaciones personalizadas
+<!-- ### Transformaciones personalizadas -->
 
-Podría pensarse en una infinidad de transformaciones a aplicar a los datos. Transformaciones de escala, de suavizamiento, estadísticas e incluso personalizadas. Existen métodos simples y métodos avanzados para realizar este proceso. A continuación, se muestra el método simple:
+<!-- Podría pensarse en una infinidad de transformaciones a aplicar a los datos. Transformaciones de escala, de suavizamiento, estadísticas e incluso personalizadas. Existen métodos simples y métodos avanzados para realizar este proceso. A continuación, se muestra el método simple: -->
 
-```{python}
-import pandas as pd
-from sklearn.preprocessing import FunctionTransformer, StandardScaler
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
+<!-- ```{python} -->
+<!-- import pandas as pd -->
+<!-- from sklearn.preprocessing import FunctionTransformer, StandardScaler -->
+<!-- from sklearn.compose import ColumnTransformer -->
+<!-- from sklearn.pipeline import Pipeline -->
 
-# Datos de ejemplo en forma de DataFrame
-data = pd.DataFrame({
-    'Column1': [-1, -5,   0,  3,  7],
-    'Column2': [ 2,  6,  10, -4, -8],
-    'Column3': [-3,  7, -11,  5, -9],
-    'Column4': [ 4,  8,  12,  6, 10]
-})
+<!-- # Datos de ejemplo en forma de DataFrame -->
+<!-- data = pd.DataFrame({ -->
+<!--     'Column1': [-1, -5,   0,  3,  7], -->
+<!--     'Column2': [ 2,  6,  10, -4, -8], -->
+<!--     'Column3': [-3,  7, -11,  5, -9], -->
+<!--     'Column4': [ 4,  8,  12,  6, 10] -->
+<!-- }) -->
 
-# Definir una función personalizada que suma dos columnas y divide por una tercera
-def custom_function(X, col1, col2, col3):
-    result = (X[col1] + X[col2])/ X[col3]
-    return result.values.reshape(-1, 1)
+<!-- # Definir una función personalizada que suma dos columnas y divide por una tercera -->
+<!-- def custom_function(X, col1, col2, col3): -->
+<!--     result = (X[col1] + X[col2])/ X[col3] -->
+<!--     return result.values.reshape(-1, 1) -->
 
-# Nombres de las columnas a operar
-col1 = 'Column1'
-col2 = 'Column2'
-col3 = 'Column3'
+<!-- # Nombres de las columnas a operar -->
+<!-- col1 = 'Column1' -->
+<!-- col2 = 'Column2' -->
+<!-- col3 = 'Column3' -->
 
-# Crear el transformador de función personalizada
-custom_transformer = FunctionTransformer(
- custom_function, 
- validate=False, 
- feature_names_out = 'one-to-one',
- kw_args={
-  'col1': col1, 'col2': col2, 'col3': col3
- })
+<!-- # Crear el transformador de función personalizada -->
+<!-- custom_transformer = FunctionTransformer( -->
+<!--  custom_function,  -->
+<!--  validate=False,  -->
+<!--  feature_names_out = 'one-to-one', -->
+<!--  kw_args={ -->
+<!--   'col1': col1, 'col2': col2, 'col3': col3 -->
+<!--  }) -->
 
-# Crear un ColumnTransformer para aplicar el transformador personalizado a las columnas
-column_transformer = ColumnTransformer(
- transformers=[
-    ('custom', custom_transformer, [col1, col2, col3]),  # Indica las columnas a transformar
-    ('scaler', StandardScaler(), [col1, col2, col3])], 
- remainder='passthrough',
- verbose = False
- )  # Mantener las columnas no transformadas
+<!-- # Crear un ColumnTransformer para aplicar el transformador personalizado a las columnas -->
+<!-- column_transformer = ColumnTransformer( -->
+<!--  transformers=[ -->
+<!--     ('custom', custom_transformer, [col1, col2, col3]),  # Indica las columnas a transformar -->
+<!--     ('scaler', StandardScaler(), [col1, col2, col3])],  -->
+<!--  remainder='passthrough', -->
+<!--  verbose = False -->
+<!--  )  # Mantener las columnas no transformadas -->
 
-column_transformer.fit(data) 
-transformed = column_transformer.transform(data) 
-transformed
+<!-- column_transformer.fit(data)  -->
+<!-- transformed = column_transformer.transform(data)  -->
+<!-- transformed -->
 
-test = pd.DataFrame({
-    'Column1': [-1, -5, 9, -3, -7],
-    'Column2': [25, 6, -10, 4, -8],
-    'Column3': [31, -7, 11, -5, 9],
-    'Column4': [-4, 8, -12, 6, -10]
-})
+<!-- test = pd.DataFrame({ -->
+<!--     'Column1': [-1, -5, 9, -3, -7], -->
+<!--     'Column2': [25, 6, -10, 4, -8], -->
+<!--     'Column3': [31, -7, 11, -5, 9], -->
+<!--     'Column4': [-4, 8, -12, 6, -10] -->
+<!-- }) -->
 
-# Aplicar el pipeline a los datos de prueba
-X_test_transformed = column_transformer.transform(test)
-X_test_transformed
+<!-- # Aplicar el pipeline a los datos de prueba -->
+<!-- X_test_transformed = column_transformer.transform(test) -->
+<!-- X_test_transformed -->
 
-```
+<!-- ``` -->
 
 ### Interacciones
 
@@ -1114,6 +1114,11 @@ Entre las transformaciones más útiles que pueden implementarse en el proceso d
 Estas se refieren a las relaciones combinadas entre dos o más variables que pueden afectar a la variable objetivo de un modelo. En otras palabras, **una interacción ocurre cuando el efecto de una característica en la variable objetivo depende de los valores combinados de otra(s) característica(s).**
 
 ```{python}
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
 from plotnine import *
 from mizani.formatters import comma_format, dollar_format
 
@@ -1210,25 +1215,25 @@ transformed_df = pd.DataFrame(transformed_data, columns=new_column_names)
 print(transformed_df)
 ```
 
-### Actividad de refuerzo
+<!-- ### Actividad de refuerzo -->
 
-Al hacer un modelo de machine learning es importante tener un dominio del fenómeno que se está analizando. Ya sea un tema médico, bancario, asegurador, comercial, demográfico, etc. 
+<!-- Al hacer un modelo de machine learning es importante tener un dominio del fenómeno que se está analizando. Ya sea un tema médico, bancario, asegurador, comercial, demográfico, etc.  -->
 
-Los mejores modelos de ML suelen tener diversas características e interacciones creadas en la ingeniería de variables.
+<!-- Los mejores modelos de ML suelen tener diversas características e interacciones creadas en la ingeniería de variables. -->
 
-Para reforzar lo aprendido, deberá realizar los siguientes ejercicios:
+<!-- Para reforzar lo aprendido, deberá realizar los siguientes ejercicios: -->
 
-1. Crear e integrar a un pipeline una función que agrupe todas las categorías que tengan **menos del 10%** de representación sobre el total de categorías. Nombrar a esta nueva categoría: "otros". Esta función debe ser útil para cualquier columna categórica que sea elegida.
+<!-- 1. Crear e integrar a un pipeline una función que agrupe todas las categorías que tengan **menos del 10%** de representación sobre el total de categorías. Nombrar a esta nueva categoría: "otros". Esta función debe ser útil para cualquier columna categórica que sea elegida. -->
 
-2. Crear e integrar a un pipeline una función que **agrupe arbitrariamente dos o más categorías** definidas dentro de una lista y posteriormente deberán ser recodificadas en una nueva etiqueta. Esta función debe ser útil para cualquier columna categórica que sea elegida con sus respectivas categorías. *Hint: estudiar la función FunctionTransformer y usar el parámetro 'kw_args'.*
+<!-- 2. Crear e integrar a un pipeline una función que **agrupe arbitrariamente dos o más categorías** definidas dentro de una lista y posteriormente deberán ser recodificadas en una nueva etiqueta. Esta función debe ser útil para cualquier columna categórica que sea elegida con sus respectivas categorías. *Hint: estudiar la función FunctionTransformer y usar el parámetro 'kw_args'.* -->
 
-3. Aplicar a 2 columnas categóricas cada uno de los pasos creados anteriormente.
+<!-- 3. Aplicar a 2 columnas categóricas cada uno de los pasos creados anteriormente. -->
 
-4. Para cada una de las columnas reagrupadas anteriormente, realizar un gráfico de barras que refleje el antes y después en la distribución de las categorías.
+<!-- 4. Para cada una de las columnas reagrupadas anteriormente, realizar un gráfico de barras que refleje el antes y después en la distribución de las categorías. -->
 
-5. Revisar la documentación de los transformadores predefinidos en sklearn: [link](https://scikit-learn.org/stable/modules/preprocessing.html#).
+<!-- 5. Revisar la documentación de los transformadores predefinidos en sklearn: [link](https://scikit-learn.org/stable/modules/preprocessing.html#). -->
 
-
+Revisar la documentación de los transformadores predefinidos en sklearn: [link](https://scikit-learn.org/stable/modules/preprocessing.html#).
 
 
 
