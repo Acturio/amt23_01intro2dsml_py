@@ -108,6 +108,7 @@ ames_test.info()
     scale_y_continuous(labels = dollar_format(prefix='$', digits=0, big_mark=','), limits = [0, 600000] ) +
     scale_x_continuous(labels = dollar_format(prefix='$', digits=0, big_mark=','), limits = [0, 500000] ) +
     geom_abline(color = "red") +
+    coord_equal() +
     labs(
       title = "Comparación entre predicción y observación",
       x = "Predicción",

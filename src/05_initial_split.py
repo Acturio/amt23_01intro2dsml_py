@@ -94,7 +94,7 @@ print("Promedio del score:", mean_score)
 print("Desviación estándar del score:", std_score)
 
 ################################################################################
-# Leave-one-out cross-validation
+# KFCV
 
 # Crea el objeto K-Fold Cross-Validation con K=5 (puedes cambiar el valor de K según tus necesidades)
 kf = KFold(n_splits = 10, shuffle = True, random_state = 42)

@@ -80,3 +80,10 @@ pipeline-de-transformación-de-datos
 creación-y-ajuste-de-modelo
 predicción-con-nuevos-datos
 extracción-de-coeficientes
+métricas-de-desempeño
+implementación-con-python-1
+validación-cruzada
+métodos-se-selección-de-variables
+forward-selection-selección-hacia-adelante
+backward-selection-selección-hacia-atrás
+ejercicio
