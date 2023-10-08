@@ -1,0 +1,478 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+::: watermark
+<img src="img/header.png" width="400"/>
+:::
+
+# Regresión Logística
+
+> El nombre de este modelo es: **Regresión Bernoulli con liga logit**, pero todo mundo la conoce solo por regresión logística. Es importante saber que la liga puede ser elegida dentro de un conjunto de ligas comunes, por lo que puede dejar de ser logit y seguir siendo regresión Bernoulli, pero ya no podría ser llamada "logística".
+
+Al igual que en regresión lineal, existe la regresión simple y regresión múltiple. La regresión logística simple se utiliza una variable independiente, mientras que cuando se utiliza más de una variable independiente, el proceso se denomina regresión logística múltiple.
+
+**Objetivo:** Estimar la **probabilidad de pertenecer a la categoría _positiva_ de una variable de respuesta categórica**. Posteriormente, se determina el umbral de probabilidad a partir del cual se clasifica a una observación como positiva o negativa. 
+
+
+```{r, warning=FALSE, echo=FALSE}
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(plotly))
+
+set.seed(123)
+x1 <- runif(500)
+r1 <- as.numeric(rbernoulli(1, x1))
+c1 <- if_else(r1 == 0, "red", "blue")
+
+set.seed(8361)
+x2 <- runif(100, 0.5, 0.75)
+r2 <- rbinom(100, 1, 0.6)
+c2 <- if_else(rbinom(100, 1, x2) == 0, "red", "blue")
+
+ggp <- bind_rows(
+  bind_cols(x = x1, respuesta = r1, c = c1),
+  bind_cols(x = x2, respuesta = r2, c = c2)
+  ) %>% 
+  mutate(x = scale(x)) %>% 
+  ggplot(aes(x = x, y = respuesta)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(formula = y ~ x, method = "lm", se = F, color = "blue") +
+  ylim(-0.5, 1.25) +
+  ggtitle("Modelación mediante 'regresión lineal'") +
+  xlab("X1") + ylab("Response") +
+  theme(legend.position ='none')
+
+ggplotly(ggp)
+```
+
+
+## Función sigmoide
+
+Si una variable cualitativa con dos categorías se codifica como 1 y 0, matemáticamente es posible ajustar un modelo de regresión lineal por mínimos cuadrados. El problema de esta aproximación es que, al tratarse de una recta, para valores extremos del predictor, se obtienen valores de $Y$ menores que 0 o mayores que 1, lo que entra en contradicción con el hecho de que las probabilidades siempre están dentro del rango [0,1].
+
+Para evitar estos problemas, la regresión logística transforma el valor devuelto por la regresión lineal empleando una función cuyo resultado está siempre comprendido entre 0 y 1. Existen varias funciones que cumplen esta descripción, una de las más utilizadas es la función logística (también conocida como función **sigmoide**):
+
+$$\sigma(Z)=\frac{e^{Z}}{1+e^{Z}}$$
+Función sigmoide:
+
+```{r, echo = F}
+ggp2 <- bind_rows(
+  bind_cols(x = x1, respuesta = r1, c = c1),
+  bind_cols(x = x2, respuesta = r2, c = c2)
+  ) %>% 
+  mutate(x = scale(x)) %>% 
+  ggplot(aes(x = x, y = respuesta)) +
+  geom_point(aes(fill = c, colour = c), alpha = 0.3) +
+  geom_smooth(formula = y ~ x, method = "glm", 
+    method.args = list(family = "binomial"), 
+    se = FALSE, color = "blue", alpha = 0.05, linewidth = 0.5) +
+  ggtitle("Modelación mediante 'regresión Bernoulli'") +
+  xlab("X1") + ylab("Response") +
+  theme(legend.position ='none')
+
+ggplotly(ggp2)
+```
+
+Para valores de $Z$ muy grandes, el valor de $e^{Z}$ tiende a *infinito* por lo que el valor de la función sigmoide es 1. Para valores de $Z$ muy negativos, el valor $e^{Z}$ tiende a *cero*, por lo que el valor de la función sigmoide es 0.
+
+Sustituyendo la $Z$ de la función sigmoide por la función lineal $\beta_0+\beta_1X$ se obtiene que:
+
+$$\pi=P(Y=k|X=x)=\frac{e^{\beta_0+\beta_1X}}{1+e^{\beta_0+\beta_1X}}$$
+
+donde $P(Y=k|X=x)$ puede interpretarse como: la probabilidad de que la variable cualitativa $Y$ adquiera el valor $k$, dado que el predictor $X$ tiene el valor $x$.
+
+
+## Ajuste del modelo
+
+Esta función, puede ajustarse de forma sencilla con métodos de regresión lineal si se emplea su versión logarítmica:
+
+$$logit(\pi)= ln(\frac{\pi}{1-\pi}) = ln(\frac{p(Y=k|X=x)}{1−p(Y=k|X=x)})=\beta_0+\beta_1X$$
+
+
+$$P(Y=k|X=x)=\frac{e^{\beta_0+\beta_1x_1+\beta_2x_2+...+\beta_ix_i}}{1+e^{\beta_0+\beta_1x_1+\beta_2x_2+...+\beta_ix_i}}$$
+
+La combinación óptima de coeficientes $\beta_0$ y $\beta_1$ será aquella que tenga la máxima verosimilitud (maximum likelihood), es decir el valor de los parámetros $\beta_0$ y $\beta_1$ con los que se maximiza la probabilidad de obtener los datos observados.
+
+
+El método de maximum likelihood está ampliamente extendido en la estadística aunque su implementación no siempre es trivial.
+
+Otra forma para ajustar un modelo de regresión logística es empleando descenso de gradiente. Si bien este no es el método de optimización más adecuado para resolver la regresión logística, está muy extendido en el ámbito de machine learning para ajustar otros modelos.
+
+
+## Clasificación
+
+Una de las principales aplicaciones de un modelo de regresión logística es clasificar la variable cualitativa en función de valor que tome el predictor. Para conseguir esta clasificación, es necesario establecer un **threshold** de probabilidad a partir de la cual se considera que la variable pertenece a uno de los niveles. Por ejemplo, se puede asignar una observación al grupo 1 si $p̂ (Y=1|X)>0.3$ y al grupo 0 si ocurre lo contrario.
+
+Es importante mencionar que el punto de corte **no necesariamente tiene que ser 0.5**, este puede ser seleccionado a conveniencia de la métrica a optimizar.
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+htmltools::tags$iframe(
+    src="rlogit.html",
+    width="800px", 
+    height="400px",
+    scrolling="no", 
+    seamless="seamless", 
+    frameBorder="0"
+  )
+
+```
+
+## Implementación en python
+
+Ajustaremos un modelo de regresión logística usando la receta antes vista.
+
+**Lectura de datos**
+```{python}
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+import pandas as pd
+from siuba import *
+from plydata.one_table_verbs import pull
+pd.set_option('display.max_columns', 4)
+
+telco = pd.read_csv("data/Churn.csv")
+telco.info()
+```
+
+**Segmentación de datos**
+```{python}
+telco_y = telco >> pull("Churn")    # telco[["Churn"]]
+telco_x = select(telco, -_.Churn, -_.customerID)   # telco.drop('Churn', axis=1)
+
+telco_x_train, telco_x_test, telco_y_train, telco_y_test = train_test_split(
+ telco_x, telco_y, 
+ train_size = 0.80, 
+ random_state = 195,
+ stratify = telco_y
+ )
+```
+
+### Pipeline de transformación de datos
+
+```{python}
+# pip install mlxtend==0.23.0
+from mlxtend.feature_selection import ColumnSelector
+
+# Seleccionamos las variales numéricas de interés
+num_cols = ["MonthlyCharges"]
+
+# Seleccionamos las variables categóricas de interés
+cat_cols = ["PaymentMethod", "Dependents"]
+
+# Juntamos todas las variables de interés
+columnas_seleccionadas = num_cols + cat_cols
+
+pipe = ColumnSelector(columnas_seleccionadas)
+telco_x_train_selected = pipe.fit_transform(telco_x_train)
+
+telco_train_selected = pd.DataFrame(
+  telco_x_train_selected, 
+  columns = columnas_seleccionadas
+  )
+
+telco_train_selected.info()
+
+# ColumnTransformer para aplicar transformaciones
+preprocessor = ColumnTransformer(
+    transformers = [
+        ('scaler', StandardScaler(), num_cols),
+        ('onehotencoding', OneHotEncoder(drop='first', sparse_output=False), cat_cols)
+    ],
+    verbose_feature_names_out = False,
+    remainder = 'passthrough'  # Mantener las columnas restantes sin cambios
+)
+
+transformed_data = preprocessor.fit_transform(telco_train_selected)
+new_column_ntelco = preprocessor.get_feature_names_out()
+
+transformed_df = pd.DataFrame(
+  transformed_data, 
+  columns=new_column_ntelco
+  )
+  
+transformed_df
+
+transformed_df.info()
+
+```
+
+
+### Creación y ajuste de modelo 
+
+```{python}
+# Crear el pipeline con la regresión logit
+pipeline = Pipeline([
+   ('preprocessor', preprocessor),
+   ('regressor', LogisticRegression())
+])
+
+# Entrenar el pipeline
+results = pipeline.fit(telco_train_selected, telco_y_train)
+```
+
+
+
+### Predicción con nuevos datos
+
+```{python}
+
+y_pred = pipeline.predict(telco_x_test)
+
+telco_test = (
+  telco_x_test >>
+  mutate(Churn_Pred = y_pred, Churn = telco_y_test)
+)
+
+(
+telco_test >>
+  select(_.Churn, _.Churn_Pred)
+)
+
+```
+
+
+## Métricas de desempeño
+
+Existen distintas métricas de desempeño para problemas de clasificación, debido a que contamos con la respuesta correcta podemos contar cuántos aciertos tuvimos y cuántos fallos tuvimos.
+
+Primero, por simplicidad ocuparemos un ejemplo de clasificación binaria, Cancelación (1) o No Cancelación (0).
+
+En este tipo de algoritmos definimos cuál de las categorías será nuestra etiqueta positiva y cuál será la negativa. La positiva será la categoría que queremos predecir -en nuestro ejemplo, Cancelación- y la negativa lo opuesto -en el caso binario- en nuestro ejemplo, no cancelación.
+
+Dadas estas definiciones tenemos 4 posibilidades:
+
+- **True positives**: Nuestra predicción dijo que la transacción es fraude y la etiqueta real dice que es fraude.
+- **False positives**: Nuestra predicción dijo que la transacción es fraude y la etiqueta real dice que no es fraude.
+- **True negatives**: Nuestra predicción dijo que la transacción es no fraude y la etiqueta real dice que no es fraude.
+- **False negatives**: Nuestra predicción dijo que la transacción es no fraude y la etiqueta real dice que es fraude.
+
+- **Matriz de confusión**
+
+```{r, fig.align='center', echo=F, out.height='350pt', out.width='700pt'}
+knitr::include_graphics("img/06-ml-logit/6-3-4-1_confusion_matrix.png")
+```
+
+Esta métrica corresponde a una matriz en donde se plasma el conteo de los aciertos y los errores que haya hecho el modelo, esto es: los verdaderos positivos (TP), los verdaderos negativos (TN), los falsos positivos (FP) y los falsos negativos (FN).
+
+Normalmente los renglones representan las etiquetas predichas, ya sean positivas o negativas, y las columnas a las etiquetas reales, aunque esto puede cambiar en cualquier software.
+
+---
+
+- **Accuracy**
+
+Número de aciertos totales entre todas las predicciones.
+
+$$accuracy = \frac{TP + TN}{ TP+FP+TN+FN}$$
+
+
+La métrica más utilizada, en conjuntos de datos no balanceados esta métrica no nos sirve, al contrario, nos engaña. Adicionalmente, cuando la identificación de una categoría es más importante que otra es mejor recurrir a otras métricas.
+
+---
+
+- **Precision**: Eficiencia
+
+De los que identificamos como clase positiva, cuántos identificamos correctamente. ¿Qué tan eficientes somos en la predicción?
+
+
+$$precision = \frac{TP}{TP + FP}$$
+
+¿Cuándo utilizar precisión?
+
+Esta es la métrica que ocuparás más, pues en un contexto de negocio, donde los recursos son finitos y tiene un costo asociado, ya sea monetario o de tiempo o de recursos, necesitarás que las predicciones de tu etiqueta positiva sean muy eficientes.
+
+Al utilizar esta métrica estaremos optimizando el modelo para minimizar el número de falsos positivos.
+
+---
+
+- **Recall o Sensibilidad**: Cobertura
+
+Del universo posible de nuestra clase positiva, cuántos identificamos correctamente.
+
+
+$$recall = \frac{TP}{TP + FN }$$
+
+Esta métrica la ocuparás cuando en el contexto de negocio de tu problema sea más conveniente aumentar la cantidad de positivos o disminuir los falsos negativos. Esto se realiza debido al impacto que estos pueden tener en las personas en quienes se implementará la predicción. 
+
+---
+
+- **Especificidad**
+
+Es el número de observaciones correctamente identificados como negativos fuera del total de negativos.
+
+$$Specificity = \frac{TN}{TN+FP}$$
+
+---
+
+- **F1-score**
+
+Combina **precision** y **recall** para optimizar ambos.
+
+$$F = 2 *\frac{precision * recall}{precision + recall} $$
+
+Se recomienda utilizar esta métrica de desempeño cuando quieres balancear tanto los falsos positivos como los falsos negativos. Aunque es una buena solución para tomar en cuenta ambos errores, pocas veces hay problemas reales que permiten ocuparla, esto es porque en más del 90% de los casos tenemos una restricción en recursos.
+
+---
+
+```{python}
+from sklearn.metrics import confusion_matrix
+
+matriz_confusion = confusion_matrix(telco_y_test, y_pred)
+matriz_confusion
+```
+
+si queremos apreciar de una manera más legible y elegante la salida de una matriz de confusión, puede lograrse mediante el apoyo de la librería *seaborn*, la cual permite crear múltiples gráficos de manera simple.
+
+
+```{python, warning=F, message=F}
+import seaborn as sns
+import matplotlib.pyplot as plt
+import warnings
+
+warnings.filterwarnings("ignore")
+
+# Crear un DataFrame a partir de la matriz de confusión
+confusion_df = pd.DataFrame(
+  matriz_confusion, 
+  columns=['Predicción Negativa', 'Predicción Positiva'], 
+  index=['Real Negativa', 'Real Positiva']
+  )
+
+# Crear una figura utilizando Seaborn
+sns.heatmap(confusion_df, annot=True, fmt='d', cmap='Blues', cbar=False);
+
+plt.title('Matriz de Confusión');
+plt.xlabel('Predicción');
+plt.ylabel('Realidad');
+plt.show();
+
+```
+
+Tómese en cuenta que esta matriz de confusión es creada a partir de un punto de corte arbirtrario en las probabilidades de predicción. Por default, python asigna un corte de porbabilidad en 0.5, sin embargo, es posible realizar otro corte, según la conveniencia para el estudio.
+
+Teniendo esto en mente podemos definir las siguientes métricas:
+
+- **AUC y ROC**: *Area Under the Curve y Receiver operator characteristic*
+
+```{r, fig.align='center', echo=F, out.height='400pt', out.width='700pt'}
+knitr::include_graphics("img/06-ml-logit/6-3-4-2_roc.png")
+```
+
+Una curva **ROC** es un gráfico que muestra el desempeño de un modelo de clasificación en todos los puntos de corte.
+
+**AUC** significa "Área bajo la curva ROC". Es decir, **AUC** mide el área debajo de la curva ROC.
+
+Para poder determinar cual es el mejor punto de corte, es indispensable conocer el comportamiento y efecto  de los diferentes puntos de corte. 
+
+Veamos un ejemplo visual en nuestra aplicación de Shiny: [ConfusionMatrixShiny](https://acturio.shinyapps.io/confusion_matrix/)
+
+## Estimación de probabilidades
+
+```{python}
+import numpy as np
+
+y_pred = pipeline.predict_proba(telco_x_test)[:,0]
+Churn_Pred = np.where(y_pred >= 0.7, "No", "Yes")
+
+results = (
+  telco_x_test >>
+  mutate(
+    Churn_Prob = y_pred, 
+    Churn_Pred = Churn_Pred,
+    Churn = telco_y_test) >>
+  select(_.Churn_Prob, _.Churn_Pred, _.Churn)
+)
+
+results
+
+(
+  results
+  >> group_by(_.Churn_Pred)
+  >> summarize(n = _.Churn_Pred.count() )
+)  
+
+
+confusion_df = pd.DataFrame(
+  confusion_matrix(telco_y_test, Churn_Pred), 
+  columns=['Predicción Negativa', 'Predicción Positiva'], 
+  index=['Real Negativa', 'Real Positiva']
+  )
+
+# Crear una figura utilizando Seaborn
+plt.plot();
+sns.heatmap(confusion_df, annot=True, fmt='d', cmap='Blues', cbar=False);
+
+plt.title('Matriz de Confusión');
+plt.xlabel('Predicción');
+plt.ylabel('Realidad');
+plt.show();
+```
+
+
+```{python}
+from sklearn.metrics import roc_curve, roc_auc_score
+from plotnine import *
+
+fpr, tpr, thresholds = roc_curve(
+  y_true = np.where(telco_y_test == "Yes", 0, 1), 
+  y_score = y_pred
+  )
+
+roc_thresholds = pd.DataFrame({
+  'thresholds': thresholds, 
+  'tpr': tpr, 
+  'fpr': fpr}
+  )
+
+(
+  roc_thresholds >>
+  ggplot(aes(x = fpr, y = tpr)) +
+  geom_path(size = 1.2) +
+  geom_abline(colour = "gray") +
+  xlab("Tasa de falsos positivos") +
+  ylab("Sensibilidad") +
+  ggtitle("Curva ROC")
+)
+
+roc_auc_score(np.where(telco_y_test == "Yes", 0, 1), y_pred)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

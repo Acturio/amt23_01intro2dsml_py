@@ -7,6 +7,7 @@ install_python(version = "3.10:latest", list = TRUE)
 ####################
 
 # create a new environment 
+use_python("tu_ruta_instalación_python")
 virtualenv_create(envname = "venv_dsml_py3_10", python = "python3.10")
 virtualenv_create(envname = "venv_dsml_py3_11", python = "python3.11")
 

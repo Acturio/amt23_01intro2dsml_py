@@ -87,3 +87,13 @@ métodos-se-selección-de-variables
 forward-selection-selección-hacia-adelante
 backward-selection-selección-hacia-atrás
 ejercicio
+regresión-logística
+función-sigmoide
+ajuste-del-modelo
+clasificación-2
+implementación-en-python
+pipeline-de-transformación-de-datos-1
+creación-y-ajuste-de-modelo-1
+predicción-con-nuevos-datos-1
+métricas-de-desempeño-1
+estimación-de-probabilidades

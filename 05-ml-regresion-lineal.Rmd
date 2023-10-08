@@ -78,14 +78,6 @@ Al analizar la interpretación de los coeficientes de regresión es importante t
 
 
 
-
-
-
-
-
-
-
-
 ## Regresión lineal múltiple 
 
 Cuando se utiliza **más de una** variable independiente, el proceso se denomina regresión lineal múltiple. En este escenario no es una recta sino un hiper-plano lo que se ajusta a partir de las covariables explicativas $\{X_1, X_2, X_3, ...,X_n\}$
