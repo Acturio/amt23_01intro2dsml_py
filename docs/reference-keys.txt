@@ -97,3 +97,4 @@ creación-y-ajuste-de-modelo-1
 predicción-con-nuevos-datos-1
 métricas-de-desempeño-1
 estimación-de-probabilidades
+validación-cruzada-1
