@@ -1044,68 +1044,63 @@ imputed_data
 ```
 
 
-<!-- ### Transformaciones personalizadas -->
+### Transformaciones personalizadas
 
-<!-- Podría pensarse en una infinidad de transformaciones a aplicar a los datos. Transformaciones de escala, de suavizamiento, estadísticas e incluso personalizadas. Existen métodos simples y métodos avanzados para realizar este proceso. A continuación, se muestra el método simple: -->
+Podría pensarse en una infinidad de transformaciones a aplicar a los datos. Transformaciones de escala, de suavizamiento, estadísticas e incluso personalizadas. Existen métodos simples y métodos avanzados para realizar este proceso. A continuación, se muestra el método simple:
 
-<!-- ```{python} -->
-<!-- import pandas as pd -->
-<!-- from sklearn.preprocessing import FunctionTransformer, StandardScaler -->
-<!-- from sklearn.compose import ColumnTransformer -->
-<!-- from sklearn.pipeline import Pipeline -->
+```{python}
+import pandas as pd
+from sklearn.preprocessing import FunctionTransformer, StandardScaler
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
-<!-- # Datos de ejemplo en forma de DataFrame -->
-<!-- data = pd.DataFrame({ -->
-<!--     'Column1': [-1, -5,   0,  3,  7], -->
-<!--     'Column2': [ 2,  6,  10, -4, -8], -->
-<!--     'Column3': [-3,  7, -11,  5, -9], -->
-<!--     'Column4': [ 4,  8,  12,  6, 10] -->
-<!-- }) -->
+# Datos de ejemplo en forma de DataFrame
+data = pd.DataFrame({
+    'Column1': [-1, -5,   0,  3,  7],
+    'Column2': [ 2,  6,  10, -4, -8],
+    'Column3': [-3,  7, -11,  5, -9]
+})
 
-<!-- # Definir una función personalizada que suma dos columnas y divide por una tercera -->
-<!-- def custom_function(X, col1, col2, col3): -->
-<!--     result = (X[col1] + X[col2])/ X[col3] -->
-<!--     return result.values.reshape(-1, 1) -->
+# Definir una función personalizada que suma dos columnas y divide por una tercera
+def custom_function(X, c1, c2):
+    
+    X["c1_c2"] = X[c1]/ X[c2]
+    return X
 
-<!-- # Nombres de las columnas a operar -->
-<!-- col1 = 'Column1' -->
-<!-- col2 = 'Column2' -->
-<!-- col3 = 'Column3' -->
 
-<!-- # Crear el transformador de función personalizada -->
-<!-- custom_transformer = FunctionTransformer( -->
-<!--  custom_function,  -->
-<!--  validate=False,  -->
-<!--  feature_names_out = 'one-to-one', -->
-<!--  kw_args={ -->
-<!--   'col1': col1, 'col2': col2, 'col3': col3 -->
-<!--  }) -->
+# Crear el transformador de función personalizada
+custom_transformer = FunctionTransformer(
+ custom_function,
+ feature_names_out = 'one-to-one',
+ kw_args={'c1': 'Column1', 'c2': 'Column2'}
+ )
 
-<!-- # Crear un ColumnTransformer para aplicar el transformador personalizado a las columnas -->
-<!-- column_transformer = ColumnTransformer( -->
-<!--  transformers=[ -->
-<!--     ('custom', custom_transformer, [col1, col2, col3]),  # Indica las columnas a transformar -->
-<!--     ('scaler', StandardScaler(), [col1, col2, col3])],  -->
-<!--  remainder='passthrough', -->
-<!--  verbose = False -->
-<!--  )  # Mantener las columnas no transformadas -->
+# Crear un ColumnTransformer para aplicar el transformador personalizado a las columnas
+column_transformer = ColumnTransformer(
+ transformers=[
+    ('custom', custom_transformer, ["Column1", "Column2"])],
+ remainder='passthrough',
+ verbose_feature_names_out = False
+ )  
 
-<!-- column_transformer.fit(data)  -->
-<!-- transformed = column_transformer.transform(data)  -->
-<!-- transformed -->
+transformed = pd.DataFrame(
+  data = column_transformer.fit_transform(data),
+  columns = ["Column1", "Column2", "C1_over_c2", "Column3"]
+)
+transformed
 
-<!-- test = pd.DataFrame({ -->
-<!--     'Column1': [-1, -5, 9, -3, -7], -->
-<!--     'Column2': [25, 6, -10, 4, -8], -->
-<!--     'Column3': [31, -7, 11, -5, 9], -->
-<!--     'Column4': [-4, 8, -12, 6, -10] -->
-<!-- }) -->
 
-<!-- # Aplicar el pipeline a los datos de prueba -->
-<!-- X_test_transformed = column_transformer.transform(test) -->
-<!-- X_test_transformed -->
+test = pd.DataFrame({
+    'Column1': [-1, -5, 9, -3, -7],
+    'Column2': [25, 6, -10, 4, -8],
+    'Column3': [31, -7, 11, -5, 9]
+})
 
-<!-- ``` -->
+# Aplicar el pipeline a los datos de prueba
+X_test_transformed = column_transformer.transform(test)
+X_test_transformed
+
+```
 
 ### Interacciones
 

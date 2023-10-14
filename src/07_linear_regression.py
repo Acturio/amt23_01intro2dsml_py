@@ -37,7 +37,7 @@ ames_x_train, ames_x_test, ames_y_train, ames_y_test = train_test_split(
 ## SELECCIÓN DE VARIABLES
 
 # Seleccionamos las variales numéricas de interés
-num_cols = ["Full_Bath", "Half_Bath"]
+num_cols = ["Full_Bath", "Half_Bath", "Year_Remod_Add"]
 
 # Seleccionamos las variables categóricas de interés
 cat_cols = ["Overall_Cond"]
@@ -62,7 +62,7 @@ ames_train_selected.info()
 preprocessor = ColumnTransformer(
     transformers = [
         ('scaler', StandardScaler(), num_cols),
-        ('onehotencoding', OneHotEncoder(drop='first'), cat_cols)
+        ('onehotencoding', OneHotEncoder(drop='first', sparse_output=False), cat_cols)
     ],
     verbose_feature_names_out = False,
     remainder = 'passthrough'  # Mantener las columnas restantes sin cambios
@@ -72,7 +72,7 @@ transformed_data = preprocessor.fit_transform(ames_train_selected)
 new_column_names = preprocessor.get_feature_names_out()
 
 transformed_df = pd.DataFrame(
-  transformed_data.todense(),
+  transformed_data,
   columns=new_column_names
   )
 
