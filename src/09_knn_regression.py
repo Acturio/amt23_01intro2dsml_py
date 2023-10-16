@@ -1,12 +1,12 @@
-# pip install mlxtend==0.23.0
 from mlxtend.feature_selection import ColumnSelector
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.linear_model import LinearRegression
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error
 from sklearn.metrics import mean_squared_error, r2_score, make_scorer
 from sklearn.model_selection import train_test_split, KFold, cross_val_score, cross_validate
+from sklearn.model_selection import GridSearchCV
 
 from plydata.one_table_verbs import pull
 from mizani.formatters import comma_format, dollar_format
@@ -85,13 +85,11 @@ transformed_df.info()
 # Crear el pipeline con la regresión lineal
 pipeline = Pipeline([
    ('preprocessor', preprocessor),
-   ('regressor', LinearRegression())
+   ('regressor', KNeighborsRegressor(n_neighbors=5))
 ])
 
 # Entrenar el pipeline
 results = pipeline.fit(ames_train_selected, ames_y_train)
-
-
 
 ## PREDICCIONES
 y_pred = pipeline.predict(ames_x_test)
@@ -107,14 +105,6 @@ ames_test.info()
 ames_test >>
   select(_.Sale_Price, _.Sale_Price_Pred)
 )
-
-
-##### Extracción de coeficientes
-
-X_train_with_intercept = sm.add_constant(transformed_df)
-model = sm.OLS(ames_y_train, X_train_with_intercept).fit()
-
-model.summary()
 
 
 ##### Métricas de desempeño
@@ -199,49 +189,115 @@ ames_test >>
   ggtitle("Relación entre error y precio de venta")
 )
 
+############################
 #### Validación cruzada ####
+############################
+
 
 # Definir el objeto K-Fold Cross Validator
-kf = KFold(n_splits=10, shuffle=True, random_state=42)
+k = 10
+kf = KFold(n_splits=k, shuffle=True, random_state=42)
+
+param_grid = {
+ 'n_neighbors': range(2, 21),
+ 'weights': ['uniform', 'distance'],
+ 'metric': ['euclidean', 'manhattan'],
+ 'p': [1, 2]
+}
 
 # Definir las métricas de desempeño que deseas calcular como funciones de puntuación
+
+def adjusted_r2_score(y_true, y_pred, n, p):
+  r2 = r2_score(y_true, y_pred)
+  adjusted_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
+  return(adjusted_r2)
+
 scoring = {
     'neg_mean_squared_error': make_scorer(mean_squared_error, greater_is_better=False),
-    'r2': make_scorer(r2_score, greater_is_better=True),
+    'r2': make_scorer(adjusted_r2_score, 
+                      greater_is_better=True, 
+                      n=np.ceil(len(ames_train_selected)), 
+                      p=len(ames_train_selected.columns)),
     'neg_mean_absolute_error': make_scorer(mean_absolute_error, greater_is_better=False),
     'mape': make_scorer(mean_absolute_percentage_error, greater_is_better=False)
 }
 
-# Realizar la validación cruzada y calcular métricas de desempeño utilizando cross_val_score
-results = cross_validate(
-  pipeline, 
-  ames_train_selected, ames_y_train,
-  cv=kf, 
-  scoring=scoring
-  )
+pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('regressor', GridSearchCV(
+      KNeighborsRegressor(), 
+      param_grid, 
+      cv=kf, 
+      scoring=scoring, 
+      refit='neg_mean_squared_error',
+      verbose=3, 
+      n_jobs=-1)
+     )
+])
 
-# Calcular estadísticas resumidas (media y desviación estándar) de las métricas
-mean_rmse = np.mean(np.sqrt(-results['test_neg_mean_squared_error']))
-std_rmse = np.std(np.sqrt(-results['test_neg_mean_squared_error']))
+pipeline.fit(ames_train_selected, ames_y_train)
 
-mean_r2 = np.mean(results['test_r2'])
-std_r2 = np.std(results['test_r2'])
+results_cv = pipeline.named_steps['regressor'].cv_results_
 
-mean_mae = np.mean(-results['test_neg_mean_absolute_error'])
-std_mae = np.std(-results['test_neg_mean_absolute_error'])
+# Convierte los resultados en un DataFrame
+pd.set_option('display.max_columns', 500)
+results_df = pd.DataFrame(results_cv)
+results_df.columns
 
-mean_mape = np.mean(-results['test_mape'])
-std_mape = np.std(-results['test_mape'])
+# Puedes seleccionar las columnas de interés, por ejemplo:
+
+summary_df = (
+  results_df >>
+  select(-_.contains("split"), -_.contains("time"), -_.params)
+)
+summary_df
+
+(
+  summary_df >>
+  ggplot(aes(x = "param_n_neighbors", y = "mean_test_r2", size = "param_p",
+             color = "param_metric", shape = "param_weights")) +
+  geom_point(alpha = 0.65) +
+  ggtitle("Parametrización de KNN vs R^2") +
+  xlab("Parámetro: Número de vecinos cercanos") +
+  ylab("R^2 promedio")
+)
+
+(
+  summary_df >>
+  filter(
+    _.param_weights == "uniform",
+    _.param_p == 1,
+    _.param_metric == "manhattan") >>
+  mutate(
+    ymin = np.maximum(0, _.mean_test_r2 - _.std_test_r2),
+    ymax = np.minimum(1, _.mean_test_r2 + _.std_test_r2)) >>
+  ggplot(aes(x = "param_n_neighbors", y = "mean_test_r2")) +
+  geom_errorbar(aes(ymin='ymin', ymax='ymax'),
+    width=0.3, position=position_dodge(0.9)) +
+  geom_point(alpha = 0.65) +
+  ggtitle("Parametrización de KNN vs R^2") +
+  xlab("Parámetro: Número de vecinos cercanos") +
+  ylab("R^2 promedio")
+)
 
 
-# Imprimir los resultados
-print(f"MAE: {mean_mae} +/- {std_mae}")
-print(f"MAPE: {mean_mape} +/- {std_mape}")
-print(f"R^2: {mean_r2} +/- {std_r2}")
-print(f"RMSE: {mean_rmse} +/- {std_rmse}")
+best_params = pipeline.named_steps['regressor'].best_params_
+best_params
+best_estimator = pipeline.named_steps['regressor'].best_estimator_
+best_estimator
 
 
-np.sort(results['test_r2'])
+#
+
+
+
+
+
+
+
+
+
+
 
 
 
