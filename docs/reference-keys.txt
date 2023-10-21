@@ -99,3 +99,14 @@ predicción-con-nuevos-datos-1
 métricas-de-desempeño-1
 estimación-de-probabilidades
 validación-cruzada-1
+k-nearest-neighbor
+clasificación-3
+regresión-2
+ajuste-del-modelo-1
+selección-de-hiper-parámetro-k
+métodos-de-cálculo-de-la-distancia-entre-observaciones
+implementación-en-python-1
+regresión-3
+métricas-de-desempeño-2
+validación-cruzada-2
+importancia-de-variables
