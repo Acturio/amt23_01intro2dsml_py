@@ -146,18 +146,17 @@ Usaremos los pipelines antes implementados para ajustar tanto el modelo de regre
 
 Los pasos a seguir, son los siguientes:
 
-<!-- 0. Carga de librerías. -->
-<!-- 1. Separación inicial de datos (*test, train, KFCV*). -->
-<!-- 2. Pre-procesamiento e ingeniería de variables. -->
-<!-- 3. Selección de tipo de modelo con hiperparámetros iniciales. -->
-<!-- 4. Inicialización de *workflow o pipeline.* -->
-<!-- 5. Creación de *grid search*. -->
-<!-- 6. Entrenamiento de modelos con hiperparámetros definidos (salvar los modelos entrenados). -->
-<!-- 7. Análisis de métricas de error e hiperparámetros (Vuelve al paso 3, si es necesario). -->
-<!-- 8. Selección de modelo a usar. -->
-<!-- 9. Ajuste de modelo final con todos los datos (Vuelve al paso 2, si es necesario). -->
-<!-- 10. Validar poder predictivo con datos de prueba. -->
-
+0. Carga de librerías
+1. Carga y separación inicial de datos ( test, train ).
+2. Pre-procesamiento e ingeniería de variables.
+3. Selección de tipo de modelo con hiperparámetros iniciales.
+4. Cálculo de métricas de desempeño.
+5. Creación de grid search y métricas de desempeño.
+6. Entrenamiento de modelos con hiperparámetros definidos.
+7. Análisis de métricas de error e hiperparámetros (Vuelve al paso 3, si es necesario).
+8. Selección de modelo a usar.
+9. Ajuste de modelo final con todos los datos (Vuelve al paso 2, si es necesario).
+10. Validar poder predictivo con datos de prueba.
 
 ### Regresión
 
@@ -295,7 +294,7 @@ ames_test >>
 
 Estas son las predicciones logradas con el modelo inicial.
 
-## Métricas de desempeño
+#### Métricas de desempeño
 
 Se procede en el siguiente paso a cuantificar los errores producidos por la predicción.
 
@@ -387,7 +386,7 @@ ames_test >>
 )
 ```
 
-## Validación cruzada
+#### Validación cruzada
 
 Para determinar cuáles son los hiper-parámetros que funcionan mejor, es necesario realizar experimentos mediante **ensayo-error** hasta determinar la mejor solución. En cada partición del método de muestreo *KFCV* se implementan las distintas configuraciones y se calculan predicciones. Con las predicciones hechas en cada *fold*, se obtienen intervalos de confianza para conocer la variación asociada al modelo a través de los hiper-parámetros implementados.
 
@@ -429,10 +428,10 @@ def adjusted_r2_score(y_true, y_pred, n, p):
   return adjusted_r2
 
 scoring = {
-    'mean_squared_error': make_scorer(mean_squared_error, greater_is_better=False),
+    'neg_mean_squared_error': make_scorer(mean_squared_error, greater_is_better=False),
     'r2': make_scorer(adjusted_r2_score, greater_is_better=True, 
                       n=np.ceil(len(ames_train_selected)), p=len(ames_train_selected.columns)),
-    'mean_absolute_error': make_scorer(mean_absolute_error, greater_is_better=False),
+    'neg_mean_absolute_error': make_scorer(mean_absolute_error, greater_is_better=False),
     'mape': make_scorer(mean_absolute_percentage_error, greater_is_better=False)
 }
 ```
@@ -449,7 +448,7 @@ pipeline = Pipeline([
       param_grid, 
       cv=kf, 
       scoring=scoring, 
-      refit='mean_squared_error',
+      refit='neg_mean_squared_error',
       verbose=3, 
       n_jobs=-1)
      )
@@ -608,7 +607,7 @@ metrics_df
 )
 ```
 
-## Importancia de variables
+#### Importancia de variables
 
 Antes de pasar al siguiente paso, es importante validar que hayamos hecho un uso correcto de las variables predictivas. En este momento es posible detectar variables que no estén aportando valor o variables que no debiéramos estar usando debido a que cometeríamos [data leakage](https://towardsdatascience.com/data-leakage-in-machine-learning-6161c167e8ba). Para enfrentar esto, ayuda estimar y ordenar el valor de importancia de cada variable en el modelo.
 

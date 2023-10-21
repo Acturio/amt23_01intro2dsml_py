@@ -7,6 +7,7 @@ from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error
 from sklearn.metrics import mean_squared_error, r2_score, make_scorer
 from sklearn.model_selection import train_test_split, KFold, cross_val_score, cross_validate
 from sklearn.model_selection import GridSearchCV
+from sklearn.utils import shuffle
 
 from plydata.one_table_verbs import pull
 from mizani.formatters import comma_format, dollar_format
@@ -15,7 +16,6 @@ from siuba import *
 
 import pandas as pd
 import numpy as np
-import statsmodels.api as sm
 
 
 #### CARGA DE DATOS ####
@@ -137,7 +137,7 @@ metrics_df
 
 (
   ames_test >>
-    ggplot(aes(x = "Sale_Price_Pred", y = "Sale_Price")) +
+    ggplot(aes(x = "Sale_Price", y = "Sale_Price_Pred")) +
     geom_point() +
     scale_y_continuous(labels = dollar_format(digits=0, big_mark=','), limits = [0, 600000] ) +
     scale_x_continuous(labels = dollar_format(digits=0, big_mark=','), limits = [0, 500000] ) +
@@ -145,8 +145,8 @@ metrics_df
     coord_equal() +
     labs(
       title = "Comparación entre predicción y observación",
-      x = "Predicción",
-      y = "Observación")
+      y = "Predicción",
+      x = "Observación")
 )
 
 
@@ -205,12 +205,15 @@ param_grid = {
  'p': [1, 2]
 }
 
+# Algunas otras posibles distancias son:
+# ['euclidean', 'manhattan', 'chebyshev', 'minkowski', 'hamming', 'jaccard', 'cosine']
+
 # Definir las métricas de desempeño que deseas calcular como funciones de puntuación
 
 def adjusted_r2_score(y_true, y_pred, n, p):
   r2 = r2_score(y_true, y_pred)
   adjusted_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
-  return(adjusted_r2)
+  return adjusted_r2
 
 scoring = {
     'neg_mean_squared_error': make_scorer(mean_squared_error, greater_is_better=False),
@@ -287,26 +290,128 @@ best_estimator = pipeline.named_steps['regressor'].best_estimator_
 best_estimator
 
 
-#
+## PREDICCIONES FINALES
+
+final_knn_pipeline = Pipeline([
+   ('preprocessor', preprocessor),
+   ('regressor', best_estimator)
+])
+
+# Entrenar el pipeline
+final_knn_pipeline.fit(ames_train_selected, ames_y_train)
+
+## Predicciones finales
+y_pred_knn = final_knn_pipeline.predict(ames_x_test)
+
+results_reg = (
+  ames_x_test >>
+  mutate(final_knn_pred = y_pred_knn, Sale_Price = ames_y_test) >>
+  select(_.Sale_Price, _.final_knn_pred)
+)
+results_reg
+
+## Métricas de desempeño
+
+me = np.mean(y_obs - y_pred_knn)
+mae = mean_absolute_error(y_obs, y_pred_knn)
+mape = mean_absolute_percentage_error(y_obs, y_pred_knn)
+mse = mean_squared_error(y_obs, y_pred_knn)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_obs, y_pred_knn)
+r2_adj = adjusted_r2_score(y_true = y_obs, y_pred = y_pred_knn,
+  n=np.ceil(len(ames_train_selected)), p=len(ames_train_selected.columns))
+
+metrics_data = {
+    "Metric": ["ME", "MAE", "MAPE", "MSE", "RMSE", "R^2", "R^2 Adj"],
+    "Value": [me, mae, mape, mse, rmse, r2, r2_adj]
+}
+
+metrics_df = pd.DataFrame(metrics_data)
+metrics_df
+
+(
+  results_reg >>
+    ggplot(aes(x = "final_knn_pred", y = "Sale_Price")) +
+    geom_point() +
+    geom_abline(color = "red") +
+    xlab("Prediction") +
+    ylab("Observation") +
+    ggtitle("Comparisson")
+)
 
 
+#### Importancia de variables
 
 
+# 1 permutación
+
+importance = np.zeros(ames_x_test[columnas_seleccionadas].shape[1])
+
+# Realiza el procedimiento de permutación
+for i in range(ames_x_test[columnas_seleccionadas].shape[1]):
+    ames_x_test_permuted = ames_x_test[columnas_seleccionadas].copy()
+    ames_x_test_permuted.iloc[:, i] = shuffle(ames_x_test_permuted.iloc[:, i], random_state=42)  
+    # Permuta una característica
+    y_pred_permuted = final_knn_pipeline.predict(ames_x_test_permuted)
+    mse_permuted = mean_squared_error(ames_y_test, y_pred_permuted)
+    importance[i] = mse - mse_permuted
+
+# Calcula la importancia relativa
+importance = importance / importance.sum()
+importance
+
+importance_df = pd.DataFrame({
+  'Variable': columnas_seleccionadas, 
+  'Importance': importance
+  })
+
+# Crea la gráfica de barras
+(
+  importance_df >>
+  ggplot(aes(x= 'reorder(Variable, Importance)', y='Importance')) + 
+  geom_bar(stat='identity', fill='blue', color = "black") + 
+  labs(title='Importancia de las Variables', x='Variable', y='Importancia') +
+  coord_flip()
+)
 
 
+# N permutaciones
 
+n_permutations = 50
+performance_losses = []
 
+for i in range(ames_x_test[columnas_seleccionadas].shape[1]):
+    loss = []
+    for j in range(n_permutations):
+        ames_x_test_permuted = ames_x_test[columnas_seleccionadas].copy()
+        ames_x_test_permuted.iloc[:, i] = np.random.permutation(ames_x_test_permuted.iloc[:, i])
+        y_pred_permuted = final_knn_pipeline.predict(ames_x_test_permuted)
+        mse_permuted = mean_squared_error(ames_y_test, y_pred_permuted)
+        loss.append(mse_permuted)
+    performance_losses.append(loss)
 
+performance_losses = performance_losses/np.sum(performance_losses, axis=0)
+mean_losses = np.mean(performance_losses, axis=1)
+std_losses = np.std(performance_losses, axis=1)
 
+importance_df = pd.DataFrame({
+  'Variable': columnas_seleccionadas, 
+  'Mean_Loss': mean_losses, 
+  'Std_Loss': std_losses
+  })
 
-
-
-
-
-
-
-
-
+(
+  importance_df >>
+  mutate(
+    ymin = _.Mean_Loss - _.Std_Loss,
+    ymax = _.Mean_Loss + _.Std_Loss) >>
+  ggplot(aes(x = 'reorder(Variable, Mean_Loss)', y = "Mean_Loss")) +
+  geom_errorbar(aes(ymin='ymin', ymax='ymax'),
+    width=0.2, position=position_dodge(0.9)) +
+  geom_point(alpha = 0.65) +
+  labs(title='Importancia de las Variables', x='Variable', y='Importancia') +
+  coord_flip()
+)
 
 
 
