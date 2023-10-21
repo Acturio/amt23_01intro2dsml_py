@@ -328,9 +328,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="7.4.1" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#regresión-3"><i class="fa fa-check"></i><b>7.4.1</b> Regresión</a></li>
 </ul></li>
-<li class="chapter" data-level="7.5" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#métricas-de-desempeño-2"><i class="fa fa-check"></i><b>7.5</b> Métricas de desempeño</a></li>
-<li class="chapter" data-level="7.6" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#validación-cruzada-2"><i class="fa fa-check"></i><b>7.6</b> Validación cruzada</a></li>
-<li class="chapter" data-level="7.7" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#importancia-de-variables"><i class="fa fa-check"></i><b>7.7</b> Importancia de variables</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="./"><img src="img/amat-logo.png" width="280"></a></li>
@@ -438,17 +435,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">7.4</span> Implementación en Python<a href="k-nearest-neighbor.html#implementación-en-python-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Usaremos los pipelines antes implementados para ajustar tanto el modelo de regresión como el de clasificación. Una ventaja que se explorará al usar KFCV es el conjunto de hiperparámetros para elegir el mejor modelo posible.</p>
 <p>Los pasos a seguir, son los siguientes:</p>
-<!-- 0. Carga de librerías. -->
-<!-- 1. Separación inicial de datos (*test, train, KFCV*). -->
-<!-- 2. Pre-procesamiento e ingeniería de variables. -->
-<!-- 3. Selección de tipo de modelo con hiperparámetros iniciales. -->
-<!-- 4. Inicialización de *workflow o pipeline.* -->
-<!-- 5. Creación de *grid search*. -->
-<!-- 6. Entrenamiento de modelos con hiperparámetros definidos (salvar los modelos entrenados). -->
-<!-- 7. Análisis de métricas de error e hiperparámetros (Vuelve al paso 3, si es necesario). -->
-<!-- 8. Selección de modelo a usar. -->
-<!-- 9. Ajuste de modelo final con todos los datos (Vuelve al paso 2, si es necesario). -->
-<!-- 10. Validar poder predictivo con datos de prueba. -->
+<ol start="0" style="list-style-type: decimal">
+<li>Carga de librerías</li>
+<li>Carga y separación inicial de datos ( test, train ).</li>
+<li>Pre-procesamiento e ingeniería de variables.</li>
+<li>Selección de tipo de modelo con hiperparámetros iniciales.</li>
+<li>Cálculo de métricas de desempeño.</li>
+<li>Creación de grid search y métricas de desempeño.</li>
+<li>Entrenamiento de modelos con hiperparámetros definidos.</li>
+<li>Análisis de métricas de error e hiperparámetros (Vuelve al paso 3, si es necesario).</li>
+<li>Selección de modelo a usar.</li>
+<li>Ajuste de modelo final con todos los datos (Vuelve al paso 2, si es necesario).</li>
+<li>Validar poder predictivo con datos de prueba.</li>
+</ol>
 <div id="regresión-3" class="section level3 hasAnchor" number="7.4.1">
 <h3><span class="header-section-number">7.4.1</span> Regresión<a href="k-nearest-neighbor.html#regresión-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><strong>Paso 0: Carga de librerías</strong></p>
@@ -625,10 +624,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## [586 rows x 2 columns]</code></pre>
 <p>Estas son las predicciones logradas con el modelo inicial.</p>
-</div>
-</div>
-<div id="métricas-de-desempeño-2" class="section level2 hasAnchor" number="7.5">
-<h2><span class="header-section-number">7.5</span> Métricas de desempeño<a href="k-nearest-neighbor.html#métricas-de-desempeño-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="métricas-de-desempeño-2" class="section level4 hasAnchor" number="7.4.1.1">
+<h4><span class="header-section-number">7.4.1.1</span> Métricas de desempeño<a href="k-nearest-neighbor.html#métricas-de-desempeño-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Se procede en el siguiente paso a cuantificar los errores producidos por la predicción.</p>
 <p><strong>Paso 4: Cálculo de métricas de desempeño</strong></p>
 <div class="sourceCode" id="cb244"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb244-1"><a href="k-nearest-neighbor.html#cb244-1" aria-hidden="true" tabindex="-1"></a>pd.options.display.float_format <span class="op">=</span> <span class="st">&#39;</span><span class="sc">{:.2f}</span><span class="st">&#39;</span>.<span class="bu">format</span></span>
@@ -721,8 +718,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-195-4.png" width="614" /></p>
 </div>
-<div id="validación-cruzada-2" class="section level2 hasAnchor" number="7.6">
-<h2><span class="header-section-number">7.6</span> Validación cruzada<a href="k-nearest-neighbor.html#validación-cruzada-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="validación-cruzada-2" class="section level4 hasAnchor" number="7.4.1.2">
+<h4><span class="header-section-number">7.4.1.2</span> Validación cruzada<a href="k-nearest-neighbor.html#validación-cruzada-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Para determinar cuáles son los hiper-parámetros que funcionan mejor, es necesario realizar experimentos mediante <strong>ensayo-error</strong> hasta determinar la mejor solución. En cada partición del método de muestreo <em>KFCV</em> se implementan las distintas configuraciones y se calculan predicciones. Con las predicciones hechas en cada <em>fold</em>, se obtienen intervalos de confianza para conocer la variación asociada al modelo a través de los hiper-parámetros implementados.</p>
 <p>Usaremos las recetas antes implementadas para ajustar tanto el modelo de regresión como el de clasificación. Exploraremos un conjunto de hiperparámetros para elegir el mejor modelo, sin embargo, para realizar este proceso de forma ágil, se inicializará un flujo de trabajo que se encargue de realizar todos los experimentos deseados y elegir el modelo adecuado.</p>
 <p><strong>Paso 5: Creación de grid search y métricas de desempeño</strong></p>
@@ -755,10 +752,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb255-6"><a href="k-nearest-neighbor.html#cb255-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> adjusted_r2</span>
 <span id="cb255-7"><a href="k-nearest-neighbor.html#cb255-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb255-8"><a href="k-nearest-neighbor.html#cb255-8" aria-hidden="true" tabindex="-1"></a>scoring <span class="op">=</span> {</span>
-<span id="cb255-9"><a href="k-nearest-neighbor.html#cb255-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;mean_squared_error&#39;</span>: make_scorer(mean_squared_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb255-9"><a href="k-nearest-neighbor.html#cb255-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;neg_mean_squared_error&#39;</span>: make_scorer(mean_squared_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
 <span id="cb255-10"><a href="k-nearest-neighbor.html#cb255-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;r2&#39;</span>: make_scorer(adjusted_r2_score, greater_is_better<span class="op">=</span><span class="va">True</span>, </span>
 <span id="cb255-11"><a href="k-nearest-neighbor.html#cb255-11" aria-hidden="true" tabindex="-1"></a>                      n<span class="op">=</span>np.ceil(<span class="bu">len</span>(ames_train_selected)), p<span class="op">=</span><span class="bu">len</span>(ames_train_selected.columns)),</span>
-<span id="cb255-12"><a href="k-nearest-neighbor.html#cb255-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;mean_absolute_error&#39;</span>: make_scorer(mean_absolute_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb255-12"><a href="k-nearest-neighbor.html#cb255-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;neg_mean_absolute_error&#39;</span>: make_scorer(mean_absolute_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
 <span id="cb255-13"><a href="k-nearest-neighbor.html#cb255-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;mape&#39;</span>: make_scorer(mean_absolute_percentage_error, greater_is_better<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb255-14"><a href="k-nearest-neighbor.html#cb255-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p><strong>Paso 6: Entrenamiento de modelos con hiperparámetros definidos</strong></p>
@@ -770,7 +767,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb256-5"><a href="k-nearest-neighbor.html#cb256-5" aria-hidden="true" tabindex="-1"></a>      param_grid, </span>
 <span id="cb256-6"><a href="k-nearest-neighbor.html#cb256-6" aria-hidden="true" tabindex="-1"></a>      cv<span class="op">=</span>kf, </span>
 <span id="cb256-7"><a href="k-nearest-neighbor.html#cb256-7" aria-hidden="true" tabindex="-1"></a>      scoring<span class="op">=</span>scoring, </span>
-<span id="cb256-8"><a href="k-nearest-neighbor.html#cb256-8" aria-hidden="true" tabindex="-1"></a>      refit<span class="op">=</span><span class="st">&#39;mean_squared_error&#39;</span>,</span>
+<span id="cb256-8"><a href="k-nearest-neighbor.html#cb256-8" aria-hidden="true" tabindex="-1"></a>      refit<span class="op">=</span><span class="st">&#39;neg_mean_squared_error&#39;</span>,</span>
 <span id="cb256-9"><a href="k-nearest-neighbor.html#cb256-9" aria-hidden="true" tabindex="-1"></a>      verbose<span class="op">=</span><span class="dv">3</span>, </span>
 <span id="cb256-10"><a href="k-nearest-neighbor.html#cb256-10" aria-hidden="true" tabindex="-1"></a>      n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
 <span id="cb256-11"><a href="k-nearest-neighbor.html#cb256-11" aria-hidden="true" tabindex="-1"></a>     )</span>
@@ -791,10 +788,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##                  GridSearchCV(cv=KFold(n_splits=10, random_state=42, shuffle=True),
 ##                               estimator=KN...
 ##                                           &#39;weights&#39;: [&#39;uniform&#39;, &#39;distance&#39;]},
-##                               refit=&#39;mean_squared_error&#39;,
+##                               refit=&#39;neg_mean_squared_error&#39;,
 ##                               scoring={&#39;mape&#39;: make_scorer(mean_absolute_percentage_error, greater_is_better=False),
-##                                        &#39;mean_absolute_error&#39;: make_scorer(mean_absolute_error, greater_is_better=False),
-##                                        &#39;mean_squared_error&#39;: make_scorer(mean_squared_error, greater_is_better=False),
+##                                        &#39;neg_mean_absolute_error&#39;: make_scorer(mean_absolute_error, greater_is_better=False),
+##                                        &#39;neg_mean_squared_error&#39;: make_scorer(mean_squared_error, greater_is_better=False),
 ##                                        &#39;r2&#39;: make_scorer(adjusted_r2_score, n=2344.0, p=3)},
 ##                               verbose=3))])</code></pre>
 <p><strong>Paso 7: Análisis de métricas de error e hiperparámetros (Vuelve al paso 3, si es necesario)</strong></p>
@@ -807,28 +804,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb258-6"><a href="k-nearest-neighbor.html#cb258-6" aria-hidden="true" tabindex="-1"></a>results_df.columns</span></code></pre></div>
 <pre><code>## Index([&#39;mean_fit_time&#39;, &#39;std_fit_time&#39;, &#39;mean_score_time&#39;, &#39;std_score_time&#39;,
 ##        &#39;param_metric&#39;, &#39;param_n_neighbors&#39;, &#39;param_p&#39;, &#39;param_weights&#39;,
-##        &#39;params&#39;, &#39;split0_test_mean_squared_error&#39;,
-##        &#39;split1_test_mean_squared_error&#39;, &#39;split2_test_mean_squared_error&#39;,
-##        &#39;split3_test_mean_squared_error&#39;, &#39;split4_test_mean_squared_error&#39;,
-##        &#39;split5_test_mean_squared_error&#39;, &#39;split6_test_mean_squared_error&#39;,
-##        &#39;split7_test_mean_squared_error&#39;, &#39;split8_test_mean_squared_error&#39;,
-##        &#39;split9_test_mean_squared_error&#39;, &#39;mean_test_mean_squared_error&#39;,
-##        &#39;std_test_mean_squared_error&#39;, &#39;rank_test_mean_squared_error&#39;,
-##        &#39;split0_test_r2&#39;, &#39;split1_test_r2&#39;, &#39;split2_test_r2&#39;, &#39;split3_test_r2&#39;,
-##        &#39;split4_test_r2&#39;, &#39;split5_test_r2&#39;, &#39;split6_test_r2&#39;, &#39;split7_test_r2&#39;,
-##        &#39;split8_test_r2&#39;, &#39;split9_test_r2&#39;, &#39;mean_test_r2&#39;, &#39;std_test_r2&#39;,
-##        &#39;rank_test_r2&#39;, &#39;split0_test_mean_absolute_error&#39;,
-##        &#39;split1_test_mean_absolute_error&#39;, &#39;split2_test_mean_absolute_error&#39;,
-##        &#39;split3_test_mean_absolute_error&#39;, &#39;split4_test_mean_absolute_error&#39;,
-##        &#39;split5_test_mean_absolute_error&#39;, &#39;split6_test_mean_absolute_error&#39;,
-##        &#39;split7_test_mean_absolute_error&#39;, &#39;split8_test_mean_absolute_error&#39;,
-##        &#39;split9_test_mean_absolute_error&#39;, &#39;mean_test_mean_absolute_error&#39;,
-##        &#39;std_test_mean_absolute_error&#39;, &#39;rank_test_mean_absolute_error&#39;,
-##        &#39;split0_test_mape&#39;, &#39;split1_test_mape&#39;, &#39;split2_test_mape&#39;,
-##        &#39;split3_test_mape&#39;, &#39;split4_test_mape&#39;, &#39;split5_test_mape&#39;,
-##        &#39;split6_test_mape&#39;, &#39;split7_test_mape&#39;, &#39;split8_test_mape&#39;,
-##        &#39;split9_test_mape&#39;, &#39;mean_test_mape&#39;, &#39;std_test_mape&#39;,
-##        &#39;rank_test_mape&#39;],
+##        &#39;params&#39;, &#39;split0_test_neg_mean_squared_error&#39;,
+##        &#39;split1_test_neg_mean_squared_error&#39;,
+##        &#39;split2_test_neg_mean_squared_error&#39;,
+##        &#39;split3_test_neg_mean_squared_error&#39;,
+##        &#39;split4_test_neg_mean_squared_error&#39;,
+##        &#39;split5_test_neg_mean_squared_error&#39;,
+##        &#39;split6_test_neg_mean_squared_error&#39;,
+##        &#39;split7_test_neg_mean_squared_error&#39;,
+##        &#39;split8_test_neg_mean_squared_error&#39;,
+##        &#39;split9_test_neg_mean_squared_error&#39;,
+##        &#39;mean_test_neg_mean_squared_error&#39;, &#39;std_test_neg_mean_squared_error&#39;,
+##        &#39;rank_test_neg_mean_squared_error&#39;, &#39;split0_test_r2&#39;, &#39;split1_test_r2&#39;,
+##        &#39;split2_test_r2&#39;, &#39;split3_test_r2&#39;, &#39;split4_test_r2&#39;, &#39;split5_test_r2&#39;,
+##        &#39;split6_test_r2&#39;, &#39;split7_test_r2&#39;, &#39;split8_test_r2&#39;, &#39;split9_test_r2&#39;,
+##        &#39;mean_test_r2&#39;, &#39;std_test_r2&#39;, &#39;rank_test_r2&#39;,
+##        &#39;split0_test_neg_mean_absolute_error&#39;,
+##        &#39;split1_test_neg_mean_absolute_error&#39;,
+##        &#39;split2_test_neg_mean_absolute_error&#39;,
+##        &#39;split3_test_neg_mean_absolute_error&#39;,
+##        &#39;split4_test_neg_mean_absolute_error&#39;,
+##        &#39;split5_test_neg_mean_absolute_error&#39;,
+##        &#39;split6_test_neg_mean_absolute_error&#39;,
+##        &#39;split7_test_neg_mean_absolute_error&#39;,
+##        &#39;split8_test_neg_mean_absolute_error&#39;,
+##        &#39;split9_test_neg_mean_absolute_error&#39;,
+##        &#39;mean_test_neg_mean_absolute_error&#39;, &#39;std_test_neg_mean_absolute_error&#39;,
+##        &#39;rank_test_neg_mean_absolute_error&#39;, &#39;split0_test_mape&#39;,
+##        &#39;split1_test_mape&#39;, &#39;split2_test_mape&#39;, &#39;split3_test_mape&#39;,
+##        &#39;split4_test_mape&#39;, &#39;split5_test_mape&#39;, &#39;split6_test_mape&#39;,
+##        &#39;split7_test_mape&#39;, &#39;split8_test_mape&#39;, &#39;split9_test_mape&#39;,
+##        &#39;mean_test_mape&#39;, &#39;std_test_mape&#39;, &#39;rank_test_mape&#39;],
 ##       dtype=&#39;object&#39;)</code></pre>
 <div class="sourceCode" id="cb260"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb260-1"><a href="k-nearest-neighbor.html#cb260-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Puedes seleccionar las columnas de interés, por ejemplo:</span></span>
 <span id="cb260-2"><a href="k-nearest-neighbor.html#cb260-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -850,70 +856,70 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 150    manhattan                20       2       uniform   
 ## 151    manhattan                20       2      distance   
 ## 
-##      mean_test_mean_squared_error  std_test_mean_squared_error  \
-## 0                  -5511130178.67                 779535172.99   
-## 1                  -5644748510.42                 867751490.59   
-## 2                  -5511130178.67                 779535172.99   
-## 3                  -5644748510.42                 867751490.59   
-## 4                  -4728796013.81                 503312671.96   
-## ..                            ...                          ...   
-## 147                -3975017717.36                 819048816.69   
-## 148                -3753148524.86                 499208852.34   
-## 149                -3960403910.23                 825919565.56   
-## 150                -3753148524.86                 499208852.34   
-## 151                -3960403910.23                 825919565.56   
+##      mean_test_neg_mean_squared_error  std_test_neg_mean_squared_error  \
+## 0                      -5511130178.67                     779535172.99   
+## 1                      -5644748510.42                     867751490.59   
+## 2                      -5511130178.67                     779535172.99   
+## 3                      -5644748510.42                     867751490.59   
+## 4                      -4728796013.81                     503312671.96   
+## ..                                ...                              ...   
+## 147                    -3975017717.36                     819048816.69   
+## 148                    -3753148524.86                     499208852.34   
+## 149                    -3960403910.23                     825919565.56   
+## 150                    -3753148524.86                     499208852.34   
+## 151                    -3960403910.23                     825919565.56   
 ## 
-##      rank_test_mean_squared_error  mean_test_r2  std_test_r2  rank_test_r2  \
-## 0                             145          0.12         0.10           145   
-## 1                             149          0.10         0.10           149   
-## 2                             145          0.12         0.10           145   
-## 3                             149          0.10         0.10           149   
-## 4                             139          0.25         0.07           139   
-## ..                            ...           ...          ...           ...   
-## 147                            59          0.37         0.09            61   
-## 148                             1          0.40         0.05             1   
-## 149                            55          0.37         0.09            55   
-## 150                             1          0.40         0.05             1   
-## 151                            55          0.37         0.09            55   
+##      rank_test_neg_mean_squared_error  mean_test_r2  std_test_r2  \
+## 0                                 145          0.12         0.10   
+## 1                                 149          0.10         0.10   
+## 2                                 145          0.12         0.10   
+## 3                                 149          0.10         0.10   
+## 4                                 139          0.25         0.07   
+## ..                                ...           ...          ...   
+## 147                                59          0.37         0.09   
+## 148                                 1          0.40         0.05   
+## 149                                55          0.37         0.09   
+## 150                                 1          0.40         0.05   
+## 151                                55          0.37         0.09   
 ## 
-##      mean_test_mean_absolute_error  std_test_mean_absolute_error  \
-## 0                        -51009.74                       3971.24   
-## 1                        -51232.98                       3914.42   
-## 2                        -51009.74                       3971.24   
-## 3                        -51232.98                       3914.42   
-## 4                        -47533.27                       2605.61   
-## ..                             ...                           ...   
-## 147                      -42546.03                       2542.37   
-## 148                      -42399.59                       2134.62   
-## 149                      -42392.34                       2507.64   
-## 150                      -42399.59                       2134.62   
-## 151                      -42392.34                       2507.64   
+##      rank_test_r2  mean_test_neg_mean_absolute_error  \
+## 0             145                          -51009.74   
+## 1             149                          -51232.98   
+## 2             145                          -51009.74   
+## 3             149                          -51232.98   
+## 4             139                          -47533.27   
+## ..            ...                                ...   
+## 147            61                          -42546.03   
+## 148             1                          -42399.59   
+## 149            55                          -42392.34   
+## 150             1                          -42399.59   
+## 151            55                          -42392.34   
 ## 
-##      rank_test_mean_absolute_error  mean_test_mape  std_test_mape  \
-## 0                              145           -0.31           0.04   
-## 1                              149           -0.31           0.04   
-## 2                              145           -0.31           0.04   
-## 3                              149           -0.31           0.04   
-## 4                              139           -0.29           0.03   
-## ..                             ...             ...            ...   
-## 147                             53           -0.25           0.02   
-## 148                             17           -0.26           0.02   
-## 149                             15           -0.25           0.02   
-## 150                             17           -0.26           0.02   
-## 151                             15           -0.25           0.02   
+##      std_test_neg_mean_absolute_error  rank_test_neg_mean_absolute_error  \
+## 0                             3971.24                                145   
+## 1                             3914.42                                149   
+## 2                             3971.24                                145   
+## 3                             3914.42                                149   
+## 4                             2605.61                                139   
+## ..                                ...                                ...   
+## 147                           2542.37                                 53   
+## 148                           2134.62                                 17   
+## 149                           2507.64                                 15   
+## 150                           2134.62                                 17   
+## 151                           2507.64                                 15   
 ## 
-##      rank_test_mape  
-## 0               147  
-## 1               151  
-## 2               147  
-## 3               151  
-## 4               139  
-## ..              ...  
-## 147              45  
-## 148              71  
-## 149              19  
-## 150              71  
-## 151              19  
+##      mean_test_mape  std_test_mape  rank_test_mape  
+## 0             -0.31           0.04             147  
+## 1             -0.31           0.04             151  
+## 2             -0.31           0.04             147  
+## 3             -0.31           0.04             151  
+## 4             -0.29           0.03             139  
+## ..              ...            ...             ...  
+## 147           -0.25           0.02              45  
+## 148           -0.26           0.02              71  
+## 149           -0.25           0.02              19  
+## 150           -0.26           0.02              71  
+## 151           -0.25           0.02              19  
 ## 
 ## [152 rows x 16 columns]</code></pre>
 <p>En la siguiente gráfica observamos las distintas métricas de error asociados a los hiperparámetros elegidos:</p>
@@ -1043,8 +1049,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-207-13.png" width="614" /></p>
 </div>
-<div id="importancia-de-variables" class="section level2 hasAnchor" number="7.7">
-<h2><span class="header-section-number">7.7</span> Importancia de variables<a href="k-nearest-neighbor.html#importancia-de-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="importancia-de-variables" class="section level4 hasAnchor" number="7.4.1.3">
+<h4><span class="header-section-number">7.4.1.3</span> Importancia de variables<a href="k-nearest-neighbor.html#importancia-de-variables" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Antes de pasar al siguiente paso, es importante validar que hayamos hecho un uso correcto de las variables predictivas. En este momento es posible detectar variables que no estén aportando valor o variables que no debiéramos estar usando debido a que cometeríamos <a href="https://towardsdatascience.com/data-leakage-in-machine-learning-6161c167e8ba">data leakage</a>. Para enfrentar esto, ayuda estimar y ordenar el valor de importancia de cada variable en el modelo.</p>
 <div class="sourceCode" id="cb278"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb278-1"><a href="k-nearest-neighbor.html#cb278-1" aria-hidden="true" tabindex="-1"></a>importance <span class="op">=</span> np.zeros(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>])</span>
 <span id="cb278-2"><a href="k-nearest-neighbor.html#cb278-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1113,8 +1119,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb283-12"><a href="k-nearest-neighbor.html#cb283-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-210-17.png" width="614" /></p>
-<p>Si en la gráfica anterior notamos algo raro en cuanto a la variable más importante y la factibilidad de conseguir o usar… ¡¡HAY QUE EMPEZAR DESDE CERO SIN CONSIDERAR ESA VARIABLE!!</p>
+<p>Si en la gráfica anterior notamos algo raro en cuanto a la(s) variable(s) más importante(s) y la factibilidad de conseguirla(s) o usarla(s)… ¡¡HAY QUE EMPEZAR DESDE CERO SIN CONSIDERAR ESA VARIABLE!!</p>
 
+</div>
+</div>
 </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
