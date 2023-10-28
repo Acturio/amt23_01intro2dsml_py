@@ -29,7 +29,7 @@
   
   
 <link rel="prev" href="regresión-logística.html"/>
-
+<link rel="next" href="árboles-de-decisión.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -327,6 +327,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#implementación-en-python-1"><i class="fa fa-check"></i><b>7.4</b> Implementación en Python</a>
 <ul>
 <li class="chapter" data-level="7.4.1" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#regresión-3"><i class="fa fa-check"></i><b>7.4.1</b> Regresión</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html"><i class="fa fa-check"></i><b>8</b> Árboles de decisión</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#ajuste-del-modelo-2"><i class="fa fa-check"></i><b>8.1</b> Ajuste del modelo</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#attribute-selective-measure-asm"><i class="fa fa-check"></i><b>8.1.1</b> Attribute Selective Measure (ASM)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#regularización-de-árboles"><i class="fa fa-check"></i><b>8.2</b> Regularización de árboles</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#nivel-de-profundidad-de-árbol"><i class="fa fa-check"></i><b>8.2.1</b> Nivel de profundidad de árbol</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#aprendizaje-conjunto"><i class="fa fa-check"></i><b>8.3</b> Aprendizaje conjunto</a></li>
+<li class="chapter" data-level="8.4" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#bagging"><i class="fa fa-check"></i><b>8.4</b> Bagging</a></li>
+<li class="chapter" data-level="8.5" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#random-forest"><i class="fa fa-check"></i><b>8.5</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#qué-es"><i class="fa fa-check"></i><b>8.5.1</b> ¿Qué es?</a></li>
+<li class="chapter" data-level="8.5.2" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#características-de-los-bosques-aleatorios"><i class="fa fa-check"></i><b>8.5.2</b> Características de los bosques aleatorios</a></li>
+<li class="chapter" data-level="8.5.3" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#aplicar-árboles-de-decisión-en-un-bosque-aleatorio"><i class="fa fa-check"></i><b>8.5.3</b> Aplicar árboles de decisión en un bosque aleatorio</a></li>
+<li class="chapter" data-level="8.5.4" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#ventajas-y-desventjas-de-bosques-aleatorios"><i class="fa fa-check"></i><b>8.5.4</b> Ventajas y desventjas de bosques aleatorios</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#implementación-en-python-2"><i class="fa fa-check"></i><b>8.6</b> Implementación en Python</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#regresión-4"><i class="fa fa-check"></i><b>8.6.1</b> Regresión</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -1121,6 +1145,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-210-17.png" width="614" /></p>
 <p>Si en la gráfica anterior notamos algo raro en cuanto a la(s) variable(s) más importante(s) y la factibilidad de conseguirla(s) o usarla(s)… ¡¡HAY QUE EMPEZAR DESDE CERO SIN CONSIDERAR ESA VARIABLE!!</p>
 
+<div class="watermark">
+<p><img src="img/header.png" width="400"/></p>
+</div>
 </div>
 </div>
 </div>
@@ -1152,8 +1179,8 @@ $('.pipehover_select_one_row tr').hover(function() {
           </div>
         </div>
       </div>
-<a href="regresión-logística.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="regresión-logística.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="árboles-de-decisión.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

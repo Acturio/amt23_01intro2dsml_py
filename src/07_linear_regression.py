@@ -1,7 +1,7 @@
 # pip install mlxtend==0.23.0
 from mlxtend.feature_selection import ColumnSelector
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, FunctionTransformer
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error
@@ -15,6 +15,7 @@ from siuba import *
 
 import pandas as pd
 import numpy as np
+import math
 import statsmodels.api as sm
 
 
@@ -37,7 +38,7 @@ ames_x_train, ames_x_test, ames_y_train, ames_y_test = train_test_split(
 ## SELECCIÓN DE VARIABLES
 
 # Seleccionamos las variales numéricas de interés
-num_cols = ["Full_Bath", "Half_Bath"]
+num_cols = ["Full_Bath", "Half_Bath", "Gr_Liv_Area"]
 
 # Seleccionamos las variables categóricas de interés
 cat_cols = ["Overall_Cond"]
@@ -58,22 +59,35 @@ ames_train_selected.info()
 
 ## TRANSFORMACIÓN DE COLUMNAS
 
+def custom_function(X, col):
+  X[col] = np.log1p(X[col].astype(float)) # esta función calcula el logaritmo de x+1. 
+  # Evita problemas al calcular log(0)
+  return X
+
+  
+custom_transformer = FunctionTransformer(
+ custom_function, feature_names_out = 'one-to-one', validate=False,
+ kw_args={'col': 'Gr_Liv_Area'}
+ )
+
 # ColumnTransformer para aplicar transformaciones
 preprocessor = ColumnTransformer(
     transformers = [
-        ('scaler', StandardScaler(), num_cols),
-        ('onehotencoding', OneHotEncoder(drop='first', sparse_output=False), cat_cols)
+      ('log_std_transform', Pipeline([
+          ('log', custom_transformer), 
+          ('scaler', StandardScaler())]), ['Gr_Liv_Area']),
+      ('scaler', StandardScaler(), list(set(num_cols) - set(["Gr_Liv_Area"]))),
+      ('onehotencoding', OneHotEncoder(drop='first', sparse_output=False), cat_cols)
     ],
-    verbose_feature_names_out = False,
-    remainder = 'passthrough'  # Mantener las columnas restantes sin cambios
+    remainder = 'passthrough',  # Mantener las columnas restantes sin cambios
+    verbose_feature_names_out = True
 )
 
 transformed_data = preprocessor.fit_transform(ames_train_selected)
 new_column_names = preprocessor.get_feature_names_out()
 
 transformed_df = pd.DataFrame(
-  transformed_data,
-  columns=new_column_names
+  transformed_data, columns=new_column_names
   )
 
 transformed_df

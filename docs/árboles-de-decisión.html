@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 8 Árboles de decisión | Introducción a Ciencia de Datos y Machine Learning con Python</title>
+  <meta name="description" content="Capítulo 8 Árboles de decisión | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 8 Árboles de decisión | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Capítulo 8 Árboles de decisión | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 8 Árboles de decisión | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  
+  <meta name="twitter:description" content="Capítulo 8 Árboles de decisión | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="k-nearest-neighbor.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./"><img src="img/amat-logo.png" width="280"></a></li|
+|:-:|  
+<center>Introducción a Ciencia de Datos y Machine Learning</center>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>BIENVENIDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#objetivo"><i class="fa fa-check"></i>Objetivo</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#instructores"><i class="fa fa-check"></i>Instructores</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#alcances-del-curso"><i class="fa fa-check"></i>Alcances del curso</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#temario"><i class="fa fa-check"></i>Temario:</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#duración-y-evaluación-del-curso"><i class="fa fa-check"></i>Duración y evaluación del curso</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#recursos-y-dinámica-de-clase"><i class="fa fa-check"></i>Recursos y dinámica de clase</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#asesorías"><i class="fa fa-check"></i>Asesorías</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html"><i class="fa fa-check"></i><b>1</b> Conceptos de Ciencia de Datos</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#qué-es-ciencia-de-datos"><i class="fa fa-check"></i><b>1.1</b> ¿Qué es Ciencia de Datos?</a>
+<ul>
+<li class="chapter" data-level="" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#definiendo-conceptos"><i class="fa fa-check"></i>Definiendo conceptos:</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#objetivos"><i class="fa fa-check"></i><b>1.2</b> Objetivos</a></li>
+<li class="chapter" data-level="1.3" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#requisitos"><i class="fa fa-check"></i><b>1.3</b> Requisitos</a></li>
+<li class="chapter" data-level="1.4" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#aplicaciones"><i class="fa fa-check"></i><b>1.4</b> Aplicaciones</a></li>
+<li class="chapter" data-level="1.5" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#tipos-de-algoritmos"><i class="fa fa-check"></i><b>1.5</b> Tipos de algoritmos</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#aprendizaje-supervisado"><i class="fa fa-check"></i><b>1.5.1</b> Aprendizaje supervisado</a></li>
+<li class="chapter" data-level="1.5.2" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#aprendizaje-no-supervisado"><i class="fa fa-check"></i><b>1.5.2</b> Aprendizaje no supervisado</a></li>
+<li class="chapter" data-level="1.5.3" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#aprendizaje-por-refuerzo"><i class="fa fa-check"></i><b>1.5.3</b> Aprendizaje por refuerzo</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#ciclo-de-un-proyecto"><i class="fa fa-check"></i><b>1.6</b> Ciclo de un proyecto</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introducción-a-python.html"><a href="introducción-a-python.html"><i class="fa fa-check"></i><b>2</b> Introducción a Python</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introducción-a-python.html"><a href="introducción-a-python.html#cómo-obtener-python"><i class="fa fa-check"></i><b>2.1</b> ¿Cómo obtener <em>Python</em>?</a></li>
+<li class="chapter" data-level="2.2" data-path="introducción-a-python.html"><a href="introducción-a-python.html#qué-es-rstudio"><i class="fa fa-check"></i><b>2.2</b> ¿Qué es RStudio?</a></li>
+<li class="chapter" data-level="2.3" data-path="introducción-a-python.html"><a href="introducción-a-python.html#uso-de-python-en-rstudio"><i class="fa fa-check"></i><b>2.3</b> Uso de python en Rstudio</a></li>
+<li class="chapter" data-level="2.4" data-path="introducción-a-python.html"><a href="introducción-a-python.html#lectura-de-datos"><i class="fa fa-check"></i><b>2.4</b> Lectura de datos</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introducción-a-python.html"><a href="introducción-a-python.html#archivos-csv"><i class="fa fa-check"></i><b>2.4.1</b> Archivos <em>csv</em></a></li>
+<li class="chapter" data-level="2.4.2" data-path="introducción-a-python.html"><a href="introducción-a-python.html#archivos-txt"><i class="fa fa-check"></i><b>2.4.2</b> Archivos txt</a></li>
+<li class="chapter" data-level="2.4.3" data-path="introducción-a-python.html"><a href="introducción-a-python.html#archivos-xls-y-xlsx"><i class="fa fa-check"></i><b>2.4.3</b> Archivos <em>xls</em> y <em>xlsx</em></a></li>
+<li class="chapter" data-level="2.4.4" data-path="introducción-a-python.html"><a href="introducción-a-python.html#archivos-pickle"><i class="fa fa-check"></i><b>2.4.4</b> Archivos pickle</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introducción-a-python.html"><a href="introducción-a-python.html#consultas-de-datos"><i class="fa fa-check"></i><b>2.5</b> Consultas de datos</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introducción-a-python.html"><a href="introducción-a-python.html#seleccionar-columnas"><i class="fa fa-check"></i><b>2.5.1</b> Seleccionar columnas</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introducción-a-python.html"><a href="introducción-a-python.html#filtrar-observaciones"><i class="fa fa-check"></i><b>2.5.2</b> Filtrar observaciones</a></li>
+<li class="chapter" data-level="2.5.3" data-path="introducción-a-python.html"><a href="introducción-a-python.html#ordenar-registros"><i class="fa fa-check"></i><b>2.5.3</b> Ordenar registros</a></li>
+<li class="chapter" data-level="2.5.4" data-path="introducción-a-python.html"><a href="introducción-a-python.html#agregar-modificar"><i class="fa fa-check"></i><b>2.5.4</b> Agregar / Modificar</a></li>
+<li class="chapter" data-level="2.5.5" data-path="introducción-a-python.html"><a href="introducción-a-python.html#resumen-estadístico"><i class="fa fa-check"></i><b>2.5.5</b> Resumen estadístico</a></li>
+<li class="chapter" data-level="2.5.6" data-path="introducción-a-python.html"><a href="introducción-a-python.html#agrupamiento"><i class="fa fa-check"></i><b>2.5.6</b> Agrupamiento</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introducción-a-python.html"><a href="introducción-a-python.html#orden-y-estructura"><i class="fa fa-check"></i><b>2.6</b> Orden y estructura</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="introducción-a-python.html"><a href="introducción-a-python.html#pivote-horizontal"><i class="fa fa-check"></i><b>2.6.1</b> Pivote horizontal</a></li>
+<li class="chapter" data-level="2.6.2" data-path="introducción-a-python.html"><a href="introducción-a-python.html#pivote-vertical"><i class="fa fa-check"></i><b>2.6.2</b> Pivote vertical</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="visualización.html"><a href="visualización.html"><i class="fa fa-check"></i><b>3</b> Visualización</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="visualización.html"><a href="visualización.html#eda-análisis-exploratorio-de-datos"><i class="fa fa-check"></i><b>3.1</b> EDA: Análisis Exploratorio de Datos</a></li>
+<li class="chapter" data-level="3.2" data-path="visualización.html"><a href="visualización.html#geda-análisis-exploratorio-de-datos-gráficos"><i class="fa fa-check"></i><b>3.2</b> GEDA: Análisis Exploratorio de Datos Gráficos</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="visualización.html"><a href="visualización.html#lo-que-no-se-debe-hacer"><i class="fa fa-check"></i><b>3.2.1</b> Lo que no se debe hacer…</a></li>
+<li class="chapter" data-level="3.2.2" data-path="visualización.html"><a href="visualización.html#principios-de-visualización"><i class="fa fa-check"></i><b>3.2.2</b> Principios de visualización</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="visualización.html"><a href="visualización.html#ggplot-plotnine"><i class="fa fa-check"></i><b>3.3</b> Ggplot / plotnine</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="visualización.html"><a href="visualización.html#capas-estéticas"><i class="fa fa-check"></i><b>3.3.1</b> Capas Estéticas</a></li>
+<li class="chapter" data-level="3.3.2" data-path="visualización.html"><a href="visualización.html#capas-geométricas"><i class="fa fa-check"></i><b>3.3.2</b> Capas geométricas</a></li>
+<li class="chapter" data-level="3.3.3" data-path="visualización.html"><a href="visualización.html#facetas"><i class="fa fa-check"></i><b>3.3.3</b> Facetas</a></li>
+<li class="chapter" data-level="3.3.4" data-path="visualización.html"><a href="visualización.html#más-sobre-estéticas"><i class="fa fa-check"></i><b>3.3.4</b> Más sobre estéticas</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="visualización.html"><a href="visualización.html#análisis-univariado"><i class="fa fa-check"></i><b>3.4</b> Análisis univariado</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="visualización.html"><a href="visualización.html#variables-numéricas"><i class="fa fa-check"></i><b>3.4.1</b> Variables numéricas</a></li>
+<li class="chapter" data-level="3.4.2" data-path="visualización.html"><a href="visualización.html#variables-nominalescategóricas"><i class="fa fa-check"></i><b>3.4.2</b> Variables nominales/categóricas</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="visualización.html"><a href="visualización.html#análisis-multivariado"><i class="fa fa-check"></i><b>3.5</b> Análisis multivariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="visualización.html"><a href="visualización.html#ejercicios"><i class="fa fa-check"></i>Ejercicios</a></li>
+<li class="chapter" data-level="" data-path="visualización.html"><a href="visualización.html#warning"><i class="fa fa-check"></i>¡ Warning !</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="visualización.html"><a href="visualización.html#reporte-interactivos"><i class="fa fa-check"></i><b>3.6</b> Reporte interactivos</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html"><i class="fa fa-check"></i><b>4</b> Introducción a Machine Learning</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#análisis-supervisado-vs-no-supervisado"><i class="fa fa-check"></i><b>4.1</b> Análisis Supervisado vs No supervisado</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#regresión-vs-clasificación"><i class="fa fa-check"></i><b>4.1.1</b> Regresión vs clasificación</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#sesgo-vs-varianza"><i class="fa fa-check"></i><b>4.2</b> Sesgo vs varianza</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#balance-entre-sesgo-y-varianza-o-trade-off"><i class="fa fa-check"></i><b>4.2.1</b> Balance entre sesgo y varianza o Trade-off</a></li>
+<li class="chapter" data-level="4.2.2" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#error-total"><i class="fa fa-check"></i><b>4.2.2</b> Error total</a></li>
+<li class="chapter" data-level="4.2.3" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#overfitting"><i class="fa fa-check"></i><b>4.2.3</b> Overfitting</a></li>
+<li class="chapter" data-level="4.2.4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#underfitting"><i class="fa fa-check"></i><b>4.2.4</b> Underfitting</a></li>
+<li class="chapter" data-level="4.2.5" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#error-irreducible"><i class="fa fa-check"></i><b>4.2.5</b> Error irreducible</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#partición-de-datos"><i class="fa fa-check"></i><b>4.3</b> Partición de datos</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#métodos-comunes-para-particionar-datos"><i class="fa fa-check"></i><b>4.3.1</b> Métodos comunes para particionar datos</a></li>
+<li class="chapter" data-level="4.3.2" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#conjunto-de-validación"><i class="fa fa-check"></i><b>4.3.2</b> Conjunto de validación</a></li>
+<li class="chapter" data-level="4.3.3" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#leave-one-out-cross-validation"><i class="fa fa-check"></i><b>4.3.3</b> Leave-one-out cross-validation</a></li>
+<li class="chapter" data-level="4.3.4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>4.3.4</b> K Fold Cross Validation</a></li>
+<li class="chapter" data-level="4.3.5" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#validación-cruzada-para-series-de-tiempo"><i class="fa fa-check"></i><b>4.3.5</b> Validación cruzada para series de tiempo</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#feature-engineering"><i class="fa fa-check"></i><b>4.4</b> Feature engineering</a></li>
+<li class="chapter" data-level="4.5" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#pipeline"><i class="fa fa-check"></i><b>4.5</b> Pipeline</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#normalizar-columnas-numéricas"><i class="fa fa-check"></i><b>4.5.1</b> Normalizar columnas numéricas</a></li>
+<li class="chapter" data-level="4.5.2" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#dicotomización-de-categorías"><i class="fa fa-check"></i><b>4.5.2</b> Dicotomización de categorías</a></li>
+<li class="chapter" data-level="4.5.3" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#imputación-de-datos-faltantes"><i class="fa fa-check"></i><b>4.5.3</b> Imputación de datos faltantes</a></li>
+<li class="chapter" data-level="4.5.4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#transformaciones-personalizadas"><i class="fa fa-check"></i><b>4.5.4</b> Transformaciones personalizadas</a></li>
+<li class="chapter" data-level="4.5.5" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#interacciones"><i class="fa fa-check"></i><b>4.5.5</b> Interacciones</a></li>
+<li class="chapter" data-level="4.5.6" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#renombramiento-de-nuevos-datos"><i class="fa fa-check"></i><b>4.5.6</b> Renombramiento de nuevos datos</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="regresión-lineal.html"><a href="regresión-lineal.html"><i class="fa fa-check"></i><b>5</b> Regresión Lineal</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#regresión-lineal-simple"><i class="fa fa-check"></i><b>5.1</b> Regresión lineal simple</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#interpretación"><i class="fa fa-check"></i><b>5.1.1</b> Interpretación</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#regresión-lineal-múltiple"><i class="fa fa-check"></i><b>5.2</b> Regresión lineal múltiple</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#interpretación-1"><i class="fa fa-check"></i><b>5.2.1</b> Interpretación</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="regresión-lineal.html"><a href="regresión-lineal.html#ajuste-de-modelo"><i class="fa fa-check"></i><b>5.3</b> Ajuste de modelo</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#estimación-de-parámetros-regresión-lineal-simple"><i class="fa fa-check"></i><b>5.3.1</b> Estimación de parámetros: Regresión lineal simple</a></li>
+<li class="chapter" data-level="5.3.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#estimación-de-parámetros-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>5.3.2</b> Estimación de parámetros: Regresión lineal múltiple</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="regresión-lineal.html"><a href="regresión-lineal.html#residuos-del-modelo"><i class="fa fa-check"></i><b>5.4</b> Residuos del modelo</a>
+<ul>
+<li class="chapter" data-level="" data-path="regresión-lineal.html"><a href="regresión-lineal.html#condiciones-para-el-ajuste-de-una-regresión-lineal"><i class="fa fa-check"></i>Condiciones para el ajuste de una regresión lineal:</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="regresión-lineal.html"><a href="regresión-lineal.html#implementación-con-python"><i class="fa fa-check"></i><b>5.5</b> Implementación con Python</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#carga-y-partición-de-datos"><i class="fa fa-check"></i><b>5.5.1</b> Carga y partición de datos</a></li>
+<li class="chapter" data-level="5.5.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#pipeline-de-transformación-de-datos"><i class="fa fa-check"></i><b>5.5.2</b> Pipeline de transformación de datos</a></li>
+<li class="chapter" data-level="5.5.3" data-path="regresión-lineal.html"><a href="regresión-lineal.html#creación-y-ajuste-de-modelo"><i class="fa fa-check"></i><b>5.5.3</b> Creación y ajuste de modelo</a></li>
+<li class="chapter" data-level="5.5.4" data-path="regresión-lineal.html"><a href="regresión-lineal.html#predicción-con-nuevos-datos"><i class="fa fa-check"></i><b>5.5.4</b> Predicción con nuevos datos</a></li>
+<li class="chapter" data-level="5.5.5" data-path="regresión-lineal.html"><a href="regresión-lineal.html#extracción-de-coeficientes"><i class="fa fa-check"></i><b>5.5.5</b> Extracción de coeficientes</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="regresión-lineal.html"><a href="regresión-lineal.html#métricas-de-desempeño"><i class="fa fa-check"></i><b>5.6</b> Métricas de desempeño</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#implementación-con-python-1"><i class="fa fa-check"></i><b>5.6.1</b> Implementación con python</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="regresión-lineal.html"><a href="regresión-lineal.html#validación-cruzada"><i class="fa fa-check"></i><b>5.7</b> Validación cruzada</a></li>
+<li class="chapter" data-level="5.8" data-path="regresión-lineal.html"><a href="regresión-lineal.html#métodos-se-selección-de-variables"><i class="fa fa-check"></i><b>5.8</b> Métodos se selección de variables</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#forward-selection-selección-hacia-adelante"><i class="fa fa-check"></i><b>5.8.1</b> Forward selection (selección hacia adelante)</a></li>
+<li class="chapter" data-level="5.8.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#backward-selection-selección-hacia-atrás"><i class="fa fa-check"></i><b>5.8.2</b> Backward selection (selección hacia atrás)</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="regresión-lineal.html"><a href="regresión-lineal.html#ejercicio"><i class="fa fa-check"></i><b>5.9</b> Ejercicio</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="regresión-logística.html"><a href="regresión-logística.html"><i class="fa fa-check"></i><b>6</b> Regresión Logística</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regresión-logística.html"><a href="regresión-logística.html#función-sigmoide"><i class="fa fa-check"></i><b>6.1</b> Función sigmoide</a></li>
+<li class="chapter" data-level="6.2" data-path="regresión-logística.html"><a href="regresión-logística.html#ajuste-del-modelo"><i class="fa fa-check"></i><b>6.2</b> Ajuste del modelo</a></li>
+<li class="chapter" data-level="6.3" data-path="regresión-logística.html"><a href="regresión-logística.html#clasificación-2"><i class="fa fa-check"></i><b>6.3</b> Clasificación</a></li>
+<li class="chapter" data-level="6.4" data-path="regresión-logística.html"><a href="regresión-logística.html#implementación-en-python"><i class="fa fa-check"></i><b>6.4</b> Implementación en python</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="regresión-logística.html"><a href="regresión-logística.html#pipeline-de-transformación-de-datos-1"><i class="fa fa-check"></i><b>6.4.1</b> Pipeline de transformación de datos</a></li>
+<li class="chapter" data-level="6.4.2" data-path="regresión-logística.html"><a href="regresión-logística.html#creación-y-ajuste-de-modelo-1"><i class="fa fa-check"></i><b>6.4.2</b> Creación y ajuste de modelo</a></li>
+<li class="chapter" data-level="6.4.3" data-path="regresión-logística.html"><a href="regresión-logística.html#predicción-con-nuevos-datos-1"><i class="fa fa-check"></i><b>6.4.3</b> Predicción con nuevos datos</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="regresión-logística.html"><a href="regresión-logística.html#métricas-de-desempeño-1"><i class="fa fa-check"></i><b>6.5</b> Métricas de desempeño</a></li>
+<li class="chapter" data-level="6.6" data-path="regresión-logística.html"><a href="regresión-logística.html#estimación-de-probabilidades"><i class="fa fa-check"></i><b>6.6</b> Estimación de probabilidades</a></li>
+<li class="chapter" data-level="6.7" data-path="regresión-logística.html"><a href="regresión-logística.html#validación-cruzada-1"><i class="fa fa-check"></i><b>6.7</b> Validación cruzada</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html"><i class="fa fa-check"></i><b>7</b> K-Nearest-Neighbor</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#clasificación-3"><i class="fa fa-check"></i><b>7.1</b> Clasificación</a></li>
+<li class="chapter" data-level="7.2" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#regresión-2"><i class="fa fa-check"></i><b>7.2</b> Regresión</a></li>
+<li class="chapter" data-level="7.3" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#ajuste-del-modelo-1"><i class="fa fa-check"></i><b>7.3</b> Ajuste del modelo</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#selección-de-hiper-parámetro-k"><i class="fa fa-check"></i><b>7.3.1</b> Selección de Hiper-parámetro K</a></li>
+<li class="chapter" data-level="7.3.2" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#métodos-de-cálculo-de-la-distancia-entre-observaciones"><i class="fa fa-check"></i><b>7.3.2</b> Métodos de cálculo de la distancia entre observaciones</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#implementación-en-python-1"><i class="fa fa-check"></i><b>7.4</b> Implementación en Python</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#regresión-3"><i class="fa fa-check"></i><b>7.4.1</b> Regresión</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html"><i class="fa fa-check"></i><b>8</b> Árboles de decisión</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#ajuste-del-modelo-2"><i class="fa fa-check"></i><b>8.1</b> Ajuste del modelo</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#attribute-selective-measure-asm"><i class="fa fa-check"></i><b>8.1.1</b> Attribute Selective Measure (ASM)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#regularización-de-árboles"><i class="fa fa-check"></i><b>8.2</b> Regularización de árboles</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#nivel-de-profundidad-de-árbol"><i class="fa fa-check"></i><b>8.2.1</b> Nivel de profundidad de árbol</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#aprendizaje-conjunto"><i class="fa fa-check"></i><b>8.3</b> Aprendizaje conjunto</a></li>
+<li class="chapter" data-level="8.4" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#bagging"><i class="fa fa-check"></i><b>8.4</b> Bagging</a></li>
+<li class="chapter" data-level="8.5" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#random-forest"><i class="fa fa-check"></i><b>8.5</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#qué-es"><i class="fa fa-check"></i><b>8.5.1</b> ¿Qué es?</a></li>
+<li class="chapter" data-level="8.5.2" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#características-de-los-bosques-aleatorios"><i class="fa fa-check"></i><b>8.5.2</b> Características de los bosques aleatorios</a></li>
+<li class="chapter" data-level="8.5.3" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#aplicar-árboles-de-decisión-en-un-bosque-aleatorio"><i class="fa fa-check"></i><b>8.5.3</b> Aplicar árboles de decisión en un bosque aleatorio</a></li>
+<li class="chapter" data-level="8.5.4" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#ventajas-y-desventjas-de-bosques-aleatorios"><i class="fa fa-check"></i><b>8.5.4</b> Ventajas y desventjas de bosques aleatorios</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#implementación-en-python-2"><i class="fa fa-check"></i><b>8.6</b> Implementación en Python</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#regresión-4"><i class="fa fa-check"></i><b>8.6.1</b> Regresión</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="./"><img src="img/amat-logo.png" width="280"></a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introducción a Ciencia de Datos y Machine Learning con Python</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="árboles-de-decisión" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Capítulo 8</span> Árboles de decisión<a href="árboles-de-decisión.html#árboles-de-decisión" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><img src="img/08-ml-tree/0-meme-arbol.jpeg" width="500pt" height="600pt" style="display: block; margin: auto;" /></p>
+<p>Un árbol de decisiones es un algoritmo del aprendizaje supervisado que se puede utilizar tanto para problemas de <strong>clasificación</strong> como de <strong>regresión</strong>. Es un clasificador estructurado en árbol, donde los nodos internos representan las características de un conjunto de datos, las ramas representan las reglas de decisión y cada nodo hoja representa el resultado. La idea básica de los árboles es buscar puntos de cortes en las variables de entrada para hacer predicciones, ir dividiendo la muestra, y encontrar cortes sucesivos para refinar las predicciones.</p>
+<p>En un árbol de decisión, hay dos tipos nodos, el nodo de decisión o nodos internos (<em>Decision Node</em>) y el nodo hoja o nodo terminal (Leaf node). Los nodos de decisión se utilizan para tomar cualquier decisión y tienen múltiples ramas, mientras que los nodos hoja son el resultado de esas decisiones y no contienen más ramas.</p>
+<p><img src="img/08-ml-tree/1-arboles.png" width="500pt" height="300pt" style="display: block; margin: auto;" /></p>
+<ul>
+<li><strong>Regresión:</strong> En el caso de la regresión de árboles de decisión, en los nodos finales se calcula el promedio de la variable de respuesta. El promedio será la estimación del modelo.</li>
+</ul>
+<p><img src="img/08-ml-tree/2-arbol-reg-graph.png" width="500pt" height="300pt" style="display: block; margin: auto;" /></p>
+<p><img src="img/08-ml-tree/3-arbol-reg-diagram.png" width="500pt" height="300pt" style="display: block; margin: auto;" /></p>
+<ul>
+<li><strong>Clasificación:</strong> Por otro lado, en los árboles de clasificación se calcula la proporción de elementos de cada categoría en los nodos finales. De esta manera se calcula la probabilidad de pertenencia a la categoría.</li>
+</ul>
+<p><img src="img/08-ml-tree/4-arbol-cla-graph.png" width="500pt" height="300pt" style="display: block; margin: auto;" /></p>
+<p><img src="img/08-ml-tree/5-arbol-cla-diagram.png" width="500pt" height="300pt" style="display: block; margin: auto;" /></p>
+<div id="ajuste-del-modelo-2" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Ajuste del modelo<a href="árboles-de-decisión.html#ajuste-del-modelo-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En un árbol de decisión, para predecir la clase del conjunto de datos, el algoritmo comienza desde el nodo raíz del árbol. Este algoritmo compara los valores de la variable raíz con la variable de registro y, según la comparación, sigue una rama y salta al siguiente nodo.</p>
+<p>Para el siguiente nodo, el algoritmo vuelve a comparar el valor de la siguiente variable con los otros sub-nodos y avanza. Continúa el proceso hasta que se llega a un nodo hoja. El proceso completo se puede comprender mejor con los siguientes pasos:</p>
+<ol style="list-style-type: decimal">
+<li><p>Comenzamos el árbol con el nodo raíz (llamado S), que contiene el conjunto de entrenamiento completo.</p></li>
+<li><p>Encuentre la mejor variable en el conjunto de datos usando <em>Attribute Selective Measure</em> (ASM).</p></li>
+<li><p>Divida la S en subconjuntos que contengan valores posibles para la mejor variable.</p></li>
+<li><p>Genere el nodo del árbol de decisión, que contiene la mejor variable.</p></li>
+<li><p>Cree de forma recursiva nuevos árboles de decisión utilizando los subconjuntos del conjunto de datos creado en el paso 3. Continúe este proceso hasta que se alcance una etapa en la que no pueda particionar más los nodos y este nodo final sera un nodo hoja.</p></li>
+<li><p>Para clasificación nos quedaremos la moda de la variable respuesta del nodo hoja y para regresión usaremos la media de la variable respuesta.</p></li>
+</ol>
+<div id="attribute-selective-measure-asm" class="section level3 hasAnchor" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> Attribute Selective Measure (ASM)<a href="árboles-de-decisión.html#attribute-selective-measure-asm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Al implementar un árbol de decisión, surge el problema principal de cómo seleccionar la mejor variable para el nodo raíz y para los sub-nodos. Para resolver este problemas existe una técnica que se llama medida de selección de atributos o <em>ASM</em>. Mediante esta medición, podemos seleccionar fácilmente la mejor variable para los nodos del árbol. Una de las técnicas más populares para <em>ASM</em> es:</p>
+<ul>
+<li>Índice de Gini</li>
+</ul>
+<p>La medida del grado de probabilidad de que una variable en particular se clasifique incorrectamente cuando se elige al azar se llama índice de Gini o impureza de Gini. Los datos se distribuyen por igual según el índice de Gini.</p>
+<p><span class="math display">\[Gini = \sum_{i=1}^{n}\hat{p_i}(1-\hat{p}_i)\]</span></p>
+<p>Con <span class="math inline">\(p_i\)</span> como la probabilidad de que un objeto se clasifique en una clase particular.</p>
+<p>Esta métrica puede analizarse como una métrica de impureza. Cuando todos o la mayoría de elementos dentro de un nodo pertenecen a una misma clase, el índice de Gini toma valores cercanos a cero.</p>
+<p>Cuando se utiliza el índice de Gini como criterio seleccionar la variable para el nodo raíz, seleccionaremos la variable con el índice de Gini menor.</p>
+</div>
+</div>
+<div id="regularización-de-árboles" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Regularización de árboles<a href="árboles-de-decisión.html#regularización-de-árboles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para asegurarse de que no exista sobre-ajuste en el modelo, es importante considerar algunas regularizaciones a los hiper-parámetros implementados. Posteriormente, se determinará cuál de las posibles combinaciones produce mejores resultados.</p>
+<div id="nivel-de-profundidad-de-árbol" class="section level3 hasAnchor" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> Nivel de profundidad de árbol<a href="árboles-de-decisión.html#nivel-de-profundidad-de-árbol" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Podríamos preguntarnos cuándo dejar de crecer un árbol. Pueden existir problemas que tengan un gran conjunto de variables y esto da como resultado una gran cantidad de divisiones, lo que a su vez genera un árbol de decisión muy grande. Estos árboles son complejos y pueden provocar un sobre-ajuste. Entonces, necesitamos saber cuándo parar.</p>
+<ol style="list-style-type: decimal">
+<li><p>Una forma de hacer esto, es establecer un número mínimo de entradas de entrenamiento para dividir un nodo (min_n).</p></li>
+<li><p>Otra forma, es establecer la profundidad máxima del modelo. La profundidad máxima se refiere a la longitud del camino más largo desde el nodo raíz hasta un nodo hoja (max_depth).</p></li>
+</ol>
+</div>
+</div>
+<div id="aprendizaje-conjunto" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Aprendizaje conjunto<a href="árboles-de-decisión.html#aprendizaje-conjunto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El aprendizaje conjunto da crédito a la idea de la “sabiduría de las multitudes”, lo que sugiere que <strong>la toma de decisiones de un grupo más grande de individuos (modelos) suele ser mejor que la de un individuo.</strong></p>
+<p>El aprendizaje en conjunto <strong>es un grupo (o conjunto) de individuos o modelos, que trabajan colectivamente para lograr una mejor predicción final</strong>. Un solo modelo, también conocido como aprendiz básico puede no funcionar bien individualmente debido a una gran variación o un alto sesgo, sin embargo, cuando se agregan individuos débiles, pueden formar un individuo fuerte, ya que su combinación reduce el sesgo o la varianza, lo que produce un mejor rendimiento del modelo.</p>
+<p><img src="img/08-ml-tree/10-inteligencia-colectiva.jpeg" width="600pt" height="250pt" style="display: block; margin: auto;" /></p>
+<p>Los métodos de conjunto se ilustran con frecuencia utilizando árboles de decisión, ya que este algoritmo puede ser propenso a sobre ajustar (alta varianza y bajo sesgo) y también puede prestarse a desajuste (baja varianza y alto sesgo) cuando es muy pequeño, como un árbol de decisión con un nivel.</p>
+<p><strong>Nota:</strong> Cuando un algoritmo se adapta o no se adapta a su conjunto de entrenamiento, no se puede generalizar bien a nuevos conjuntos de datos, por lo que se utilizan métodos de conjunto para contrarrestar este comportamiento y permitir la generalización del modelo a nuevos conjuntos de datos.</p>
+</div>
+<div id="bagging" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> Bagging<a href="árboles-de-decisión.html#bagging" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Primero tenemos que definir qué es la <strong>Agregación de Bootstrap o Bagging</strong>. Este es un algoritmo de aprendizaje automático diseñado para mejorar la estabilidad y precisión de algoritmos de ML usados en clasificación estadística y regresión. Además reduce la varianza y ayuda a evitar el sobre-ajuste. Aunque es usualmente aplicado a métodos de árboles de decisión, puede ser usado con cualquier tipo de método. Bagging es un caso especial del promediado de modelos.</p>
+<p><img src="img/08-ml-tree/bootstrap.svg" width="800pt" height="450pt" style="display: block; margin: auto;" /></p>
+<p>Los métodos de <em>bagging</em> son métodos donde los algoritmos simples son usados en paralelo. El principal objetivo de los métodos en paralelo es el de aprovecharse de la independencia que hay entre los algoritmos simples, ya que el error se puede reducir bastante al promediar las salidas de los modelos simples. Es como si, queriendo resolver un problema entre varias personas independientes unas de otras, damos por bueno lo que eligiese la mayoría de las personas.</p>
+<p>Para obtener la agregación de las salidas de cada modelo simple e independiente, bagging puede usar la votación para los métodos de clasificación y el promedio para los métodos de regresión.</p>
+<p><img src="img/08-ml-tree/7-bag.png" width="500pt" height="300pt" style="display: block; margin: auto;" /></p>
+<p>El <em>bagging o agregación bootstrap</em>, es un método de aprendizaje por conjuntos que se usa comúnmente para reducir la varianza dentro de un conjunto de datos ruidoso.</p>
+</div>
+<div id="random-forest" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Random Forest<a href="árboles-de-decisión.html#random-forest" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Un bosque aleatorio es un algoritmo de aprendizaje automático supervisado que se construye a partir de algoritmos de árbol de decisión. Este algoritmo se aplica en diversas industrias, como la banca y el comercio electrónico, para predecir el comportamiento y los resultados.</p>
+<p>En esta clase se dará una descripción general del algoritmo de bosque aleatorio, cómo funciona y las características del algoritmo.</p>
+<p>También se señalan las ventajas y desventajas de este algoritmo.</p>
+<p><img src="img/08-ml-tree/bagging.jpeg" width="900pt" height="500pt" style="display: block; margin: auto;" /></p>
+<div id="qué-es" class="section level3 hasAnchor" number="8.5.1">
+<h3><span class="header-section-number">8.5.1</span> ¿Qué es?<a href="árboles-de-decisión.html#qué-es" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Un bosque aleatorio es una técnica de aprendizaje automático que se utiliza para resolver problemas de regresión y clasificación. Utiliza el aprendizaje por conjuntos, que es una técnica que combina muchos clasificadores para proporcionar soluciones a problemas complejos.</p>
+<p>Este algoritmo consta de muchos árboles de decisión. El “bosque” generado se entrena
+mediante <strong>agregación de bootstrap (bagging)</strong>, el cual es es un meta-algoritmo
+de conjunto que mejora la precisión de los algoritmos de aprendizaje automático.</p>
+<p>El algoritmo establece el resultado en función de las predicciones de los árboles de decisión. Predice tomando el promedio o la media de la salida de varios árboles. El aumento del número de árboles aumenta la precisión del resultado.</p>
+<p>Un bosque aleatorio erradica las limitaciones de un algoritmo de árbol de decisión. Reduce el sobre-ajuste de conjuntos de datos y aumenta la precisión. Genera predicciones sin requerir muchas configuraciones.</p>
+<p><img src="img/08-ml-tree/3-10-1-bosques-aleatorios.png" width="600pt" height="300pt" style="display: block; margin: auto;" /></p>
+</div>
+<div id="características-de-los-bosques-aleatorios" class="section level3 hasAnchor" number="8.5.2">
+<h3><span class="header-section-number">8.5.2</span> Características de los bosques aleatorios<a href="árboles-de-decisión.html#características-de-los-bosques-aleatorios" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>Es más preciso que el algoritmo árbol de decisiones.</p></li>
+<li><p>Proporciona una forma eficaz de gestionar los datos faltantes.</p></li>
+<li><p>Puede producir una predicción razonable sin ajuste de hiperparámetros.</p></li>
+<li><p>Resuelve el problema del sobre-ajuste en los árboles de decisión.</p></li>
+<li><p>En cada árbol forestal aleatorio, se selecciona aleatoriamente un subconjunto
+de características en el punto de división del nodo.</p></li>
+</ul>
+</div>
+<div id="aplicar-árboles-de-decisión-en-un-bosque-aleatorio" class="section level3 hasAnchor" number="8.5.3">
+<h3><span class="header-section-number">8.5.3</span> Aplicar árboles de decisión en un bosque aleatorio<a href="árboles-de-decisión.html#aplicar-árboles-de-decisión-en-un-bosque-aleatorio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La principal diferencia entre el algoritmo de árbol de decisión y el algoritmo de bosque aleatorio es que el establecimiento de nodos raíz y la desagregación de nodos se realiza de forma aleatoria en este último. <strong>El bosque aleatorio emplea el método de bagging para generar la predicción requerida.</strong></p>
+<p><strong>El método bagging implica el uso de diferentes muestras de datos (datos de entrenamiento) en lugar de una sola muestra.</strong> Los árboles de decisión producen diferentes resultados, dependiendo de los datos de entrenamiento alimentados al algoritmo de bosque aleatorio.</p>
+<p>Nuestro primer ejemplo todavía se puede utilizar para explicar cómo funcionan los bosques aleatorios. Supongamos que solo tenemos cuatro árboles de decisión. En este caso, los datos de entrenamiento que comprenden las observaciones y características de estudio se dividirán en cuatro nodos raíz. Supongamos que queremos modelar si un cliente compra o no compra un teléfono.</p>
+<p>Los nodos raíz podrían representar cuatro características que podrían influir en la elección de un cliente (precio, almacenamiento interno, cámara y RAM). <strong>El bosque aleatorio dividirá los nodos seleccionando características al azar. La predicción final se seleccionará en función del resultado de los cuatro árboles.</strong></p>
+<p><strong>El resultado elegido por la mayoría de los árboles de decisión será la elección final.</strong></p>
+<p>Si tres árboles predicen la compra y un árbol predice que no comprará, entonces la predicción final será la compra. En este caso, se prevé que el cliente comprará.</p>
+<p>El siguiente diagrama muestra un clasificador de bosque aleatorio simple.</p>
+<p><img src="img/08-ml-tree/3-10-3-bosques-aleatorios-clasificador.png" width="600pt" height="300pt" style="display: block; margin: auto;" /></p>
+<p><img src="img/08-ml-tree/3-13-1-randomforest.png" width="600pt" height="300pt" style="display: block; margin: auto;" /></p>
+</div>
+<div id="ventajas-y-desventjas-de-bosques-aleatorios" class="section level3 hasAnchor" number="8.5.4">
+<h3><span class="header-section-number">8.5.4</span> Ventajas y desventjas de bosques aleatorios<a href="árboles-de-decisión.html#ventajas-y-desventjas-de-bosques-aleatorios" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Ventajas</strong></p>
+<ul>
+<li><p>Puede realizar tareas de regresión y clasificación.</p></li>
+<li><p>Un bosque aleatorio produce buenas predicciones que se pueden entender fácilmente.</p></li>
+<li><p>Puede manejar grandes conjuntos de datos de manera eficiente.</p></li>
+<li><p>Proporciona un mayor nivel de precisión en la predicción de resultados sobre el algoritmo del árbol de decisión.</p></li>
+</ul>
+<p><strong>Desventajas</strong></p>
+<ul>
+<li><p>Cuando se usa un bosque aleatorio, se requieren bastantes recursos para el cálculo.</p></li>
+<li><p>Consume más tiempo en comparación con un algoritmo de árbol de decisiones.</p></li>
+<li><p>No producen buenos resultados cuando los datos son muy escasos. En este caso, el subconjunto de características y la muestra de arranque producirán un espacio invariante. Esto conducirá a divisiones improductivas, que afectarán el resultado.</p></li>
+</ul>
+</div>
+</div>
+<div id="implementación-en-python-2" class="section level2 hasAnchor" number="8.6">
+<h2><span class="header-section-number">8.6</span> Implementación en Python<a href="árboles-de-decisión.html#implementación-en-python-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Usaremos los pipelines antes implementados para ajustar tanto el modelo de regresión como el de clasificación. Una ventaja que se explorará al usar KFCV es el conjunto de hiperparámetros para elegir el mejor modelo posible.</p>
+<p>Los pasos a seguir, son los siguientes:</p>
+<ol start="0" style="list-style-type: decimal">
+<li>Carga de librerías</li>
+<li>Carga y separación inicial de datos ( test, train ).</li>
+<li>Pre-procesamiento e ingeniería de variables.</li>
+<li>Selección de tipo de modelo con hiperparámetros iniciales.</li>
+<li>Cálculo de métricas de desempeño.</li>
+<li>Creación de grid search y métricas de desempeño.</li>
+<li>Entrenamiento de modelos con hiperparámetros definidos.</li>
+<li>Análisis de métricas de error e hiperparámetros (Vuelve al paso 3, si es necesario).</li>
+<li>Selección de modelo a usar.</li>
+<li>Ajuste de modelo final con todos los datos.</li>
+<li>Validar poder predictivo con datos de prueba.</li>
+</ol>
+<div id="regresión-4" class="section level3 hasAnchor" number="8.6.1">
+<h3><span class="header-section-number">8.6.1</span> Regresión<a href="árboles-de-decisión.html#regresión-4" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Paso 0: Carga de librerías</strong></p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb285-1"><a href="árboles-de-decisión.html#cb285-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mlxtend.feature_selection <span class="im">import</span> ColumnSelector</span>
+<span id="cb285-2"><a href="árboles-de-decisión.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+<span id="cb285-3"><a href="árboles-de-decisión.html#cb285-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder</span>
+<span id="cb285-4"><a href="árboles-de-decisión.html#cb285-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
+<span id="cb285-5"><a href="árboles-de-decisión.html#cb285-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb285-6"><a href="árboles-de-decisión.html#cb285-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_absolute_percentage_error</span>
+<span id="cb285-7"><a href="árboles-de-decisión.html#cb285-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error, r2_score, make_scorer</span>
+<span id="cb285-8"><a href="árboles-de-decisión.html#cb285-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, KFold, cross_val_score, cross_validate</span>
+<span id="cb285-9"><a href="árboles-de-decisión.html#cb285-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
+<span id="cb285-10"><a href="árboles-de-decisión.html#cb285-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.utils <span class="im">import</span> shuffle</span>
+<span id="cb285-11"><a href="árboles-de-decisión.html#cb285-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> set_config</span>
+<span id="cb285-12"><a href="árboles-de-decisión.html#cb285-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb285-13"><a href="árboles-de-decisión.html#cb285-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plydata.one_table_verbs <span class="im">import</span> pull</span>
+<span id="cb285-14"><a href="árboles-de-decisión.html#cb285-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plydata.tidy <span class="im">import</span> pivot_longer</span>
+<span id="cb285-15"><a href="árboles-de-decisión.html#cb285-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mizani.formatters <span class="im">import</span> comma_format, dollar_format</span>
+<span id="cb285-16"><a href="árboles-de-decisión.html#cb285-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb285-17"><a href="árboles-de-decisión.html#cb285-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> siuba <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb285-18"><a href="árboles-de-decisión.html#cb285-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb285-19"><a href="árboles-de-decisión.html#cb285-19" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb285-20"><a href="árboles-de-decisión.html#cb285-20" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb285-21"><a href="árboles-de-decisión.html#cb285-21" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pickle</span></code></pre></div>
+<p><strong>Paso 1: Carga y separación inicial de datos ( test, train )</strong></p>
+<p>Comenzamos por cargar los datos completos e identificar la variable de respuesta para separarla de las explicativas</p>
+<div class="sourceCode" id="cb286"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb286-1"><a href="árboles-de-decisión.html#cb286-1" aria-hidden="true" tabindex="-1"></a><span class="co">#### CARGA DE DATOS ####</span></span>
+<span id="cb286-2"><a href="árboles-de-decisión.html#cb286-2" aria-hidden="true" tabindex="-1"></a>ames <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/ames.csv&quot;</span>)</span>
+<span id="cb286-3"><a href="árboles-de-decisión.html#cb286-3" aria-hidden="true" tabindex="-1"></a>ames <span class="op">=</span> (ames <span class="op">&gt;&gt;</span> </span>
+<span id="cb286-4"><a href="árboles-de-decisión.html#cb286-4" aria-hidden="true" tabindex="-1"></a> mutate(</span>
+<span id="cb286-5"><a href="árboles-de-decisión.html#cb286-5" aria-hidden="true" tabindex="-1"></a>  Second_Flr_SF <span class="op">=</span> _.Second_Flr_SF.astype(<span class="bu">float</span>),</span>
+<span id="cb286-6"><a href="árboles-de-decisión.html#cb286-6" aria-hidden="true" tabindex="-1"></a>  Full_Bath <span class="op">=</span> _.Full_Bath.astype(<span class="bu">int</span>),</span>
+<span id="cb286-7"><a href="árboles-de-decisión.html#cb286-7" aria-hidden="true" tabindex="-1"></a>  Half_Bath <span class="op">=</span> _.Half_Bath.astype(<span class="bu">int</span>))</span>
+<span id="cb286-8"><a href="árboles-de-decisión.html#cb286-8" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb286-9"><a href="árboles-de-decisión.html#cb286-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb286-10"><a href="árboles-de-decisión.html#cb286-10" aria-hidden="true" tabindex="-1"></a>ames_y <span class="op">=</span> ames <span class="op">&gt;&gt;</span> pull(<span class="st">&quot;Sale_Price&quot;</span>)    <span class="co"># ames[[&quot;Sale_Price&quot;]]</span></span>
+<span id="cb286-11"><a href="árboles-de-decisión.html#cb286-11" aria-hidden="true" tabindex="-1"></a>ames_x <span class="op">=</span> select(ames, <span class="op">-</span>_.Sale_Price)   <span class="co"># ames.drop(&#39;Sale_Price&#39;, axis=1)</span></span>
+<span id="cb286-12"><a href="árboles-de-decisión.html#cb286-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb286-13"><a href="árboles-de-decisión.html#cb286-13" aria-hidden="true" tabindex="-1"></a><span class="co">#### DIVISIÓN DE DATOS ####</span></span>
+<span id="cb286-14"><a href="árboles-de-decisión.html#cb286-14" aria-hidden="true" tabindex="-1"></a>ames_x_train, ames_x_test, ames_y_train, ames_y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb286-15"><a href="árboles-de-decisión.html#cb286-15" aria-hidden="true" tabindex="-1"></a> ames_x, ames_y, </span>
+<span id="cb286-16"><a href="árboles-de-decisión.html#cb286-16" aria-hidden="true" tabindex="-1"></a> train_size <span class="op">=</span> <span class="fl">0.80</span>, </span>
+<span id="cb286-17"><a href="árboles-de-decisión.html#cb286-17" aria-hidden="true" tabindex="-1"></a> random_state <span class="op">=</span> <span class="dv">195</span></span>
+<span id="cb286-18"><a href="árboles-de-decisión.html#cb286-18" aria-hidden="true" tabindex="-1"></a> )</span></code></pre></div>
+<p>Contando con datos de entrenamiento, procedemos a realizar el feature engineering para extraer las mejores características que permitirán realizar las estimaciones en el modelo.</p>
+<p><strong>Paso 2: Pre-procesamiento e ingeniería de variables</strong></p>
+<p>En este paso se pone a prueba la imaginación y conocimiento de transformaciones estadísticas que permitan ofrecer un mejor ajuste a la relación entre datos dependientes y de respuesta.</p>
+<p>EL primer pipeline es para facilitar las transformaciones sobre las columnas sugeridas inicialmente:</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb287-1"><a href="árboles-de-decisión.html#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="co">## SELECCIÓN DE VARIABLES</span></span>
+<span id="cb287-2"><a href="árboles-de-decisión.html#cb287-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-3"><a href="árboles-de-decisión.html#cb287-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionamos las variales numéricas de interés</span></span>
+<span id="cb287-4"><a href="árboles-de-decisión.html#cb287-4" aria-hidden="true" tabindex="-1"></a>num_cols <span class="op">=</span> [<span class="st">&quot;Full_Bath&quot;</span>, <span class="st">&quot;Half_Bath&quot;</span>, <span class="st">&quot;Second_Flr_SF&quot;</span>]</span>
+<span id="cb287-5"><a href="árboles-de-decisión.html#cb287-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-6"><a href="árboles-de-decisión.html#cb287-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionamos las variables categóricas de interés</span></span>
+<span id="cb287-7"><a href="árboles-de-decisión.html#cb287-7" aria-hidden="true" tabindex="-1"></a>cat_cols <span class="op">=</span> [<span class="st">&quot;Overall_Cond&quot;</span>]</span>
+<span id="cb287-8"><a href="árboles-de-decisión.html#cb287-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-9"><a href="árboles-de-decisión.html#cb287-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Juntamos todas las variables de interés</span></span>
+<span id="cb287-10"><a href="árboles-de-decisión.html#cb287-10" aria-hidden="true" tabindex="-1"></a>columnas_seleccionadas <span class="op">=</span> num_cols <span class="op">+</span> cat_cols</span>
+<span id="cb287-11"><a href="árboles-de-decisión.html#cb287-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-12"><a href="árboles-de-decisión.html#cb287-12" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> ColumnSelector(columnas_seleccionadas)</span>
+<span id="cb287-13"><a href="árboles-de-decisión.html#cb287-13" aria-hidden="true" tabindex="-1"></a>ames_x_train_selected <span class="op">=</span> pipe.fit_transform(ames_x_train)</span>
+<span id="cb287-14"><a href="árboles-de-decisión.html#cb287-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-15"><a href="árboles-de-decisión.html#cb287-15" aria-hidden="true" tabindex="-1"></a>ames_train_selected <span class="op">=</span> (pd.DataFrame(</span>
+<span id="cb287-16"><a href="árboles-de-decisión.html#cb287-16" aria-hidden="true" tabindex="-1"></a>  ames_x_train_selected, </span>
+<span id="cb287-17"><a href="árboles-de-decisión.html#cb287-17" aria-hidden="true" tabindex="-1"></a>  columns <span class="op">=</span> columnas_seleccionadas) <span class="op">&gt;&gt;</span> </span>
+<span id="cb287-18"><a href="árboles-de-decisión.html#cb287-18" aria-hidden="true" tabindex="-1"></a> mutate(</span>
+<span id="cb287-19"><a href="árboles-de-decisión.html#cb287-19" aria-hidden="true" tabindex="-1"></a>  Second_Flr_SF <span class="op">=</span> _.Second_Flr_SF.astype(<span class="bu">float</span>),</span>
+<span id="cb287-20"><a href="árboles-de-decisión.html#cb287-20" aria-hidden="true" tabindex="-1"></a>  Full_Bath <span class="op">=</span> _.Full_Bath.astype(<span class="bu">int</span>),</span>
+<span id="cb287-21"><a href="árboles-de-decisión.html#cb287-21" aria-hidden="true" tabindex="-1"></a>  Half_Bath <span class="op">=</span> _.Half_Bath.astype(<span class="bu">int</span>))</span>
+<span id="cb287-22"><a href="árboles-de-decisión.html#cb287-22" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb287-23"><a href="árboles-de-decisión.html#cb287-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-24"><a href="árboles-de-decisión.html#cb287-24" aria-hidden="true" tabindex="-1"></a>ames_train_selected.info()</span></code></pre></div>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 2344 entries, 0 to 2343
+## Data columns (total 4 columns):
+##  #   Column         Non-Null Count  Dtype  
+## ---  ------         --------------  -----  
+##  0   Full_Bath      2344 non-null   int64  
+##  1   Half_Bath      2344 non-null   int64  
+##  2   Second_Flr_SF  2344 non-null   float64
+##  3   Overall_Cond   2344 non-null   object 
+## dtypes: float64(1), int64(2), object(1)
+## memory usage: 73.4+ KB</code></pre>
+<p>Y una vez que se han sugerido algunas columnas, se procede a realizar el pipeline de transformación:</p>
+<div class="sourceCode" id="cb289"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb289-1"><a href="árboles-de-decisión.html#cb289-1" aria-hidden="true" tabindex="-1"></a><span class="co">## TRANSFORMACIÓN DE COLUMNAS</span></span>
+<span id="cb289-2"><a href="árboles-de-decisión.html#cb289-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-3"><a href="árboles-de-decisión.html#cb289-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ColumnTransformer para aplicar transformaciones</span></span>
+<span id="cb289-4"><a href="árboles-de-decisión.html#cb289-4" aria-hidden="true" tabindex="-1"></a>preprocessor <span class="op">=</span> ColumnTransformer(</span>
+<span id="cb289-5"><a href="árboles-de-decisión.html#cb289-5" aria-hidden="true" tabindex="-1"></a>    transformers <span class="op">=</span> [</span>
+<span id="cb289-6"><a href="árboles-de-decisión.html#cb289-6" aria-hidden="true" tabindex="-1"></a>        (<span class="st">&#39;scaler&#39;</span>, StandardScaler(), num_cols),</span>
+<span id="cb289-7"><a href="árboles-de-decisión.html#cb289-7" aria-hidden="true" tabindex="-1"></a>        (<span class="st">&#39;onehotencoding&#39;</span>, OneHotEncoder(drop<span class="op">=</span><span class="st">&#39;first&#39;</span>, sparse_output<span class="op">=</span><span class="va">False</span>), cat_cols)</span>
+<span id="cb289-8"><a href="árboles-de-decisión.html#cb289-8" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb289-9"><a href="árboles-de-decisión.html#cb289-9" aria-hidden="true" tabindex="-1"></a>    verbose_feature_names_out <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb289-10"><a href="árboles-de-decisión.html#cb289-10" aria-hidden="true" tabindex="-1"></a>    remainder <span class="op">=</span> <span class="st">&#39;passthrough&#39;</span>  <span class="co"># Mantener las columnas restantes sin cambios</span></span>
+<span id="cb289-11"><a href="árboles-de-decisión.html#cb289-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb289-12"><a href="árboles-de-decisión.html#cb289-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-13"><a href="árboles-de-decisión.html#cb289-13" aria-hidden="true" tabindex="-1"></a>transformed_data <span class="op">=</span> preprocessor.fit_transform(ames_train_selected)</span>
+<span id="cb289-14"><a href="árboles-de-decisión.html#cb289-14" aria-hidden="true" tabindex="-1"></a>new_column_names <span class="op">=</span> preprocessor.get_feature_names_out()</span>
+<span id="cb289-15"><a href="árboles-de-decisión.html#cb289-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-16"><a href="árboles-de-decisión.html#cb289-16" aria-hidden="true" tabindex="-1"></a>transformed_df <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb289-17"><a href="árboles-de-decisión.html#cb289-17" aria-hidden="true" tabindex="-1"></a>  transformed_data,</span>
+<span id="cb289-18"><a href="árboles-de-decisión.html#cb289-18" aria-hidden="true" tabindex="-1"></a>  columns<span class="op">=</span>new_column_names</span>
+<span id="cb289-19"><a href="árboles-de-decisión.html#cb289-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb289-20"><a href="árboles-de-decisión.html#cb289-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-21"><a href="árboles-de-decisión.html#cb289-21" aria-hidden="true" tabindex="-1"></a>transformed_df</span></code></pre></div>
+<pre><code>##       Full_Bath  Half_Bath  Second_Flr_SF  Overall_Cond_Average  \
+## 0          0.78       1.24           0.68                  1.00   
+## 1          0.78      -0.75          -0.78                  1.00   
+## 2          0.78      -0.75           0.73                  1.00   
+## 3         -1.01      -0.75          -0.78                  1.00   
+## 4         -1.01       1.24          -0.78                  0.00   
+## ...         ...        ...            ...                   ...   
+## 2339      -1.01       1.24           0.50                  0.00   
+## 2340       0.78      -0.75          -0.78                  1.00   
+## 2341      -1.01      -0.75          -0.78                  1.00   
+## 2342       0.78       1.24           1.38                  1.00   
+## 2343       0.78      -0.75           1.36                  1.00   
+## 
+##       Overall_Cond_Below_Average  Overall_Cond_Excellent  Overall_Cond_Fair  \
+## 0                           0.00                    0.00               0.00   
+## 1                           0.00                    0.00               0.00   
+## 2                           0.00                    0.00               0.00   
+## 3                           0.00                    0.00               0.00   
+## 4                           0.00                    0.00               0.00   
+## ...                          ...                     ...                ...   
+## 2339                        1.00                    0.00               0.00   
+## 2340                        0.00                    0.00               0.00   
+## 2341                        0.00                    0.00               0.00   
+## 2342                        0.00                    0.00               0.00   
+## 2343                        0.00                    0.00               0.00   
+## 
+##       Overall_Cond_Good  Overall_Cond_Poor  Overall_Cond_Very_Good  \
+## 0                  0.00               0.00                    0.00   
+## 1                  0.00               0.00                    0.00   
+## 2                  0.00               0.00                    0.00   
+## 3                  0.00               0.00                    0.00   
+## 4                  1.00               0.00                    0.00   
+## ...                 ...                ...                     ...   
+## 2339               0.00               0.00                    0.00   
+## 2340               0.00               0.00                    0.00   
+## 2341               0.00               0.00                    0.00   
+## 2342               0.00               0.00                    0.00   
+## 2343               0.00               0.00                    0.00   
+## 
+##       Overall_Cond_Very_Poor  
+## 0                       0.00  
+## 1                       0.00  
+## 2                       0.00  
+## 3                       0.00  
+## 4                       0.00  
+## ...                      ...  
+## 2339                    0.00  
+## 2340                    0.00  
+## 2341                    0.00  
+## 2342                    0.00  
+## 2343                    0.00  
+## 
+## [2344 rows x 11 columns]</code></pre>
+<div class="sourceCode" id="cb291"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb291-1"><a href="árboles-de-decisión.html#cb291-1" aria-hidden="true" tabindex="-1"></a>transformed_df.info()</span></code></pre></div>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 2344 entries, 0 to 2343
+## Data columns (total 11 columns):
+##  #   Column                      Non-Null Count  Dtype  
+## ---  ------                      --------------  -----  
+##  0   Full_Bath                   2344 non-null   float64
+##  1   Half_Bath                   2344 non-null   float64
+##  2   Second_Flr_SF               2344 non-null   float64
+##  3   Overall_Cond_Average        2344 non-null   float64
+##  4   Overall_Cond_Below_Average  2344 non-null   float64
+##  5   Overall_Cond_Excellent      2344 non-null   float64
+##  6   Overall_Cond_Fair           2344 non-null   float64
+##  7   Overall_Cond_Good           2344 non-null   float64
+##  8   Overall_Cond_Poor           2344 non-null   float64
+##  9   Overall_Cond_Very_Good      2344 non-null   float64
+##  10  Overall_Cond_Very_Poor      2344 non-null   float64
+## dtypes: float64(11)
+## memory usage: 201.6 KB</code></pre>
+<p>Recordemos que la función <strong>ColumnTransformes()</strong> solo son los pasos a seguir, necesitamos usar el método <strong>fit()</strong> que nos devuelve una receta actualizada con las estimaciones y la función <strong>transform()</strong> que nos devuelve la matriz transformada. Estos pasos pueden resumirse con el método: <strong>fit_transform()</strong></p>
+<p>Una vez que la receta de transformación de datos está lista, procedemos a implementar el pipeline del modelo de interés.</p>
+<p><strong>Paso 3: Selección de tipo de modelo con hiperparámetros iniciales</strong></p>
+<p>Ahora se procede a unir en un mismo flujo el proceso de ingeniería de datos y un modelo inicial sugerido. En este primer ejemplo, se muestra un modelo de 5 vecinos más cercanos.</p>
+<div class="sourceCode" id="cb293"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb293-1"><a href="árboles-de-decisión.html#cb293-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el pipeline con la regresión por Random Forest</span></span>
+<span id="cb293-2"><a href="árboles-de-decisión.html#cb293-2" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline([</span>
+<span id="cb293-3"><a href="árboles-de-decisión.html#cb293-3" aria-hidden="true" tabindex="-1"></a>   (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
+<span id="cb293-4"><a href="árboles-de-decisión.html#cb293-4" aria-hidden="true" tabindex="-1"></a>   (<span class="st">&#39;regressor&#39;</span>, RandomForestRegressor(</span>
+<span id="cb293-5"><a href="árboles-de-decisión.html#cb293-5" aria-hidden="true" tabindex="-1"></a>     n_estimators<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb293-6"><a href="árboles-de-decisión.html#cb293-6" aria-hidden="true" tabindex="-1"></a>     min_samples_split<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb293-7"><a href="árboles-de-decisión.html#cb293-7" aria-hidden="true" tabindex="-1"></a>     min_samples_leaf<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb293-8"><a href="árboles-de-decisión.html#cb293-8" aria-hidden="true" tabindex="-1"></a>     random_state<span class="op">=</span><span class="dv">12345</span>))</span>
+<span id="cb293-9"><a href="árboles-de-decisión.html#cb293-9" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb293-10"><a href="árboles-de-decisión.html#cb293-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb293-11"><a href="árboles-de-decisión.html#cb293-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrenar el pipeline</span></span>
+<span id="cb293-12"><a href="árboles-de-decisión.html#cb293-12" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pipeline.fit(ames_train_selected, ames_y_train)</span>
+<span id="cb293-13"><a href="árboles-de-decisión.html#cb293-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb293-14"><a href="árboles-de-decisión.html#cb293-14" aria-hidden="true" tabindex="-1"></a><span class="co">## PREDICCIONES</span></span>
+<span id="cb293-15"><a href="árboles-de-decisión.html#cb293-15" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> pipeline.predict(ames_x_test)</span>
+<span id="cb293-16"><a href="árboles-de-decisión.html#cb293-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb293-17"><a href="árboles-de-decisión.html#cb293-17" aria-hidden="true" tabindex="-1"></a>ames_test <span class="op">=</span> (</span>
+<span id="cb293-18"><a href="árboles-de-decisión.html#cb293-18" aria-hidden="true" tabindex="-1"></a>  ames_x_test <span class="op">&gt;&gt;</span></span>
+<span id="cb293-19"><a href="árboles-de-decisión.html#cb293-19" aria-hidden="true" tabindex="-1"></a>  mutate(Sale_Price_Pred <span class="op">=</span> y_pred, Sale_Price <span class="op">=</span> ames_y_test)</span>
+<span id="cb293-20"><a href="árboles-de-decisión.html#cb293-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb293-21"><a href="árboles-de-decisión.html#cb293-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb293-22"><a href="árboles-de-decisión.html#cb293-22" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb293-23"><a href="árboles-de-decisión.html#cb293-23" aria-hidden="true" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
+<span id="cb293-24"><a href="árboles-de-decisión.html#cb293-24" aria-hidden="true" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred)</span>
+<span id="cb293-25"><a href="árboles-de-decisión.html#cb293-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>##       Sale_Price  Sale_Price_Pred
+## 390       165000        224063.10
+## 1235      124000        195821.07
+## 2288       75000         91954.24
+## 107       206000        132702.51
+## 1861      190000        192461.90
+## ...          ...              ...
+## 116       171000        154051.67
+## 398       120500        132702.51
+## 1253      146000        224063.10
+## 78        125000        130667.37
+## 714       110000        125676.00
+## 
+## [586 rows x 2 columns]</code></pre>
+<p>Estas son las predicciones logradas con el modelo inicial.</p>
+<div id="métricas-de-desempeño-3" class="section level4 hasAnchor" number="8.6.1.1">
+<h4><span class="header-section-number">8.6.1.1</span> Métricas de desempeño<a href="árboles-de-decisión.html#métricas-de-desempeño-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Se procede en el siguiente paso a cuantificar los errores producidos por la predicción.</p>
+<p><strong>Paso 4: Cálculo de métricas de desempeño</strong></p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb295-1"><a href="árboles-de-decisión.html#cb295-1" aria-hidden="true" tabindex="-1"></a>pd.options.display.float_format <span class="op">=</span> <span class="st">&#39;</span><span class="sc">{:.2f}</span><span class="st">&#39;</span>.<span class="bu">format</span></span>
+<span id="cb295-2"><a href="árboles-de-decisión.html#cb295-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb295-3"><a href="árboles-de-decisión.html#cb295-3" aria-hidden="true" tabindex="-1"></a>y_obs <span class="op">=</span> ames_test[<span class="st">&quot;Sale_Price&quot;</span>]</span>
+<span id="cb295-4"><a href="árboles-de-decisión.html#cb295-4" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> ames_test[<span class="st">&quot;Sale_Price_Pred&quot;</span>]</span>
+<span id="cb295-5"><a href="árboles-de-decisión.html#cb295-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb295-6"><a href="árboles-de-decisión.html#cb295-6" aria-hidden="true" tabindex="-1"></a>me <span class="op">=</span> np.mean(y_obs <span class="op">-</span> y_pred)</span>
+<span id="cb295-7"><a href="árboles-de-decisión.html#cb295-7" aria-hidden="true" tabindex="-1"></a>mae <span class="op">=</span> mean_absolute_error(y_obs, y_pred)</span>
+<span id="cb295-8"><a href="árboles-de-decisión.html#cb295-8" aria-hidden="true" tabindex="-1"></a>mape <span class="op">=</span> mean_absolute_percentage_error(y_obs, y_pred)</span>
+<span id="cb295-9"><a href="árboles-de-decisión.html#cb295-9" aria-hidden="true" tabindex="-1"></a>mse <span class="op">=</span> mean_squared_error(y_obs, y_pred)</span>
+<span id="cb295-10"><a href="árboles-de-decisión.html#cb295-10" aria-hidden="true" tabindex="-1"></a>rmse <span class="op">=</span> np.sqrt(mse)</span>
+<span id="cb295-11"><a href="árboles-de-decisión.html#cb295-11" aria-hidden="true" tabindex="-1"></a>r2 <span class="op">=</span> r2_score(y_obs, y_pred)</span>
+<span id="cb295-12"><a href="árboles-de-decisión.html#cb295-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb295-13"><a href="árboles-de-decisión.html#cb295-13" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(y_obs)  <span class="co"># Número de observaciones</span></span>
+<span id="cb295-14"><a href="árboles-de-decisión.html#cb295-14" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">11</span>  <span class="co"># Número de predictores </span></span>
+<span id="cb295-15"><a href="árboles-de-decisión.html#cb295-15" aria-hidden="true" tabindex="-1"></a>r2_adj <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (n <span class="op">-</span> p <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> r2)</span>
+<span id="cb295-16"><a href="árboles-de-decisión.html#cb295-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb295-17"><a href="árboles-de-decisión.html#cb295-17" aria-hidden="true" tabindex="-1"></a>metrics_data <span class="op">=</span> {</span>
+<span id="cb295-18"><a href="árboles-de-decisión.html#cb295-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Metric&quot;</span>: [<span class="st">&quot;ME&quot;</span>, <span class="st">&quot;MAE&quot;</span>, <span class="st">&quot;MAPE&quot;</span>, <span class="st">&quot;MSE&quot;</span>, <span class="st">&quot;RMSE&quot;</span>, <span class="st">&quot;R^2&quot;</span>, <span class="st">&quot;R^2 Adj&quot;</span>],</span>
+<span id="cb295-19"><a href="árboles-de-decisión.html#cb295-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Value&quot;</span>: [me, mae, mape, mse, rmse, r2, r2_adj]</span>
+<span id="cb295-20"><a href="árboles-de-decisión.html#cb295-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb295-21"><a href="árboles-de-decisión.html#cb295-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb295-22"><a href="árboles-de-decisión.html#cb295-22" aria-hidden="true" tabindex="-1"></a>metrics_df <span class="op">=</span> pd.DataFrame(metrics_data)</span>
+<span id="cb295-23"><a href="árboles-de-decisión.html#cb295-23" aria-hidden="true" tabindex="-1"></a>metrics_df</span></code></pre></div>
+<pre><code>##     Metric         Value
+## 0       ME       -326.52
+## 1      MAE      38207.14
+## 2     MAPE          0.22
+## 3      MSE 3298090728.47
+## 4     RMSE      57429.01
+## 5      R^2          0.50
+## 6  R^2 Adj          0.49</code></pre>
+<p>Una manera amigable de dimensionar los errores y el buen desempeño es mediante gráficos</p>
+<div class="sourceCode" id="cb297"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb297-1"><a href="árboles-de-decisión.html#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="co">#### Gráficos de desempeño de modelo</span></span>
+<span id="cb297-2"><a href="árboles-de-decisión.html#cb297-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb297-3"><a href="árboles-de-decisión.html#cb297-3" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb297-4"><a href="árboles-de-decisión.html#cb297-4" aria-hidden="true" tabindex="-1"></a>  ames_test <span class="op">&gt;&gt;</span></span>
+<span id="cb297-5"><a href="árboles-de-decisión.html#cb297-5" aria-hidden="true" tabindex="-1"></a>    ggplot(aes(x <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>, y <span class="op">=</span> <span class="st">&quot;Sale_Price_Pred&quot;</span>)) <span class="op">+</span></span>
+<span id="cb297-6"><a href="árboles-de-decisión.html#cb297-6" aria-hidden="true" tabindex="-1"></a>    geom_point() <span class="op">+</span></span>
+<span id="cb297-7"><a href="árboles-de-decisión.html#cb297-7" aria-hidden="true" tabindex="-1"></a>    scale_y_continuous(labels <span class="op">=</span> dollar_format(digits<span class="op">=</span><span class="dv">0</span>, big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>), limits <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">600000</span>] ) <span class="op">+</span></span>
+<span id="cb297-8"><a href="árboles-de-decisión.html#cb297-8" aria-hidden="true" tabindex="-1"></a>    scale_x_continuous(labels <span class="op">=</span> dollar_format(digits<span class="op">=</span><span class="dv">0</span>, big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>), limits <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">500000</span>] ) <span class="op">+</span></span>
+<span id="cb297-9"><a href="árboles-de-decisión.html#cb297-9" aria-hidden="true" tabindex="-1"></a>    geom_abline(color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb297-10"><a href="árboles-de-decisión.html#cb297-10" aria-hidden="true" tabindex="-1"></a>    coord_equal() <span class="op">+</span></span>
+<span id="cb297-11"><a href="árboles-de-decisión.html#cb297-11" aria-hidden="true" tabindex="-1"></a>    labs(</span>
+<span id="cb297-12"><a href="árboles-de-decisión.html#cb297-12" aria-hidden="true" tabindex="-1"></a>      title <span class="op">=</span> <span class="st">&quot;Comparación entre predicción y observación&quot;</span>,</span>
+<span id="cb297-13"><a href="árboles-de-decisión.html#cb297-13" aria-hidden="true" tabindex="-1"></a>      y <span class="op">=</span> <span class="st">&quot;Predicción&quot;</span>,</span>
+<span id="cb297-14"><a href="árboles-de-decisión.html#cb297-14" aria-hidden="true" tabindex="-1"></a>      x <span class="op">=</span> <span class="st">&quot;Observación&quot;</span>)</span>
+<span id="cb297-15"><a href="árboles-de-decisión.html#cb297-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-232-1.png" width="614" /></p>
+<div class="sourceCode" id="cb299"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb299-1"><a href="árboles-de-decisión.html#cb299-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb299-2"><a href="árboles-de-decisión.html#cb299-2" aria-hidden="true" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
+<span id="cb299-3"><a href="árboles-de-decisión.html#cb299-3" aria-hidden="true" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
+<span id="cb299-4"><a href="árboles-de-decisión.html#cb299-4" aria-hidden="true" tabindex="-1"></a>  mutate(error <span class="op">=</span> _.Sale_Price <span class="op">-</span> _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
+<span id="cb299-5"><a href="árboles-de-decisión.html#cb299-5" aria-hidden="true" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;error&quot;</span>)) <span class="op">+</span></span>
+<span id="cb299-6"><a href="árboles-de-decisión.html#cb299-6" aria-hidden="true" tabindex="-1"></a>  geom_histogram(color <span class="op">=</span> <span class="st">&quot;white&quot;</span>, fill <span class="op">=</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></span>
+<span id="cb299-7"><a href="árboles-de-decisión.html#cb299-7" aria-hidden="true" tabindex="-1"></a>  geom_vline(xintercept <span class="op">=</span> <span class="dv">0</span>, color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb299-8"><a href="árboles-de-decisión.html#cb299-8" aria-hidden="true" tabindex="-1"></a>  scale_x_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits<span class="op">=</span><span class="dv">0</span>)) <span class="op">+</span> </span>
+<span id="cb299-9"><a href="árboles-de-decisión.html#cb299-9" aria-hidden="true" tabindex="-1"></a>  ylab(<span class="st">&quot;Conteos de clase&quot;</span>) <span class="op">+</span> xlab(<span class="st">&quot;Errores&quot;</span>) <span class="op">+</span></span>
+<span id="cb299-10"><a href="árboles-de-decisión.html#cb299-10" aria-hidden="true" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Distribución de error&quot;</span>)</span>
+<span id="cb299-11"><a href="árboles-de-decisión.html#cb299-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-232-2.png" width="614" /></p>
+<div class="sourceCode" id="cb301"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb301-1"><a href="árboles-de-decisión.html#cb301-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb301-2"><a href="árboles-de-decisión.html#cb301-2" aria-hidden="true" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
+<span id="cb301-3"><a href="árboles-de-decisión.html#cb301-3" aria-hidden="true" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
+<span id="cb301-4"><a href="árboles-de-decisión.html#cb301-4" aria-hidden="true" tabindex="-1"></a>  mutate(error <span class="op">=</span> _.Sale_Price <span class="op">-</span> _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
+<span id="cb301-5"><a href="árboles-de-decisión.html#cb301-5" aria-hidden="true" tabindex="-1"></a>  ggplot(aes(sample <span class="op">=</span> <span class="st">&quot;error&quot;</span>)) <span class="op">+</span></span>
+<span id="cb301-6"><a href="árboles-de-decisión.html#cb301-6" aria-hidden="true" tabindex="-1"></a>  geom_qq(alpha <span class="op">=</span> <span class="fl">0.3</span>) <span class="op">+</span> stat_qq_line(color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb301-7"><a href="árboles-de-decisión.html#cb301-7" aria-hidden="true" tabindex="-1"></a>  scale_y_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits <span class="op">=</span> <span class="dv">0</span>)) <span class="op">+</span> </span>
+<span id="cb301-8"><a href="árboles-de-decisión.html#cb301-8" aria-hidden="true" tabindex="-1"></a>  xlab(<span class="st">&quot;Distribución normal&quot;</span>) <span class="op">+</span> ylab(<span class="st">&quot;Distribución de errores&quot;</span>) <span class="op">+</span></span>
+<span id="cb301-9"><a href="árboles-de-decisión.html#cb301-9" aria-hidden="true" tabindex="-1"></a>  ggtitle(<span class="st">&quot;QQ-Plot&quot;</span>)</span>
+<span id="cb301-10"><a href="árboles-de-decisión.html#cb301-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-232-3.png" width="614" /></p>
+<div class="sourceCode" id="cb303"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb303-1"><a href="árboles-de-decisión.html#cb303-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb303-2"><a href="árboles-de-decisión.html#cb303-2" aria-hidden="true" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
+<span id="cb303-3"><a href="árboles-de-decisión.html#cb303-3" aria-hidden="true" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
+<span id="cb303-4"><a href="árboles-de-decisión.html#cb303-4" aria-hidden="true" tabindex="-1"></a>  mutate(error <span class="op">=</span> _.Sale_Price <span class="op">-</span> _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
+<span id="cb303-5"><a href="árboles-de-decisión.html#cb303-5" aria-hidden="true" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>)) <span class="op">+</span></span>
+<span id="cb303-6"><a href="árboles-de-decisión.html#cb303-6" aria-hidden="true" tabindex="-1"></a>  geom_linerange(aes(ymin <span class="op">=</span> <span class="dv">0</span>, ymax <span class="op">=</span> <span class="st">&quot;error&quot;</span>), colour <span class="op">=</span> <span class="st">&quot;purple&quot;</span>) <span class="op">+</span></span>
+<span id="cb303-7"><a href="árboles-de-decisión.html#cb303-7" aria-hidden="true" tabindex="-1"></a>  geom_point(aes(y <span class="op">=</span> <span class="st">&quot;error&quot;</span>), size <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>) <span class="op">+</span></span>
+<span id="cb303-8"><a href="árboles-de-decisión.html#cb303-8" aria-hidden="true" tabindex="-1"></a>  geom_abline(intercept <span class="op">=</span> <span class="dv">0</span>, slope <span class="op">=</span> <span class="dv">0</span>) <span class="op">+</span></span>
+<span id="cb303-9"><a href="árboles-de-decisión.html#cb303-9" aria-hidden="true" tabindex="-1"></a>  scale_x_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits<span class="op">=</span><span class="dv">0</span>)) <span class="op">+</span> </span>
+<span id="cb303-10"><a href="árboles-de-decisión.html#cb303-10" aria-hidden="true" tabindex="-1"></a>  scale_y_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits<span class="op">=</span><span class="dv">0</span>)) <span class="op">+</span></span>
+<span id="cb303-11"><a href="árboles-de-decisión.html#cb303-11" aria-hidden="true" tabindex="-1"></a>  xlab(<span class="st">&quot;Precio real&quot;</span>) <span class="op">+</span> ylab(<span class="st">&quot;Error de estimación&quot;</span>) <span class="op">+</span></span>
+<span id="cb303-12"><a href="árboles-de-decisión.html#cb303-12" aria-hidden="true" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Relación entre error y precio de venta&quot;</span>)</span>
+<span id="cb303-13"><a href="árboles-de-decisión.html#cb303-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-232-4.png" width="614" /></p>
+</div>
+<div id="validación-cruzada-3" class="section level4 hasAnchor" number="8.6.1.2">
+<h4><span class="header-section-number">8.6.1.2</span> Validación cruzada<a href="árboles-de-decisión.html#validación-cruzada-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Para determinar cuáles son los hiper-parámetros que funcionan mejor, es necesario realizar experimentos mediante <strong>ensayo-error</strong> hasta determinar la mejor solución. En cada partición del método de muestreo <em>KFCV</em> se implementan las distintas configuraciones y se calculan predicciones. Con las predicciones hechas en cada <em>fold</em>, se obtienen intervalos de confianza para conocer la variación asociada al modelo a través de los hiper-parámetros implementados.</p>
+<p>Usaremos las recetas antes implementadas para ajustar tanto el modelo de regresión como el de clasificación. Exploraremos un conjunto de hiperparámetros para elegir el mejor modelo, sin embargo, para realizar este proceso de forma ágil, se inicializará un flujo de trabajo que se encargue de realizar todos los experimentos deseados y elegir el modelo adecuado.</p>
+<p><strong>Paso 5: Creación de grid search y métricas de desempeño</strong></p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb305-1"><a href="árboles-de-decisión.html#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir el objeto K-Fold Cross Validator</span></span>
+<span id="cb305-2"><a href="árboles-de-decisión.html#cb305-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb305-3"><a href="árboles-de-decisión.html#cb305-3" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits<span class="op">=</span>k, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb305-4"><a href="árboles-de-decisión.html#cb305-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb305-5"><a href="árboles-de-decisión.html#cb305-5" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {</span>
+<span id="cb305-6"><a href="árboles-de-decisión.html#cb305-6" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;max_depth&#39;</span>: <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">5</span>),</span>
+<span id="cb305-7"><a href="árboles-de-decisión.html#cb305-7" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;min_samples_split&#39;</span>: <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">8</span>),</span>
+<span id="cb305-8"><a href="árboles-de-decisión.html#cb305-8" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;min_samples_leaf&#39;</span>: <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">8</span>),</span>
+<span id="cb305-9"><a href="árboles-de-decisión.html#cb305-9" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;max_features&#39;</span>: <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">5</span>)</span>
+<span id="cb305-10"><a href="árboles-de-decisión.html#cb305-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Una vez definidos los posibles hiperparámetros, procedemos a definir las métricas que serán usadas para cuantificar la bondad del ajuste.</p>
+<div class="sourceCode" id="cb306"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb306-1"><a href="árboles-de-decisión.html#cb306-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir las métricas de desempeño que deseas calcular como funciones de puntuación</span></span>
+<span id="cb306-2"><a href="árboles-de-decisión.html#cb306-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb306-3"><a href="árboles-de-decisión.html#cb306-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> adjusted_r2_score(y_true, y_pred, n, p):</span>
+<span id="cb306-4"><a href="árboles-de-decisión.html#cb306-4" aria-hidden="true" tabindex="-1"></a>  r2 <span class="op">=</span> r2_score(y_true, y_pred)</span>
+<span id="cb306-5"><a href="árboles-de-decisión.html#cb306-5" aria-hidden="true" tabindex="-1"></a>  adjusted_r2 <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> r2) <span class="op">*</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (n <span class="op">-</span> p <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb306-6"><a href="árboles-de-decisión.html#cb306-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> adjusted_r2</span>
+<span id="cb306-7"><a href="árboles-de-decisión.html#cb306-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb306-8"><a href="árboles-de-decisión.html#cb306-8" aria-hidden="true" tabindex="-1"></a>scoring <span class="op">=</span> {</span>
+<span id="cb306-9"><a href="árboles-de-decisión.html#cb306-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;neg_mean_squared_error&#39;</span>: make_scorer(mean_squared_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb306-10"><a href="árboles-de-decisión.html#cb306-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;r2&#39;</span>: make_scorer(adjusted_r2_score, greater_is_better<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb306-11"><a href="árboles-de-decisión.html#cb306-11" aria-hidden="true" tabindex="-1"></a>                      n<span class="op">=</span>np.ceil(<span class="bu">len</span>(ames_train_selected)), p<span class="op">=</span><span class="bu">len</span>(ames_train_selected.columns)),</span>
+<span id="cb306-12"><a href="árboles-de-decisión.html#cb306-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;neg_mean_absolute_error&#39;</span>: make_scorer(mean_absolute_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb306-13"><a href="árboles-de-decisión.html#cb306-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;mape&#39;</span>: make_scorer(mean_absolute_percentage_error, greater_is_better<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb306-14"><a href="árboles-de-decisión.html#cb306-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Paso 6: Entrenamiento de modelos con hiperparámetros definidos</strong></p>
+<p>Teniendo todos los elementos anteriores listos, se procede con el ajuste de todas las posibles configuraciones del modelo a través de la validación cruzada. Esto permitirá contar con medidas de tendencia central para los resultados de cada uno de las configuraciones y evaluar si estadísticamente hay diferencia entre los mejores resultados.</p>
+<div class="sourceCode" id="cb307"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb307-1"><a href="árboles-de-decisión.html#cb307-1" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline([</span>
+<span id="cb307-2"><a href="árboles-de-decisión.html#cb307-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
+<span id="cb307-3"><a href="árboles-de-decisión.html#cb307-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;regressor&#39;</span>, GridSearchCV(</span>
+<span id="cb307-4"><a href="árboles-de-decisión.html#cb307-4" aria-hidden="true" tabindex="-1"></a>      RandomForestRegressor(), </span>
+<span id="cb307-5"><a href="árboles-de-decisión.html#cb307-5" aria-hidden="true" tabindex="-1"></a>      param_grid <span class="op">=</span> param_grid, </span>
+<span id="cb307-6"><a href="árboles-de-decisión.html#cb307-6" aria-hidden="true" tabindex="-1"></a>      cv<span class="op">=</span>kf, </span>
+<span id="cb307-7"><a href="árboles-de-decisión.html#cb307-7" aria-hidden="true" tabindex="-1"></a>      scoring<span class="op">=</span>scoring, </span>
+<span id="cb307-8"><a href="árboles-de-decisión.html#cb307-8" aria-hidden="true" tabindex="-1"></a>      refit<span class="op">=</span><span class="st">&#39;neg_mean_squared_error&#39;</span>,</span>
+<span id="cb307-9"><a href="árboles-de-decisión.html#cb307-9" aria-hidden="true" tabindex="-1"></a>      verbose<span class="op">=</span><span class="dv">2</span>, </span>
+<span id="cb307-10"><a href="árboles-de-decisión.html#cb307-10" aria-hidden="true" tabindex="-1"></a>      n_jobs<span class="op">=</span><span class="dv">7</span>,</span>
+<span id="cb307-11"><a href="árboles-de-decisión.html#cb307-11" aria-hidden="true" tabindex="-1"></a>      error_score<span class="op">=</span><span class="st">&#39;raise&#39;</span>)</span>
+<span id="cb307-12"><a href="árboles-de-decisión.html#cb307-12" aria-hidden="true" tabindex="-1"></a>     )</span>
+<span id="cb307-13"><a href="árboles-de-decisión.html#cb307-13" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb307-14"><a href="árboles-de-decisión.html#cb307-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb307-15"><a href="árboles-de-decisión.html#cb307-15" aria-hidden="true" tabindex="-1"></a>pipeline.fit(ames_train_selected, ames_y_train)</span>
+<span id="cb307-16"><a href="árboles-de-decisión.html#cb307-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb307-17"><a href="árboles-de-decisión.html#cb307-17" aria-hidden="true" tabindex="-1"></a>pickle.dump(pipeline, <span class="bu">open</span>(<span class="st">&#39;models/grid_search_random_forest.pkl&#39;</span>, <span class="st">&#39;wb&#39;</span>))</span></code></pre></div>
+<p><strong>Paso 7: Análisis de métricas de error e hiperparámetros (Vuelve al paso 3, si es necesario)</strong></p>
+<p>Podemos obtener las métricas de los resultados de cada <em>fold</em>:</p>
+<div class="sourceCode" id="cb308"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb308-1"><a href="árboles-de-decisión.html#cb308-1" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> pickle.load(<span class="bu">open</span>(<span class="st">&#39;models/grid_search_random_forest.pkl&#39;</span>, <span class="st">&#39;rb&#39;</span>))</span>
+<span id="cb308-2"><a href="árboles-de-decisión.html#cb308-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb308-3"><a href="árboles-de-decisión.html#cb308-3" aria-hidden="true" tabindex="-1"></a>results_cv <span class="op">=</span> pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].cv_results_</span>
+<span id="cb308-4"><a href="árboles-de-decisión.html#cb308-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb308-5"><a href="árboles-de-decisión.html#cb308-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Convierte los resultados en un DataFrame</span></span>
+<span id="cb308-6"><a href="árboles-de-decisión.html#cb308-6" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="dv">500</span>)</span>
+<span id="cb308-7"><a href="árboles-de-decisión.html#cb308-7" aria-hidden="true" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results_cv)</span>
+<span id="cb308-8"><a href="árboles-de-decisión.html#cb308-8" aria-hidden="true" tabindex="-1"></a>results_df.columns</span></code></pre></div>
+<pre><code>## Index([&#39;mean_fit_time&#39;, &#39;std_fit_time&#39;, &#39;mean_score_time&#39;, &#39;std_score_time&#39;,
+##        &#39;param_max_depth&#39;, &#39;param_max_features&#39;, &#39;param_min_samples_leaf&#39;,
+##        &#39;param_min_samples_split&#39;, &#39;params&#39;,
+##        &#39;split0_test_neg_mean_squared_error&#39;,
+##        &#39;split1_test_neg_mean_squared_error&#39;,
+##        &#39;split2_test_neg_mean_squared_error&#39;,
+##        &#39;split3_test_neg_mean_squared_error&#39;,
+##        &#39;split4_test_neg_mean_squared_error&#39;,
+##        &#39;mean_test_neg_mean_squared_error&#39;, &#39;std_test_neg_mean_squared_error&#39;,
+##        &#39;rank_test_neg_mean_squared_error&#39;, &#39;split0_test_r2&#39;, &#39;split1_test_r2&#39;,
+##        &#39;split2_test_r2&#39;, &#39;split3_test_r2&#39;, &#39;split4_test_r2&#39;, &#39;mean_test_r2&#39;,
+##        &#39;std_test_r2&#39;, &#39;rank_test_r2&#39;, &#39;split0_test_neg_mean_absolute_error&#39;,
+##        &#39;split1_test_neg_mean_absolute_error&#39;,
+##        &#39;split2_test_neg_mean_absolute_error&#39;,
+##        &#39;split3_test_neg_mean_absolute_error&#39;,
+##        &#39;split4_test_neg_mean_absolute_error&#39;,
+##        &#39;mean_test_neg_mean_absolute_error&#39;, &#39;std_test_neg_mean_absolute_error&#39;,
+##        &#39;rank_test_neg_mean_absolute_error&#39;, &#39;split0_test_mape&#39;,
+##        &#39;split1_test_mape&#39;, &#39;split2_test_mape&#39;, &#39;split3_test_mape&#39;,
+##        &#39;split4_test_mape&#39;, &#39;mean_test_mape&#39;, &#39;std_test_mape&#39;,
+##        &#39;rank_test_mape&#39;],
+##       dtype=&#39;object&#39;)</code></pre>
+<div class="sourceCode" id="cb310"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb310-1"><a href="árboles-de-decisión.html#cb310-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Puedes seleccionar las columnas de interés, por ejemplo:</span></span>
+<span id="cb310-2"><a href="árboles-de-decisión.html#cb310-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb310-3"><a href="árboles-de-decisión.html#cb310-3" aria-hidden="true" tabindex="-1"></a>summary_df <span class="op">=</span> (</span>
+<span id="cb310-4"><a href="árboles-de-decisión.html#cb310-4" aria-hidden="true" tabindex="-1"></a>  results_df <span class="op">&gt;&gt;</span></span>
+<span id="cb310-5"><a href="árboles-de-decisión.html#cb310-5" aria-hidden="true" tabindex="-1"></a>  select(<span class="op">-</span>_.contains(<span class="st">&quot;split._&quot;</span>), <span class="op">-</span>_.contains(<span class="st">&quot;time&quot;</span>), <span class="op">-</span>_.params)</span>
+<span id="cb310-6"><a href="árboles-de-decisión.html#cb310-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb310-7"><a href="árboles-de-decisión.html#cb310-7" aria-hidden="true" tabindex="-1"></a>summary_df</span></code></pre></div>
+<pre><code>##     param_max_depth param_max_features param_min_samples_leaf  \
+## 0                 2                  1                      2   
+## 1                 2                  1                      2   
+## 2                 2                  1                      2   
+## 3                 2                  1                      2   
+## 4                 2                  1                      2   
+## ..              ...                ...                    ...   
+## 427               4                  4                      7   
+## 428               4                  4                      7   
+## 429               4                  4                      7   
+## 430               4                  4                      7   
+## 431               4                  4                      7   
+## 
+##     param_min_samples_split  mean_test_neg_mean_squared_error  \
+## 0                         2                    -4970280637.82   
+## 1                         3                    -4974587424.48   
+## 2                         4                    -5005446361.21   
+## 3                         5                    -5019964053.35   
+## 4                         6                    -5034494921.64   
+## ..                      ...                               ...   
+## 427                       3                    -3576638787.58   
+## 428                       4                    -3563145452.88   
+## 429                       5                    -3584718778.74   
+## 430                       6                    -3599654298.71   
+## 431                       7                    -3583862726.28   
+## 
+##      std_test_neg_mean_squared_error  rank_test_neg_mean_squared_error  \
+## 0                       502974264.93                               398   
+## 1                       520187648.69                               399   
+## 2                       596477224.42                               402   
+## 3                       475974437.54                               408   
+## 4                       462785558.52                               409   
+## ..                               ...                               ...   
+## 427                     416707863.11                                30   
+## 428                     410466613.96                                19   
+## 429                     415571196.41                                37   
+## 430                     437276292.66                                42   
+## 431                     416165232.48                                35   
+## 
+##      mean_test_r2  std_test_r2  rank_test_r2  \
+## 0            0.21         0.02           398   
+## 1            0.21         0.02           399   
+## 2            0.21         0.03           402   
+## 3            0.21         0.02           408   
+## 4            0.20         0.01           410   
+## ..            ...          ...           ...   
+## 427          0.44         0.03            27   
+## 428          0.44         0.03            19   
+## 429          0.43         0.03            37   
+## 430          0.43         0.03            42   
+## 431          0.43         0.03            35   
+## 
+##      mean_test_neg_mean_absolute_error  std_test_neg_mean_absolute_error  \
+## 0                            -49246.68                           1474.96   
+## 1                            -49247.84                            993.79   
+## 2                            -49481.49                           1732.09   
+## 3                            -49624.64                            814.17   
+## 4                            -49623.45                            724.66   
+## ..                                 ...                               ...   
+## 427                          -39875.82                           1197.55   
+## 428                          -39734.62                           1124.42   
+## 429                          -39856.54                           1130.38   
+## 430                          -39917.63                           1252.06   
+## 431                          -39806.33                           1282.96   
+## 
+##      rank_test_neg_mean_absolute_error  mean_test_mape  std_test_mape  \
+## 0                                  398           -0.31           0.02   
+## 1                                  399           -0.31           0.01   
+## 2                                  404           -0.32           0.01   
+## 3                                  409           -0.32           0.01   
+## 4                                  408           -0.32           0.01   
+## ..                                 ...             ...            ...   
+## 427                                 29           -0.24           0.01   
+## 428                                  6           -0.24           0.01   
+## 429                                 26           -0.24           0.01   
+## 430                                 33           -0.24           0.01   
+## 431                                 14           -0.24           0.01   
+## 
+##      rank_test_mape  
+## 0               399  
+## 1               398  
+## 2               402  
+## 3               406  
+## 4               409  
+## ..              ...  
+## 427              27  
+## 428               6  
+## 429              28  
+## 430              36  
+## 431              20  
+## 
+## [432 rows x 16 columns]</code></pre>
+<p>En la siguiente gráfica observamos las distintas métricas de error asociados a los hiperparámetros elegidos:</p>
+<div class="sourceCode" id="cb312"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb312-1"><a href="árboles-de-decisión.html#cb312-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb312-2"><a href="árboles-de-decisión.html#cb312-2" aria-hidden="true" tabindex="-1"></a>  summary_df <span class="op">&gt;&gt;</span></span>
+<span id="cb312-3"><a href="árboles-de-decisión.html#cb312-3" aria-hidden="true" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;param_max_features&quot;</span>, y <span class="op">=</span> <span class="st">&quot;mean_test_r2&quot;</span>, fill <span class="op">=</span> <span class="st">&quot;param_max_depth&quot;</span>)) <span class="op">+</span></span>
+<span id="cb312-4"><a href="árboles-de-decisión.html#cb312-4" aria-hidden="true" tabindex="-1"></a>  geom_point() <span class="op">+</span></span>
+<span id="cb312-5"><a href="árboles-de-decisión.html#cb312-5" aria-hidden="true" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Parametrización de Random Forest vs R^2&quot;</span>) <span class="op">+</span></span>
+<span id="cb312-6"><a href="árboles-de-decisión.html#cb312-6" aria-hidden="true" tabindex="-1"></a>  xlab(<span class="st">&quot;Parámetro: Número de features por árbol&quot;</span>) <span class="op">+</span></span>
+<span id="cb312-7"><a href="árboles-de-decisión.html#cb312-7" aria-hidden="true" tabindex="-1"></a>  ylab(<span class="st">&quot;R^2 promedio&quot;</span>)</span>
+<span id="cb312-8"><a href="árboles-de-decisión.html#cb312-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-237-9.png" width="614" /></p>
+<p>Seleccionando la mejor parametrización, se puede definir la siguiente gráfica para comparar la diferencia entre hiperparámetros a un nivel más granular.</p>
+<div class="sourceCode" id="cb314"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb314-1"><a href="árboles-de-decisión.html#cb314-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb314-2"><a href="árboles-de-decisión.html#cb314-2" aria-hidden="true" tabindex="-1"></a>  summary_df <span class="op">&gt;&gt;</span></span>
+<span id="cb314-3"><a href="árboles-de-decisión.html#cb314-3" aria-hidden="true" tabindex="-1"></a>  select(_.param_max_depth, _.param_max_features, _.param_min_samples_leaf, </span>
+<span id="cb314-4"><a href="árboles-de-decisión.html#cb314-4" aria-hidden="true" tabindex="-1"></a>         _.param_min_samples_split, _.mean_test_r2) <span class="op">&gt;&gt;</span></span>
+<span id="cb314-5"><a href="árboles-de-decisión.html#cb314-5" aria-hidden="true" tabindex="-1"></a>  pivot_longer(</span>
+<span id="cb314-6"><a href="árboles-de-decisión.html#cb314-6" aria-hidden="true" tabindex="-1"></a>    cols <span class="op">=</span> [<span class="st">&quot;param_max_depth&quot;</span>, <span class="st">&quot;param_max_features&quot;</span>, <span class="st">&quot;param_min_samples_leaf&quot;</span>, <span class="st">&quot;param_min_samples_split&quot;</span>],</span>
+<span id="cb314-7"><a href="árboles-de-decisión.html#cb314-7" aria-hidden="true" tabindex="-1"></a>    names_to<span class="op">=</span><span class="st">&quot;parameter&quot;</span>,</span>
+<span id="cb314-8"><a href="árboles-de-decisión.html#cb314-8" aria-hidden="true" tabindex="-1"></a>    values_to<span class="op">=</span><span class="st">&quot;value&quot;</span>) <span class="op">&gt;&gt;</span></span>
+<span id="cb314-9"><a href="árboles-de-decisión.html#cb314-9" aria-hidden="true" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;value&quot;</span>, y <span class="op">=</span> <span class="st">&quot;mean_test_r2&quot;</span>)) <span class="op">+</span></span>
+<span id="cb314-10"><a href="árboles-de-decisión.html#cb314-10" aria-hidden="true" tabindex="-1"></a>  geom_point(size <span class="op">=</span> <span class="dv">1</span>, ) <span class="op">+</span></span>
+<span id="cb314-11"><a href="árboles-de-decisión.html#cb314-11" aria-hidden="true" tabindex="-1"></a>  facet_wrap(<span class="st">&quot;~parameter&quot;</span>, scales <span class="op">=</span> <span class="st">&quot;free_x&quot;</span>) <span class="op">+</span></span>
+<span id="cb314-12"><a href="árboles-de-decisión.html#cb314-12" aria-hidden="true" tabindex="-1"></a>  xlab(<span class="st">&quot;Parameter value&quot;</span>) <span class="op">+</span></span>
+<span id="cb314-13"><a href="árboles-de-decisión.html#cb314-13" aria-hidden="true" tabindex="-1"></a>  ylab(<span class="st">&quot;R^2 promedio&quot;</span>) <span class="op">+</span></span>
+<span id="cb314-14"><a href="árboles-de-decisión.html#cb314-14" aria-hidden="true" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Parametrización de Random Forest vs R^2&quot;</span>)</span>
+<span id="cb314-15"><a href="árboles-de-decisión.html#cb314-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-238-11.png" width="614" /></p>
+<p><strong>Paso 8: Selección de modelo a usar</strong></p>
+<p>Habiendo realizado un análisis de los hiperparámetros, se procede a elegir el mejor modelo. Esto a veces a muy evidente y otras no. En cualquier caso, puede automatizarse la extracción del mejor modelo:</p>
+<div class="sourceCode" id="cb316"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb316-1"><a href="árboles-de-decisión.html#cb316-1" aria-hidden="true" tabindex="-1"></a>best_params <span class="op">=</span> pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].best_params_</span>
+<span id="cb316-2"><a href="árboles-de-decisión.html#cb316-2" aria-hidden="true" tabindex="-1"></a>best_params</span></code></pre></div>
+<pre><code>## {&#39;max_depth&#39;: 4, &#39;max_features&#39;: 4, &#39;min_samples_leaf&#39;: 2, &#39;min_samples_split&#39;: 5}</code></pre>
+<p>Sabiendo cuáles son los mejores hiperparámetros, se procede a extraer el modelo que <strong>DEBEREMOS AJUSTAR A TODOS LOS DATOS DE ENTRENAMIENTO</strong>.</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb318-1"><a href="árboles-de-decisión.html#cb318-1" aria-hidden="true" tabindex="-1"></a>best_estimator <span class="op">=</span> pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].best_estimator_</span>
+<span id="cb318-2"><a href="árboles-de-decisión.html#cb318-2" aria-hidden="true" tabindex="-1"></a>best_estimator</span></code></pre></div>
+<pre><code>## RandomForestRegressor(max_depth=4, max_features=4, min_samples_leaf=2,
+##                       min_samples_split=5)</code></pre>
+<p><strong>Paso 9: Ajuste de modelo final con todos los datos (Vuelve al paso 2, si es necesario)</strong></p>
+<p>Ahora obtendremos el modelo que mejor desempeño tiene y haremos las predicciones del conjunto de prueba con este modelo.</p>
+<p>Es importante volver a hacer el ajuste con el modelo elegido.</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb320-1"><a href="árboles-de-decisión.html#cb320-1" aria-hidden="true" tabindex="-1"></a>final_rf_pipeline <span class="op">=</span> Pipeline([</span>
+<span id="cb320-2"><a href="árboles-de-decisión.html#cb320-2" aria-hidden="true" tabindex="-1"></a>   (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
+<span id="cb320-3"><a href="árboles-de-decisión.html#cb320-3" aria-hidden="true" tabindex="-1"></a>   (<span class="st">&#39;regressor&#39;</span>, best_estimator)</span>
+<span id="cb320-4"><a href="árboles-de-decisión.html#cb320-4" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb320-5"><a href="árboles-de-decisión.html#cb320-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb320-6"><a href="árboles-de-decisión.html#cb320-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrenar el pipeline</span></span>
+<span id="cb320-7"><a href="árboles-de-decisión.html#cb320-7" aria-hidden="true" tabindex="-1"></a>final_rf_pipeline.fit(ames_train_selected, ames_y_train)</span></code></pre></div>
+<pre><code>## Pipeline(steps=[(&#39;preprocessor&#39;,
+##                  ColumnTransformer(remainder=&#39;passthrough&#39;,
+##                                    transformers=[(&#39;scaler&#39;, StandardScaler(),
+##                                                   [&#39;Full_Bath&#39;, &#39;Half_Bath&#39;,
+##                                                    &#39;Second_Flr_SF&#39;]),
+##                                                  (&#39;onehotencoding&#39;,
+##                                                   OneHotEncoder(drop=&#39;first&#39;,
+##                                                                 sparse_output=False),
+##                                                   [&#39;Overall_Cond&#39;])],
+##                                    verbose_feature_names_out=False)),
+##                 (&#39;regressor&#39;,
+##                  RandomForestRegressor(max_depth=4, max_features=4,
+##                                        min_samples_leaf=2,
+##                                        min_samples_split=5))])</code></pre>
+<p>Este último objeto creado es el modelo final entrenado, el cual contiene toda la información del pre-procesamiento de datos, por lo que en caso de ponerse en producción, sólo se necesita de los nuevos datos y de este último elemento para poder realizar nuevas predicciones.</p>
+<p><strong>Paso 10: Validar poder predictivo con datos de prueba</strong></p>
+<p>Imaginemos por un momento que pasa un mes de tiempo desde que hicimos nuestro modelo, es hora de ponerlo a prueba prediciendo valores de nuevos elementos:</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb322-1"><a href="árboles-de-decisión.html#cb322-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Predicciones finales</span></span>
+<span id="cb322-2"><a href="árboles-de-decisión.html#cb322-2" aria-hidden="true" tabindex="-1"></a>y_pred_rf <span class="op">=</span> final_rf_pipeline.predict(ames_x_test)</span>
+<span id="cb322-3"><a href="árboles-de-decisión.html#cb322-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb322-4"><a href="árboles-de-decisión.html#cb322-4" aria-hidden="true" tabindex="-1"></a>results_reg <span class="op">=</span> (</span>
+<span id="cb322-5"><a href="árboles-de-decisión.html#cb322-5" aria-hidden="true" tabindex="-1"></a>  ames_x_test <span class="op">&gt;&gt;</span></span>
+<span id="cb322-6"><a href="árboles-de-decisión.html#cb322-6" aria-hidden="true" tabindex="-1"></a>  mutate(final_rf_pred <span class="op">=</span> y_pred_rf, Sale_Price <span class="op">=</span> ames_y_test) <span class="op">&gt;&gt;</span></span>
+<span id="cb322-7"><a href="árboles-de-decisión.html#cb322-7" aria-hidden="true" tabindex="-1"></a>  select(_.Sale_Price, _.final_rf_pred)</span>
+<span id="cb322-8"><a href="árboles-de-decisión.html#cb322-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb322-9"><a href="árboles-de-decisión.html#cb322-9" aria-hidden="true" tabindex="-1"></a>results_reg</span></code></pre></div>
+<pre><code>##       Sale_Price  final_rf_pred
+## 390       165000      215678.00
+## 1235      124000      168313.59
+## 2288       75000      156397.66
+## 107       206000      131732.28
+## 1861      190000      249002.80
+## ...          ...            ...
+## 116       171000      153568.34
+## 398       120500      131732.28
+## 1253      146000      215678.00
+## 78        125000      135145.32
+## 714       110000      143760.94
+## 
+## [586 rows x 2 columns]</code></pre>
+<p><strong>Métricas de desempeño</strong></p>
+<p>Ahora para calcular las métricas de desempeño usaremos la paquetería <em>MLmetrics</em>. Es posible definir nuestro propio conjunto de métricas que deseamos reportar creando el objeto <em>metric_set</em>:</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb324-1"><a href="árboles-de-decisión.html#cb324-1" aria-hidden="true" tabindex="-1"></a>me <span class="op">=</span> np.mean(y_obs <span class="op">-</span> y_pred_rf)</span>
+<span id="cb324-2"><a href="árboles-de-decisión.html#cb324-2" aria-hidden="true" tabindex="-1"></a>mae <span class="op">=</span> mean_absolute_error(y_obs, y_pred_rf)</span>
+<span id="cb324-3"><a href="árboles-de-decisión.html#cb324-3" aria-hidden="true" tabindex="-1"></a>mape <span class="op">=</span> mean_absolute_percentage_error(y_obs, y_pred_rf)</span>
+<span id="cb324-4"><a href="árboles-de-decisión.html#cb324-4" aria-hidden="true" tabindex="-1"></a>mse <span class="op">=</span> mean_squared_error(y_obs, y_pred_rf)</span>
+<span id="cb324-5"><a href="árboles-de-decisión.html#cb324-5" aria-hidden="true" tabindex="-1"></a>rmse <span class="op">=</span> np.sqrt(mse)</span>
+<span id="cb324-6"><a href="árboles-de-decisión.html#cb324-6" aria-hidden="true" tabindex="-1"></a>r2 <span class="op">=</span> r2_score(y_obs, y_pred_rf)</span>
+<span id="cb324-7"><a href="árboles-de-decisión.html#cb324-7" aria-hidden="true" tabindex="-1"></a>r2_adj <span class="op">=</span> adjusted_r2_score(y_true <span class="op">=</span> y_obs, y_pred <span class="op">=</span> y_pred_rf,</span>
+<span id="cb324-8"><a href="árboles-de-decisión.html#cb324-8" aria-hidden="true" tabindex="-1"></a>  n<span class="op">=</span>np.ceil(<span class="bu">len</span>(ames_train_selected)), p<span class="op">=</span><span class="bu">len</span>(ames_train_selected.columns))</span>
+<span id="cb324-9"><a href="árboles-de-decisión.html#cb324-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb324-10"><a href="árboles-de-decisión.html#cb324-10" aria-hidden="true" tabindex="-1"></a>metrics_data <span class="op">=</span> {</span>
+<span id="cb324-11"><a href="árboles-de-decisión.html#cb324-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Metric&quot;</span>: [<span class="st">&quot;ME&quot;</span>, <span class="st">&quot;MAE&quot;</span>, <span class="st">&quot;MAPE&quot;</span>, <span class="st">&quot;MSE&quot;</span>, <span class="st">&quot;RMSE&quot;</span>, <span class="st">&quot;R^2&quot;</span>, <span class="st">&quot;R^2 Adj&quot;</span>],</span>
+<span id="cb324-12"><a href="árboles-de-decisión.html#cb324-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Value&quot;</span>: [me, mae, mape, mse, rmse, r2, r2_adj]</span>
+<span id="cb324-13"><a href="árboles-de-decisión.html#cb324-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb324-14"><a href="árboles-de-decisión.html#cb324-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb324-15"><a href="árboles-de-decisión.html#cb324-15" aria-hidden="true" tabindex="-1"></a>metrics_df <span class="op">=</span> pd.DataFrame(metrics_data)</span>
+<span id="cb324-16"><a href="árboles-de-decisión.html#cb324-16" aria-hidden="true" tabindex="-1"></a>metrics_df</span></code></pre></div>
+<pre><code>##     Metric         Value
+## 0       ME       -607.81
+## 1      MAE      42267.85
+## 2     MAPE          0.25
+## 3      MSE 3857083380.44
+## 4     RMSE      62105.42
+## 5      R^2          0.41
+## 6  R^2 Adj          0.41</code></pre>
+<div class="sourceCode" id="cb326"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb326-1"><a href="árboles-de-decisión.html#cb326-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb326-2"><a href="árboles-de-decisión.html#cb326-2" aria-hidden="true" tabindex="-1"></a>  results_reg <span class="op">&gt;&gt;</span></span>
+<span id="cb326-3"><a href="árboles-de-decisión.html#cb326-3" aria-hidden="true" tabindex="-1"></a>    ggplot(aes(x <span class="op">=</span> <span class="st">&quot;final_rf_pred&quot;</span>, y <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>)) <span class="op">+</span></span>
+<span id="cb326-4"><a href="árboles-de-decisión.html#cb326-4" aria-hidden="true" tabindex="-1"></a>    geom_point() <span class="op">+</span></span>
+<span id="cb326-5"><a href="árboles-de-decisión.html#cb326-5" aria-hidden="true" tabindex="-1"></a>    geom_abline(color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb326-6"><a href="árboles-de-decisión.html#cb326-6" aria-hidden="true" tabindex="-1"></a>    xlab(<span class="st">&quot;Prediction&quot;</span>) <span class="op">+</span></span>
+<span id="cb326-7"><a href="árboles-de-decisión.html#cb326-7" aria-hidden="true" tabindex="-1"></a>    ylab(<span class="st">&quot;Observation&quot;</span>) <span class="op">+</span></span>
+<span id="cb326-8"><a href="árboles-de-decisión.html#cb326-8" aria-hidden="true" tabindex="-1"></a>    ggtitle(<span class="st">&quot;Comparisson&quot;</span>)</span>
+<span id="cb326-9"><a href="árboles-de-decisión.html#cb326-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-244-13.png" width="614" /></p>
+</div>
+<div id="importancia-de-variables-1" class="section level4 hasAnchor" number="8.6.1.3">
+<h4><span class="header-section-number">8.6.1.3</span> Importancia de variables<a href="árboles-de-decisión.html#importancia-de-variables-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Antes de pasar al siguiente paso, es importante validar que hayamos hecho un uso correcto de las variables predictivas. En este momento es posible detectar variables que no estén aportando valor o variables que no debiéramos estar usando debido a que cometeríamos <a href="https://towardsdatascience.com/data-leakage-in-machine-learning-6161c167e8ba">data leakage</a>. Para enfrentar esto, ayuda estimar y ordenar el valor de importancia de cada variable en el modelo.</p>
+<div class="sourceCode" id="cb328"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb328-1"><a href="árboles-de-decisión.html#cb328-1" aria-hidden="true" tabindex="-1"></a>importance <span class="op">=</span> np.zeros(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>])</span>
+<span id="cb328-2"><a href="árboles-de-decisión.html#cb328-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb328-3"><a href="árboles-de-decisión.html#cb328-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Realiza el procedimiento de permutación</span></span>
+<span id="cb328-4"><a href="árboles-de-decisión.html#cb328-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>]):</span>
+<span id="cb328-5"><a href="árboles-de-decisión.html#cb328-5" aria-hidden="true" tabindex="-1"></a>    ames_x_test_permuted <span class="op">=</span> ames_x_test[columnas_seleccionadas].copy()</span>
+<span id="cb328-6"><a href="árboles-de-decisión.html#cb328-6" aria-hidden="true" tabindex="-1"></a>    ames_x_test_permuted.iloc[:, i] <span class="op">=</span> shuffle(ames_x_test_permuted.iloc[:, i], random_state<span class="op">=</span><span class="dv">42</span>)  </span>
+<span id="cb328-7"><a href="árboles-de-decisión.html#cb328-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Permuta una característica</span></span>
+<span id="cb328-8"><a href="árboles-de-decisión.html#cb328-8" aria-hidden="true" tabindex="-1"></a>    y_pred_permuted <span class="op">=</span> final_rf_pipeline.predict(ames_x_test_permuted)</span>
+<span id="cb328-9"><a href="árboles-de-decisión.html#cb328-9" aria-hidden="true" tabindex="-1"></a>    mse_permuted <span class="op">=</span> mean_squared_error(ames_y_test, y_pred_permuted)</span>
+<span id="cb328-10"><a href="árboles-de-decisión.html#cb328-10" aria-hidden="true" tabindex="-1"></a>    importance[i] <span class="op">=</span> mse <span class="op">-</span> mse_permuted</span>
+<span id="cb328-11"><a href="árboles-de-decisión.html#cb328-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb328-12"><a href="árboles-de-decisión.html#cb328-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcula la importancia relativa</span></span>
+<span id="cb328-13"><a href="árboles-de-decisión.html#cb328-13" aria-hidden="true" tabindex="-1"></a>importance <span class="op">=</span> importance <span class="op">/</span> importance.<span class="bu">sum</span>()</span>
+<span id="cb328-14"><a href="árboles-de-decisión.html#cb328-14" aria-hidden="true" tabindex="-1"></a>importance</span></code></pre></div>
+<pre><code>## array([0.60673473, 0.11271676, 0.16279304, 0.11775547])</code></pre>
+<div class="sourceCode" id="cb330"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb330-1"><a href="árboles-de-decisión.html#cb330-1" aria-hidden="true" tabindex="-1"></a>importance_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb330-2"><a href="árboles-de-decisión.html#cb330-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Variable&#39;</span>: columnas_seleccionadas, </span>
+<span id="cb330-3"><a href="árboles-de-decisión.html#cb330-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Importance&#39;</span>: importance</span>
+<span id="cb330-4"><a href="árboles-de-decisión.html#cb330-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb330-5"><a href="árboles-de-decisión.html#cb330-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb330-6"><a href="árboles-de-decisión.html#cb330-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Crea la gráfica de barras</span></span>
+<span id="cb330-7"><a href="árboles-de-decisión.html#cb330-7" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb330-8"><a href="árboles-de-decisión.html#cb330-8" aria-hidden="true" tabindex="-1"></a>  importance_df <span class="op">&gt;&gt;</span></span>
+<span id="cb330-9"><a href="árboles-de-decisión.html#cb330-9" aria-hidden="true" tabindex="-1"></a>  ggplot(aes(x<span class="op">=</span> <span class="st">&#39;reorder(Variable, Importance)&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importance&#39;</span>)) <span class="op">+</span> </span>
+<span id="cb330-10"><a href="árboles-de-decisión.html#cb330-10" aria-hidden="true" tabindex="-1"></a>  geom_bar(stat<span class="op">=</span><span class="st">&#39;identity&#39;</span>, fill<span class="op">=</span><span class="st">&#39;blue&#39;</span>, color <span class="op">=</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span> </span>
+<span id="cb330-11"><a href="árboles-de-decisión.html#cb330-11" aria-hidden="true" tabindex="-1"></a>  labs(title<span class="op">=</span><span class="st">&#39;Importancia de las Variables&#39;</span>, x<span class="op">=</span><span class="st">&#39;Variable&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importancia&#39;</span>) <span class="op">+</span></span>
+<span id="cb330-12"><a href="árboles-de-decisión.html#cb330-12" aria-hidden="true" tabindex="-1"></a>  coord_flip()</span>
+<span id="cb330-13"><a href="árboles-de-decisión.html#cb330-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-245-15.png" width="614" /></p>
+<p>La gráfica anterior muestra la importancia de una variable cuando se lleva a cabo una permutación. Dado que este resultado fue aleatorio, resulta vital contar con un conjunto de permutaciones que permitan conocer la caída promedio y desviación esperada en el desempeño cuando se elimina una variable o esta se vuelve inservible.</p>
+<div class="sourceCode" id="cb332"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb332-1"><a href="árboles-de-decisión.html#cb332-1" aria-hidden="true" tabindex="-1"></a>n_permutations <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb332-2"><a href="árboles-de-decisión.html#cb332-2" aria-hidden="true" tabindex="-1"></a>performance_losses <span class="op">=</span> []</span>
+<span id="cb332-3"><a href="árboles-de-decisión.html#cb332-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb332-4"><a href="árboles-de-decisión.html#cb332-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>]):</span>
+<span id="cb332-5"><a href="árboles-de-decisión.html#cb332-5" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> []</span>
+<span id="cb332-6"><a href="árboles-de-decisión.html#cb332-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_permutations):</span>
+<span id="cb332-7"><a href="árboles-de-decisión.html#cb332-7" aria-hidden="true" tabindex="-1"></a>        ames_x_test_permuted <span class="op">=</span> ames_x_test[columnas_seleccionadas].copy()</span>
+<span id="cb332-8"><a href="árboles-de-decisión.html#cb332-8" aria-hidden="true" tabindex="-1"></a>        ames_x_test_permuted.iloc[:, i] <span class="op">=</span> np.random.permutation(ames_x_test_permuted.iloc[:, i])</span>
+<span id="cb332-9"><a href="árboles-de-decisión.html#cb332-9" aria-hidden="true" tabindex="-1"></a>        y_pred_permuted <span class="op">=</span> final_rf_pipeline.predict(ames_x_test_permuted)</span>
+<span id="cb332-10"><a href="árboles-de-decisión.html#cb332-10" aria-hidden="true" tabindex="-1"></a>        mse_permuted <span class="op">=</span> mean_squared_error(ames_y_test, y_pred_permuted)</span>
+<span id="cb332-11"><a href="árboles-de-decisión.html#cb332-11" aria-hidden="true" tabindex="-1"></a>        loss.append(mse_permuted)</span>
+<span id="cb332-12"><a href="árboles-de-decisión.html#cb332-12" aria-hidden="true" tabindex="-1"></a>    performance_losses.append(loss)</span>
+<span id="cb332-13"><a href="árboles-de-decisión.html#cb332-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb332-14"><a href="árboles-de-decisión.html#cb332-14" aria-hidden="true" tabindex="-1"></a>performance_losses <span class="op">=</span> performance_losses<span class="op">/</span>np.<span class="bu">sum</span>(performance_losses, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb332-15"><a href="árboles-de-decisión.html#cb332-15" aria-hidden="true" tabindex="-1"></a>mean_losses <span class="op">=</span> np.mean(performance_losses, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb332-16"><a href="árboles-de-decisión.html#cb332-16" aria-hidden="true" tabindex="-1"></a>std_losses <span class="op">=</span> np.std(performance_losses, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb332-17"><a href="árboles-de-decisión.html#cb332-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb332-18"><a href="árboles-de-decisión.html#cb332-18" aria-hidden="true" tabindex="-1"></a>importance_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb332-19"><a href="árboles-de-decisión.html#cb332-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Variable&#39;</span>: columnas_seleccionadas, </span>
+<span id="cb332-20"><a href="árboles-de-decisión.html#cb332-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Mean_Loss&#39;</span>: mean_losses, </span>
+<span id="cb332-21"><a href="árboles-de-decisión.html#cb332-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Std_Loss&#39;</span>: std_losses</span>
+<span id="cb332-22"><a href="árboles-de-decisión.html#cb332-22" aria-hidden="true" tabindex="-1"></a>  })</span></code></pre></div>
+<div class="sourceCode" id="cb333"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb333-1"><a href="árboles-de-decisión.html#cb333-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb333-2"><a href="árboles-de-decisión.html#cb333-2" aria-hidden="true" tabindex="-1"></a>  importance_df <span class="op">&gt;&gt;</span></span>
+<span id="cb333-3"><a href="árboles-de-decisión.html#cb333-3" aria-hidden="true" tabindex="-1"></a>  mutate(</span>
+<span id="cb333-4"><a href="árboles-de-decisión.html#cb333-4" aria-hidden="true" tabindex="-1"></a>    ymin <span class="op">=</span> _.Mean_Loss <span class="op">-</span> _.Std_Loss,</span>
+<span id="cb333-5"><a href="árboles-de-decisión.html#cb333-5" aria-hidden="true" tabindex="-1"></a>    ymax <span class="op">=</span> _.Mean_Loss <span class="op">+</span> _.Std_Loss) <span class="op">&gt;&gt;</span></span>
+<span id="cb333-6"><a href="árboles-de-decisión.html#cb333-6" aria-hidden="true" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&#39;reorder(Variable, Mean_Loss)&#39;</span>, y <span class="op">=</span> <span class="st">&quot;Mean_Loss&quot;</span>)) <span class="op">+</span></span>
+<span id="cb333-7"><a href="árboles-de-decisión.html#cb333-7" aria-hidden="true" tabindex="-1"></a>  geom_errorbar(aes(ymin<span class="op">=</span><span class="st">&#39;ymin&#39;</span>, ymax<span class="op">=</span><span class="st">&#39;ymax&#39;</span>),</span>
+<span id="cb333-8"><a href="árboles-de-decisión.html#cb333-8" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="fl">0.2</span>, position<span class="op">=</span>position_dodge(<span class="fl">0.9</span>)) <span class="op">+</span></span>
+<span id="cb333-9"><a href="árboles-de-decisión.html#cb333-9" aria-hidden="true" tabindex="-1"></a>  geom_point(alpha <span class="op">=</span> <span class="fl">0.65</span>) <span class="op">+</span></span>
+<span id="cb333-10"><a href="árboles-de-decisión.html#cb333-10" aria-hidden="true" tabindex="-1"></a>  labs(title<span class="op">=</span><span class="st">&#39;Importancia de las Variables&#39;</span>, x<span class="op">=</span><span class="st">&#39;Variable&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importancia&#39;</span>) <span class="op">+</span></span>
+<span id="cb333-11"><a href="árboles-de-decisión.html#cb333-11" aria-hidden="true" tabindex="-1"></a>  coord_flip()</span>
+<span id="cb333-12"><a href="árboles-de-decisión.html#cb333-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-247-17.png" width="614" /></p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb335-1"><a href="árboles-de-decisión.html#cb335-1" aria-hidden="true" tabindex="-1"></a>importances <span class="op">=</span> final_rf_pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].feature_importances_</span>
+<span id="cb335-2"><a href="árboles-de-decisión.html#cb335-2" aria-hidden="true" tabindex="-1"></a>columns <span class="op">=</span> final_rf_pipeline[<span class="st">&quot;preprocessor&quot;</span>].get_feature_names_out()</span>
+<span id="cb335-3"><a href="árboles-de-decisión.html#cb335-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb335-4"><a href="árboles-de-decisión.html#cb335-4" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb335-5"><a href="árboles-de-decisión.html#cb335-5" aria-hidden="true" tabindex="-1"></a>  pd.DataFrame({<span class="st">&#39;feature&#39;</span>: columns, <span class="st">&#39;Importance&#39;</span>: importances}) <span class="op">&gt;&gt;</span></span>
+<span id="cb335-6"><a href="árboles-de-decisión.html#cb335-6" aria-hidden="true" tabindex="-1"></a>  ggplot(aes(x<span class="op">=</span> <span class="st">&#39;reorder(feature, Importance)&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importance&#39;</span>)) <span class="op">+</span> </span>
+<span id="cb335-7"><a href="árboles-de-decisión.html#cb335-7" aria-hidden="true" tabindex="-1"></a>  geom_bar(stat<span class="op">=</span><span class="st">&#39;identity&#39;</span>, fill<span class="op">=</span><span class="st">&#39;blue&#39;</span>, color <span class="op">=</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span> </span>
+<span id="cb335-8"><a href="árboles-de-decisión.html#cb335-8" aria-hidden="true" tabindex="-1"></a>  labs(title<span class="op">=</span><span class="st">&#39;Importancia de las Variables&#39;</span>, x<span class="op">=</span><span class="st">&#39;Variable&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importancia&#39;</span>) <span class="op">+</span></span>
+<span id="cb335-9"><a href="árboles-de-decisión.html#cb335-9" aria-hidden="true" tabindex="-1"></a>  coord_flip()</span>
+<span id="cb335-10"><a href="árboles-de-decisión.html#cb335-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-248-19.png" width="614" /></p>
+<p>Si en la gráfica anterior notamos algo raro en cuanto a la(s) variable(s) más importante(s) y la factibilidad de conseguirla(s) o usarla(s)… ¡¡HAY QUE EMPEZAR DESDE CERO SIN CONSIDERAR ESA VARIABLE!!</p>
+
+</div>
+</div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+$('.pipehover_incremental tr').hover(function() {
+  $(this).removeClass()
+  $(this).prevAll().removeClass()
+  $(this).nextAll().removeClass()
+  $(this).addClass('hover');
+  $(this).prevAll().addClass('hover');
+  $(this).closest('div').next().find('img').attr("src", $(this).attr("link"));
+});
+
+
+$('.pipehover_select_one_row tr').hover(function() {
+  $(this).removeClass()
+  $(this).prevAll().removeClass()
+  $(this).nextAll().removeClass()
+  $(this).addClass('hover');
+  $(this).closest('div').next().find('img').attr("src", $(this).attr("link"));
+});
+
+</script>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="k-nearest-neighbor.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["amt23_01intro2dsml_py.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
