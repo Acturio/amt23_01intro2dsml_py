@@ -5,10 +5,9 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error
 from sklearn.metrics import mean_squared_error, r2_score, make_scorer
-from sklearn.model_selection import train_test_split, KFold, cross_val_score, cross_validate
+from sklearn.model_selection import train_test_split, KFold
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import shuffle
-from sklearn import set_config
 
 from plydata.one_table_verbs import pull
 from plydata.tidy import pivot_longer
@@ -99,6 +98,7 @@ pipeline = Pipeline([
    ('preprocessor', preprocessor),
    ('regressor', RandomForestRegressor(
      n_estimators=10,
+     max_depth = 3,
      min_samples_split=2,
      min_samples_leaf=2,
      random_state=12345))
@@ -219,9 +219,10 @@ param_grid = {
 # Definir las métricas de desempeño que deseas calcular como funciones de puntuación
 
 def adjusted_r2_score(y_true, y_pred, n, p):
-  r2 = r2_score(y_true, y_pred)
-  adjusted_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
-  return adjusted_r2
+ r2 = r2_score(y_true, y_pred)
+ adjusted_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
+ return(adjusted_r2)
+
 
 scoring = {
     'neg_mean_squared_error': make_scorer(mean_squared_error, greater_is_better=False),
@@ -234,7 +235,7 @@ scoring = {
 pipeline = Pipeline([
     ('preprocessor', preprocessor),
     ('regressor', GridSearchCV(
-      RandomForestRegressor(), 
+      RandomForestRegressor(n_estimators = 1000), 
       param_grid = param_grid, 
       cv=kf, 
       scoring=scoring, 

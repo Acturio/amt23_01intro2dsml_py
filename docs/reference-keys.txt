@@ -127,3 +127,15 @@ regresión-4
 métricas-de-desempeño-3
 validación-cruzada-3
 importancia-de-variables-1
+clustering-no-jerárquico
+cálculo-de-distancia
+distancias-homogéneas
+visualización-de-distancias
+tendencia-de-factibilidad
+k---means
+ajuste-de-modelo-cómo-funciona-el-algortimo
+calidad-de-ajuste
+inercia
+cómo-seleccionamos-k
+implementación-en-python-3
+despedida

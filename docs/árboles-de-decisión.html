@@ -29,7 +29,7 @@
   
   
 <link rel="prev" href="k-nearest-neighbor.html"/>
-
+<link rel="next" href="clustering-no-jerárquico.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -353,6 +353,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.6.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#regresión-4"><i class="fa fa-check"></i><b>8.6.1</b> Regresión</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="9" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html"><i class="fa fa-check"></i><b>9</b> Clustering No Jerárquico</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#cálculo-de-distancia"><i class="fa fa-check"></i><b>9.1</b> Cálculo de distancia</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#distancias-homogéneas"><i class="fa fa-check"></i><b>9.1.1</b> Distancias homogéneas</a></li>
+<li class="chapter" data-level="9.1.2" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#visualización-de-distancias"><i class="fa fa-check"></i><b>9.1.2</b> Visualización de distancias</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#tendencia-de-factibilidad"><i class="fa fa-check"></i><b>9.2</b> Tendencia de factibilidad</a></li>
+<li class="chapter" data-level="9.3" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#k---means"><i class="fa fa-check"></i><b>9.3</b> K - means</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#ajuste-de-modelo-cómo-funciona-el-algortimo"><i class="fa fa-check"></i><b>9.3.1</b> Ajuste de modelo: ¿Cómo funciona el algortimo?</a></li>
+<li class="chapter" data-level="9.3.2" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#calidad-de-ajuste"><i class="fa fa-check"></i><b>9.3.2</b> Calidad de ajuste</a></li>
+<li class="chapter" data-level="9.3.3" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#cómo-seleccionamos-k"><i class="fa fa-check"></i><b>9.3.3</b> ¿Cómo seleccionamos K?</a></li>
+<li class="chapter" data-level="9.3.4" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#implementación-en-python-3"><i class="fa fa-check"></i><b>9.3.4</b> Implementación en Python</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="despedida.html"><a href="despedida.html"><i class="fa fa-check"></i><b>10</b> DESPEDIDA</a></li>
 <li class="divider"></li>
 <li><a href="./"><img src="img/amat-logo.png" width="280"></a></li>
 
@@ -1087,17 +1104,17 @@ de características en el punto de división del nodo.</p></li>
 <span id="cb322-8"><a href="árboles-de-decisión.html#cb322-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb322-9"><a href="árboles-de-decisión.html#cb322-9" aria-hidden="true" tabindex="-1"></a>results_reg</span></code></pre></div>
 <pre><code>##       Sale_Price  final_rf_pred
-## 390       165000      215678.00
-## 1235      124000      168313.59
-## 2288       75000      156397.66
-## 107       206000      131732.28
-## 1861      190000      249002.80
+## 390       165000      216723.87
+## 1235      124000      166863.81
+## 2288       75000      157479.80
+## 107       206000      131379.70
+## 1861      190000      254600.78
 ## ...          ...            ...
-## 116       171000      153568.34
-## 398       120500      131732.28
-## 1253      146000      215678.00
-## 78        125000      135145.32
-## 714       110000      143760.94
+## 116       171000      154932.83
+## 398       120500      131379.70
+## 1253      146000      216723.87
+## 78        125000      135138.56
+## 714       110000      143666.50
 ## 
 ## [586 rows x 2 columns]</code></pre>
 <p><strong>Métricas de desempeño</strong></p>
@@ -1119,13 +1136,13 @@ de características en el punto de división del nodo.</p></li>
 <span id="cb324-15"><a href="árboles-de-decisión.html#cb324-15" aria-hidden="true" tabindex="-1"></a>metrics_df <span class="op">=</span> pd.DataFrame(metrics_data)</span>
 <span id="cb324-16"><a href="árboles-de-decisión.html#cb324-16" aria-hidden="true" tabindex="-1"></a>metrics_df</span></code></pre></div>
 <pre><code>##     Metric         Value
-## 0       ME       -607.81
-## 1      MAE      42267.85
+## 0       ME       -709.41
+## 1      MAE      41978.16
 ## 2     MAPE          0.25
-## 3      MSE 3857083380.44
-## 4     RMSE      62105.42
-## 5      R^2          0.41
-## 6  R^2 Adj          0.41</code></pre>
+## 3      MSE 3819043820.82
+## 4     RMSE      61798.41
+## 5      R^2          0.42
+## 6  R^2 Adj          0.42</code></pre>
 <div class="sourceCode" id="cb326"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb326-1"><a href="árboles-de-decisión.html#cb326-1" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb326-2"><a href="árboles-de-decisión.html#cb326-2" aria-hidden="true" tabindex="-1"></a>  results_reg <span class="op">&gt;&gt;</span></span>
 <span id="cb326-3"><a href="árboles-de-decisión.html#cb326-3" aria-hidden="true" tabindex="-1"></a>    ggplot(aes(x <span class="op">=</span> <span class="st">&quot;final_rf_pred&quot;</span>, y <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>)) <span class="op">+</span></span>
@@ -1155,7 +1172,7 @@ de características en el punto de división del nodo.</p></li>
 <span id="cb328-12"><a href="árboles-de-decisión.html#cb328-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcula la importancia relativa</span></span>
 <span id="cb328-13"><a href="árboles-de-decisión.html#cb328-13" aria-hidden="true" tabindex="-1"></a>importance <span class="op">=</span> importance <span class="op">/</span> importance.<span class="bu">sum</span>()</span>
 <span id="cb328-14"><a href="árboles-de-decisión.html#cb328-14" aria-hidden="true" tabindex="-1"></a>importance</span></code></pre></div>
-<pre><code>## array([0.60673473, 0.11271676, 0.16279304, 0.11775547])</code></pre>
+<pre><code>## array([0.58905059, 0.1001707 , 0.20209608, 0.10868263])</code></pre>
 <div class="sourceCode" id="cb330"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb330-1"><a href="árboles-de-decisión.html#cb330-1" aria-hidden="true" tabindex="-1"></a>importance_df <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb330-2"><a href="árboles-de-decisión.html#cb330-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Variable&#39;</span>: columnas_seleccionadas, </span>
 <span id="cb330-3"><a href="árboles-de-decisión.html#cb330-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;Importance&#39;</span>: importance</span>
@@ -1222,6 +1239,9 @@ de características en el punto de división del nodo.</p></li>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-248-19.png" width="614" /></p>
 <p>Si en la gráfica anterior notamos algo raro en cuanto a la(s) variable(s) más importante(s) y la factibilidad de conseguirla(s) o usarla(s)… ¡¡HAY QUE EMPEZAR DESDE CERO SIN CONSIDERAR ESA VARIABLE!!</p>
 
+<div class="watermark">
+<img src="img/header.png" width="400">
+</div>
 </div>
 </div>
 </div>
@@ -1253,8 +1273,8 @@ $('.pipehover_select_one_row tr').hover(function() {
           </div>
         </div>
       </div>
-<a href="k-nearest-neighbor.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="k-nearest-neighbor.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="clustering-no-jerárquico.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

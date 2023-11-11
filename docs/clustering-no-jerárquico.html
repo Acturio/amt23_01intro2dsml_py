@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 9 Clustering No Jerárquico | Introducción a Ciencia de Datos y Machine Learning con Python</title>
+  <meta name="description" content="Capítulo 9 Clustering No Jerárquico | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 9 Clustering No Jerárquico | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Capítulo 9 Clustering No Jerárquico | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 9 Clustering No Jerárquico | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  
+  <meta name="twitter:description" content="Capítulo 9 Clustering No Jerárquico | Introducción a Ciencia de Datos y Machine Learning con Python" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="árboles-de-decisión.html"/>
+<link rel="next" href="despedida.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./"><img src="img/amat-logo.png" width="280"></a></li|
+|:-:|  
+<center>Introducción a Ciencia de Datos y Machine Learning</center>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>BIENVENIDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#objetivo"><i class="fa fa-check"></i>Objetivo</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#instructores"><i class="fa fa-check"></i>Instructores</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#alcances-del-curso"><i class="fa fa-check"></i>Alcances del curso</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#temario"><i class="fa fa-check"></i>Temario:</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#duración-y-evaluación-del-curso"><i class="fa fa-check"></i>Duración y evaluación del curso</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#recursos-y-dinámica-de-clase"><i class="fa fa-check"></i>Recursos y dinámica de clase</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#asesorías"><i class="fa fa-check"></i>Asesorías</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html"><i class="fa fa-check"></i><b>1</b> Conceptos de Ciencia de Datos</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#qué-es-ciencia-de-datos"><i class="fa fa-check"></i><b>1.1</b> ¿Qué es Ciencia de Datos?</a>
+<ul>
+<li class="chapter" data-level="" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#definiendo-conceptos"><i class="fa fa-check"></i>Definiendo conceptos:</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#objetivos"><i class="fa fa-check"></i><b>1.2</b> Objetivos</a></li>
+<li class="chapter" data-level="1.3" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#requisitos"><i class="fa fa-check"></i><b>1.3</b> Requisitos</a></li>
+<li class="chapter" data-level="1.4" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#aplicaciones"><i class="fa fa-check"></i><b>1.4</b> Aplicaciones</a></li>
+<li class="chapter" data-level="1.5" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#tipos-de-algoritmos"><i class="fa fa-check"></i><b>1.5</b> Tipos de algoritmos</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#aprendizaje-supervisado"><i class="fa fa-check"></i><b>1.5.1</b> Aprendizaje supervisado</a></li>
+<li class="chapter" data-level="1.5.2" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#aprendizaje-no-supervisado"><i class="fa fa-check"></i><b>1.5.2</b> Aprendizaje no supervisado</a></li>
+<li class="chapter" data-level="1.5.3" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#aprendizaje-por-refuerzo"><i class="fa fa-check"></i><b>1.5.3</b> Aprendizaje por refuerzo</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="conceptos-de-ciencia-de-datos.html"><a href="conceptos-de-ciencia-de-datos.html#ciclo-de-un-proyecto"><i class="fa fa-check"></i><b>1.6</b> Ciclo de un proyecto</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introducción-a-python.html"><a href="introducción-a-python.html"><i class="fa fa-check"></i><b>2</b> Introducción a Python</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introducción-a-python.html"><a href="introducción-a-python.html#cómo-obtener-python"><i class="fa fa-check"></i><b>2.1</b> ¿Cómo obtener <em>Python</em>?</a></li>
+<li class="chapter" data-level="2.2" data-path="introducción-a-python.html"><a href="introducción-a-python.html#qué-es-rstudio"><i class="fa fa-check"></i><b>2.2</b> ¿Qué es RStudio?</a></li>
+<li class="chapter" data-level="2.3" data-path="introducción-a-python.html"><a href="introducción-a-python.html#uso-de-python-en-rstudio"><i class="fa fa-check"></i><b>2.3</b> Uso de python en Rstudio</a></li>
+<li class="chapter" data-level="2.4" data-path="introducción-a-python.html"><a href="introducción-a-python.html#lectura-de-datos"><i class="fa fa-check"></i><b>2.4</b> Lectura de datos</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introducción-a-python.html"><a href="introducción-a-python.html#archivos-csv"><i class="fa fa-check"></i><b>2.4.1</b> Archivos <em>csv</em></a></li>
+<li class="chapter" data-level="2.4.2" data-path="introducción-a-python.html"><a href="introducción-a-python.html#archivos-txt"><i class="fa fa-check"></i><b>2.4.2</b> Archivos txt</a></li>
+<li class="chapter" data-level="2.4.3" data-path="introducción-a-python.html"><a href="introducción-a-python.html#archivos-xls-y-xlsx"><i class="fa fa-check"></i><b>2.4.3</b> Archivos <em>xls</em> y <em>xlsx</em></a></li>
+<li class="chapter" data-level="2.4.4" data-path="introducción-a-python.html"><a href="introducción-a-python.html#archivos-pickle"><i class="fa fa-check"></i><b>2.4.4</b> Archivos pickle</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introducción-a-python.html"><a href="introducción-a-python.html#consultas-de-datos"><i class="fa fa-check"></i><b>2.5</b> Consultas de datos</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introducción-a-python.html"><a href="introducción-a-python.html#seleccionar-columnas"><i class="fa fa-check"></i><b>2.5.1</b> Seleccionar columnas</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introducción-a-python.html"><a href="introducción-a-python.html#filtrar-observaciones"><i class="fa fa-check"></i><b>2.5.2</b> Filtrar observaciones</a></li>
+<li class="chapter" data-level="2.5.3" data-path="introducción-a-python.html"><a href="introducción-a-python.html#ordenar-registros"><i class="fa fa-check"></i><b>2.5.3</b> Ordenar registros</a></li>
+<li class="chapter" data-level="2.5.4" data-path="introducción-a-python.html"><a href="introducción-a-python.html#agregar-modificar"><i class="fa fa-check"></i><b>2.5.4</b> Agregar / Modificar</a></li>
+<li class="chapter" data-level="2.5.5" data-path="introducción-a-python.html"><a href="introducción-a-python.html#resumen-estadístico"><i class="fa fa-check"></i><b>2.5.5</b> Resumen estadístico</a></li>
+<li class="chapter" data-level="2.5.6" data-path="introducción-a-python.html"><a href="introducción-a-python.html#agrupamiento"><i class="fa fa-check"></i><b>2.5.6</b> Agrupamiento</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introducción-a-python.html"><a href="introducción-a-python.html#orden-y-estructura"><i class="fa fa-check"></i><b>2.6</b> Orden y estructura</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="introducción-a-python.html"><a href="introducción-a-python.html#pivote-horizontal"><i class="fa fa-check"></i><b>2.6.1</b> Pivote horizontal</a></li>
+<li class="chapter" data-level="2.6.2" data-path="introducción-a-python.html"><a href="introducción-a-python.html#pivote-vertical"><i class="fa fa-check"></i><b>2.6.2</b> Pivote vertical</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="visualización.html"><a href="visualización.html"><i class="fa fa-check"></i><b>3</b> Visualización</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="visualización.html"><a href="visualización.html#eda-análisis-exploratorio-de-datos"><i class="fa fa-check"></i><b>3.1</b> EDA: Análisis Exploratorio de Datos</a></li>
+<li class="chapter" data-level="3.2" data-path="visualización.html"><a href="visualización.html#geda-análisis-exploratorio-de-datos-gráficos"><i class="fa fa-check"></i><b>3.2</b> GEDA: Análisis Exploratorio de Datos Gráficos</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="visualización.html"><a href="visualización.html#lo-que-no-se-debe-hacer"><i class="fa fa-check"></i><b>3.2.1</b> Lo que no se debe hacer…</a></li>
+<li class="chapter" data-level="3.2.2" data-path="visualización.html"><a href="visualización.html#principios-de-visualización"><i class="fa fa-check"></i><b>3.2.2</b> Principios de visualización</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="visualización.html"><a href="visualización.html#ggplot-plotnine"><i class="fa fa-check"></i><b>3.3</b> Ggplot / plotnine</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="visualización.html"><a href="visualización.html#capas-estéticas"><i class="fa fa-check"></i><b>3.3.1</b> Capas Estéticas</a></li>
+<li class="chapter" data-level="3.3.2" data-path="visualización.html"><a href="visualización.html#capas-geométricas"><i class="fa fa-check"></i><b>3.3.2</b> Capas geométricas</a></li>
+<li class="chapter" data-level="3.3.3" data-path="visualización.html"><a href="visualización.html#facetas"><i class="fa fa-check"></i><b>3.3.3</b> Facetas</a></li>
+<li class="chapter" data-level="3.3.4" data-path="visualización.html"><a href="visualización.html#más-sobre-estéticas"><i class="fa fa-check"></i><b>3.3.4</b> Más sobre estéticas</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="visualización.html"><a href="visualización.html#análisis-univariado"><i class="fa fa-check"></i><b>3.4</b> Análisis univariado</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="visualización.html"><a href="visualización.html#variables-numéricas"><i class="fa fa-check"></i><b>3.4.1</b> Variables numéricas</a></li>
+<li class="chapter" data-level="3.4.2" data-path="visualización.html"><a href="visualización.html#variables-nominalescategóricas"><i class="fa fa-check"></i><b>3.4.2</b> Variables nominales/categóricas</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="visualización.html"><a href="visualización.html#análisis-multivariado"><i class="fa fa-check"></i><b>3.5</b> Análisis multivariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="visualización.html"><a href="visualización.html#ejercicios"><i class="fa fa-check"></i>Ejercicios</a></li>
+<li class="chapter" data-level="" data-path="visualización.html"><a href="visualización.html#warning"><i class="fa fa-check"></i>¡ Warning !</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="visualización.html"><a href="visualización.html#reporte-interactivos"><i class="fa fa-check"></i><b>3.6</b> Reporte interactivos</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html"><i class="fa fa-check"></i><b>4</b> Introducción a Machine Learning</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#análisis-supervisado-vs-no-supervisado"><i class="fa fa-check"></i><b>4.1</b> Análisis Supervisado vs No supervisado</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#regresión-vs-clasificación"><i class="fa fa-check"></i><b>4.1.1</b> Regresión vs clasificación</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#sesgo-vs-varianza"><i class="fa fa-check"></i><b>4.2</b> Sesgo vs varianza</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#balance-entre-sesgo-y-varianza-o-trade-off"><i class="fa fa-check"></i><b>4.2.1</b> Balance entre sesgo y varianza o Trade-off</a></li>
+<li class="chapter" data-level="4.2.2" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#error-total"><i class="fa fa-check"></i><b>4.2.2</b> Error total</a></li>
+<li class="chapter" data-level="4.2.3" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#overfitting"><i class="fa fa-check"></i><b>4.2.3</b> Overfitting</a></li>
+<li class="chapter" data-level="4.2.4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#underfitting"><i class="fa fa-check"></i><b>4.2.4</b> Underfitting</a></li>
+<li class="chapter" data-level="4.2.5" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#error-irreducible"><i class="fa fa-check"></i><b>4.2.5</b> Error irreducible</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#partición-de-datos"><i class="fa fa-check"></i><b>4.3</b> Partición de datos</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#métodos-comunes-para-particionar-datos"><i class="fa fa-check"></i><b>4.3.1</b> Métodos comunes para particionar datos</a></li>
+<li class="chapter" data-level="4.3.2" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#conjunto-de-validación"><i class="fa fa-check"></i><b>4.3.2</b> Conjunto de validación</a></li>
+<li class="chapter" data-level="4.3.3" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#leave-one-out-cross-validation"><i class="fa fa-check"></i><b>4.3.3</b> Leave-one-out cross-validation</a></li>
+<li class="chapter" data-level="4.3.4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>4.3.4</b> K Fold Cross Validation</a></li>
+<li class="chapter" data-level="4.3.5" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#validación-cruzada-para-series-de-tiempo"><i class="fa fa-check"></i><b>4.3.5</b> Validación cruzada para series de tiempo</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#feature-engineering"><i class="fa fa-check"></i><b>4.4</b> Feature engineering</a></li>
+<li class="chapter" data-level="4.5" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#pipeline"><i class="fa fa-check"></i><b>4.5</b> Pipeline</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#normalizar-columnas-numéricas"><i class="fa fa-check"></i><b>4.5.1</b> Normalizar columnas numéricas</a></li>
+<li class="chapter" data-level="4.5.2" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#dicotomización-de-categorías"><i class="fa fa-check"></i><b>4.5.2</b> Dicotomización de categorías</a></li>
+<li class="chapter" data-level="4.5.3" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#imputación-de-datos-faltantes"><i class="fa fa-check"></i><b>4.5.3</b> Imputación de datos faltantes</a></li>
+<li class="chapter" data-level="4.5.4" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#transformaciones-personalizadas"><i class="fa fa-check"></i><b>4.5.4</b> Transformaciones personalizadas</a></li>
+<li class="chapter" data-level="4.5.5" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#interacciones"><i class="fa fa-check"></i><b>4.5.5</b> Interacciones</a></li>
+<li class="chapter" data-level="4.5.6" data-path="introducción-a-machine-learning.html"><a href="introducción-a-machine-learning.html#renombramiento-de-nuevos-datos"><i class="fa fa-check"></i><b>4.5.6</b> Renombramiento de nuevos datos</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="regresión-lineal.html"><a href="regresión-lineal.html"><i class="fa fa-check"></i><b>5</b> Regresión Lineal</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#regresión-lineal-simple"><i class="fa fa-check"></i><b>5.1</b> Regresión lineal simple</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#interpretación"><i class="fa fa-check"></i><b>5.1.1</b> Interpretación</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#regresión-lineal-múltiple"><i class="fa fa-check"></i><b>5.2</b> Regresión lineal múltiple</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#interpretación-1"><i class="fa fa-check"></i><b>5.2.1</b> Interpretación</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="regresión-lineal.html"><a href="regresión-lineal.html#ajuste-de-modelo"><i class="fa fa-check"></i><b>5.3</b> Ajuste de modelo</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#estimación-de-parámetros-regresión-lineal-simple"><i class="fa fa-check"></i><b>5.3.1</b> Estimación de parámetros: Regresión lineal simple</a></li>
+<li class="chapter" data-level="5.3.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#estimación-de-parámetros-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>5.3.2</b> Estimación de parámetros: Regresión lineal múltiple</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="regresión-lineal.html"><a href="regresión-lineal.html#residuos-del-modelo"><i class="fa fa-check"></i><b>5.4</b> Residuos del modelo</a>
+<ul>
+<li class="chapter" data-level="" data-path="regresión-lineal.html"><a href="regresión-lineal.html#condiciones-para-el-ajuste-de-una-regresión-lineal"><i class="fa fa-check"></i>Condiciones para el ajuste de una regresión lineal:</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="regresión-lineal.html"><a href="regresión-lineal.html#implementación-con-python"><i class="fa fa-check"></i><b>5.5</b> Implementación con Python</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#carga-y-partición-de-datos"><i class="fa fa-check"></i><b>5.5.1</b> Carga y partición de datos</a></li>
+<li class="chapter" data-level="5.5.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#pipeline-de-transformación-de-datos"><i class="fa fa-check"></i><b>5.5.2</b> Pipeline de transformación de datos</a></li>
+<li class="chapter" data-level="5.5.3" data-path="regresión-lineal.html"><a href="regresión-lineal.html#creación-y-ajuste-de-modelo"><i class="fa fa-check"></i><b>5.5.3</b> Creación y ajuste de modelo</a></li>
+<li class="chapter" data-level="5.5.4" data-path="regresión-lineal.html"><a href="regresión-lineal.html#predicción-con-nuevos-datos"><i class="fa fa-check"></i><b>5.5.4</b> Predicción con nuevos datos</a></li>
+<li class="chapter" data-level="5.5.5" data-path="regresión-lineal.html"><a href="regresión-lineal.html#extracción-de-coeficientes"><i class="fa fa-check"></i><b>5.5.5</b> Extracción de coeficientes</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="regresión-lineal.html"><a href="regresión-lineal.html#métricas-de-desempeño"><i class="fa fa-check"></i><b>5.6</b> Métricas de desempeño</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#implementación-con-python-1"><i class="fa fa-check"></i><b>5.6.1</b> Implementación con python</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="regresión-lineal.html"><a href="regresión-lineal.html#validación-cruzada"><i class="fa fa-check"></i><b>5.7</b> Validación cruzada</a></li>
+<li class="chapter" data-level="5.8" data-path="regresión-lineal.html"><a href="regresión-lineal.html#métodos-se-selección-de-variables"><i class="fa fa-check"></i><b>5.8</b> Métodos se selección de variables</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="regresión-lineal.html"><a href="regresión-lineal.html#forward-selection-selección-hacia-adelante"><i class="fa fa-check"></i><b>5.8.1</b> Forward selection (selección hacia adelante)</a></li>
+<li class="chapter" data-level="5.8.2" data-path="regresión-lineal.html"><a href="regresión-lineal.html#backward-selection-selección-hacia-atrás"><i class="fa fa-check"></i><b>5.8.2</b> Backward selection (selección hacia atrás)</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="regresión-lineal.html"><a href="regresión-lineal.html#ejercicio"><i class="fa fa-check"></i><b>5.9</b> Ejercicio</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="regresión-logística.html"><a href="regresión-logística.html"><i class="fa fa-check"></i><b>6</b> Regresión Logística</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regresión-logística.html"><a href="regresión-logística.html#función-sigmoide"><i class="fa fa-check"></i><b>6.1</b> Función sigmoide</a></li>
+<li class="chapter" data-level="6.2" data-path="regresión-logística.html"><a href="regresión-logística.html#ajuste-del-modelo"><i class="fa fa-check"></i><b>6.2</b> Ajuste del modelo</a></li>
+<li class="chapter" data-level="6.3" data-path="regresión-logística.html"><a href="regresión-logística.html#clasificación-2"><i class="fa fa-check"></i><b>6.3</b> Clasificación</a></li>
+<li class="chapter" data-level="6.4" data-path="regresión-logística.html"><a href="regresión-logística.html#implementación-en-python"><i class="fa fa-check"></i><b>6.4</b> Implementación en python</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="regresión-logística.html"><a href="regresión-logística.html#pipeline-de-transformación-de-datos-1"><i class="fa fa-check"></i><b>6.4.1</b> Pipeline de transformación de datos</a></li>
+<li class="chapter" data-level="6.4.2" data-path="regresión-logística.html"><a href="regresión-logística.html#creación-y-ajuste-de-modelo-1"><i class="fa fa-check"></i><b>6.4.2</b> Creación y ajuste de modelo</a></li>
+<li class="chapter" data-level="6.4.3" data-path="regresión-logística.html"><a href="regresión-logística.html#predicción-con-nuevos-datos-1"><i class="fa fa-check"></i><b>6.4.3</b> Predicción con nuevos datos</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="regresión-logística.html"><a href="regresión-logística.html#métricas-de-desempeño-1"><i class="fa fa-check"></i><b>6.5</b> Métricas de desempeño</a></li>
+<li class="chapter" data-level="6.6" data-path="regresión-logística.html"><a href="regresión-logística.html#estimación-de-probabilidades"><i class="fa fa-check"></i><b>6.6</b> Estimación de probabilidades</a></li>
+<li class="chapter" data-level="6.7" data-path="regresión-logística.html"><a href="regresión-logística.html#validación-cruzada-1"><i class="fa fa-check"></i><b>6.7</b> Validación cruzada</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html"><i class="fa fa-check"></i><b>7</b> K-Nearest-Neighbor</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#clasificación-3"><i class="fa fa-check"></i><b>7.1</b> Clasificación</a></li>
+<li class="chapter" data-level="7.2" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#regresión-2"><i class="fa fa-check"></i><b>7.2</b> Regresión</a></li>
+<li class="chapter" data-level="7.3" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#ajuste-del-modelo-1"><i class="fa fa-check"></i><b>7.3</b> Ajuste del modelo</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#selección-de-hiper-parámetro-k"><i class="fa fa-check"></i><b>7.3.1</b> Selección de Hiper-parámetro K</a></li>
+<li class="chapter" data-level="7.3.2" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#métodos-de-cálculo-de-la-distancia-entre-observaciones"><i class="fa fa-check"></i><b>7.3.2</b> Métodos de cálculo de la distancia entre observaciones</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#implementación-en-python-1"><i class="fa fa-check"></i><b>7.4</b> Implementación en Python</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="k-nearest-neighbor.html"><a href="k-nearest-neighbor.html#regresión-3"><i class="fa fa-check"></i><b>7.4.1</b> Regresión</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html"><i class="fa fa-check"></i><b>8</b> Árboles de decisión</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#ajuste-del-modelo-2"><i class="fa fa-check"></i><b>8.1</b> Ajuste del modelo</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#attribute-selective-measure-asm"><i class="fa fa-check"></i><b>8.1.1</b> Attribute Selective Measure (ASM)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#regularización-de-árboles"><i class="fa fa-check"></i><b>8.2</b> Regularización de árboles</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#nivel-de-profundidad-de-árbol"><i class="fa fa-check"></i><b>8.2.1</b> Nivel de profundidad de árbol</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#aprendizaje-conjunto"><i class="fa fa-check"></i><b>8.3</b> Aprendizaje conjunto</a></li>
+<li class="chapter" data-level="8.4" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#bagging"><i class="fa fa-check"></i><b>8.4</b> Bagging</a></li>
+<li class="chapter" data-level="8.5" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#random-forest"><i class="fa fa-check"></i><b>8.5</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#qué-es"><i class="fa fa-check"></i><b>8.5.1</b> ¿Qué es?</a></li>
+<li class="chapter" data-level="8.5.2" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#características-de-los-bosques-aleatorios"><i class="fa fa-check"></i><b>8.5.2</b> Características de los bosques aleatorios</a></li>
+<li class="chapter" data-level="8.5.3" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#aplicar-árboles-de-decisión-en-un-bosque-aleatorio"><i class="fa fa-check"></i><b>8.5.3</b> Aplicar árboles de decisión en un bosque aleatorio</a></li>
+<li class="chapter" data-level="8.5.4" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#ventajas-y-desventjas-de-bosques-aleatorios"><i class="fa fa-check"></i><b>8.5.4</b> Ventajas y desventjas de bosques aleatorios</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#implementación-en-python-2"><i class="fa fa-check"></i><b>8.6</b> Implementación en Python</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="árboles-de-decisión.html"><a href="árboles-de-decisión.html#regresión-4"><i class="fa fa-check"></i><b>8.6.1</b> Regresión</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html"><i class="fa fa-check"></i><b>9</b> Clustering No Jerárquico</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#cálculo-de-distancia"><i class="fa fa-check"></i><b>9.1</b> Cálculo de distancia</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#distancias-homogéneas"><i class="fa fa-check"></i><b>9.1.1</b> Distancias homogéneas</a></li>
+<li class="chapter" data-level="9.1.2" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#visualización-de-distancias"><i class="fa fa-check"></i><b>9.1.2</b> Visualización de distancias</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#tendencia-de-factibilidad"><i class="fa fa-check"></i><b>9.2</b> Tendencia de factibilidad</a></li>
+<li class="chapter" data-level="9.3" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#k---means"><i class="fa fa-check"></i><b>9.3</b> K - means</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#ajuste-de-modelo-cómo-funciona-el-algortimo"><i class="fa fa-check"></i><b>9.3.1</b> Ajuste de modelo: ¿Cómo funciona el algortimo?</a></li>
+<li class="chapter" data-level="9.3.2" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#calidad-de-ajuste"><i class="fa fa-check"></i><b>9.3.2</b> Calidad de ajuste</a></li>
+<li class="chapter" data-level="9.3.3" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#cómo-seleccionamos-k"><i class="fa fa-check"></i><b>9.3.3</b> ¿Cómo seleccionamos K?</a></li>
+<li class="chapter" data-level="9.3.4" data-path="clustering-no-jerárquico.html"><a href="clustering-no-jerárquico.html#implementación-en-python-3"><i class="fa fa-check"></i><b>9.3.4</b> Implementación en Python</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="despedida.html"><a href="despedida.html"><i class="fa fa-check"></i><b>10</b> DESPEDIDA</a></li>
+<li class="divider"></li>
+<li><a href="./"><img src="img/amat-logo.png" width="280"></a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introducción a Ciencia de Datos y Machine Learning con Python</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="clustering-no-jerárquico" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Capítulo 9</span> Clustering No Jerárquico<a href="clustering-no-jerárquico.html#clustering-no-jerárquico" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="cálculo-de-distancia" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Cálculo de distancia<a href="clustering-no-jerárquico.html#cálculo-de-distancia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Otro parámetro que podemos ajustar para el modelo es la distancia usada, existen diferentes formas de medir qué tan “cerca” están dos puntos entre sí, y las diferencias entre estos métodos pueden volverse significativas en dimensiones superiores.</p>
+<ul>
+<li>La más utilizada es la distancia <strong>euclidiana</strong>, el tipo estándar de distancia.</li>
+</ul>
+<p><span class="math display">\[d(X,Y) = \sqrt{\sum_{i=1}^{n} (x_i-y_i)^2}\]</span></p>
+<ul>
+<li>Otra métrica es la llamada distancia de <strong>Manhattan</strong>, que mide la distancia tomada en cada dirección cardinal, en lugar de a lo largo de la diagonal.</li>
+</ul>
+<p><span class="math display">\[d(X,Y) = \sum_{i=1}^{n} |x_i - y_i|\]</span></p>
+<ul>
+<li>De manera más general, las anteriores son casos particulares de la distancia de <strong>Minkowski</strong>, cuya fórmula es:</li>
+</ul>
+<p><span class="math display">\[d(X,Y) = (\sum_{i=1}^{n} |x_i-y_i|^p)^{\frac{1}{p}}\]</span></p>
+<ul>
+<li>La distancia de <strong>coseno</strong> es ampliamente en análisis de texto, sistemas de recomendación.</li>
+</ul>
+<p><span class="math display">\[d(X,Y)= 1 - \frac{\sum_{i=1}^{n}{X_iY_i}}{\sqrt{\sum_{i=1}^{n}{X_i^2}}\sqrt{\sum_{i=1}^{n}{Y_i^2}}}\]</span></p>
+<ul>
+<li>La distancia de <strong>Jaccard</strong> es ampliamente usada para medir similitud cuando se trata de variables categóricas. Es usado en análisis de texto y sistemas de recomendación.</li>
+</ul>
+<p><span class="math display">\[d(X, Y) = \frac{X \cap Y}{X \cup Y}\]</span></p>
+<ul>
+<li>La distancia de <strong>Gower´s</strong> mide la similitud entre variables de forma distinta dependiendo del tipo de dato (numérica, nominal, ordinal).</li>
+</ul>
+<p><span class="math display">\[D_{Gower}(X_1, X_2) = 1 - \frac{1}{p} \sum_{j=1}^{p}{s_j(X_1, X_2)} ; \quad \quad s_j(X_1, X_2)=1-\frac{|y_{1j}-y_{2j}|}{R_j} \]</span>
+Para mayor detalle sobre el funcionamiento de la métrica, revisar el siguiente <a href="https://medium.com/analytics-vidhya/gowers-distance-899f9c4bd553">link</a></p>
+<p><img src="img/09-not-hclus/01-similitudes.png" width="700pt" height="700pt" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p><a href="https://towardsdatascience.com/17-types-of-similarity-and-dissimilarity-measures-used-in-data-science-3eb914d2681">Un link interesante</a></p></li>
+<li><p><a href="https://www.maartengrootendorst.com/blog/distances/">Otro link interesante</a></p></li>
+</ul>
+<div id="distancias-homogéneas" class="section level3 hasAnchor" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> Distancias homogéneas<a href="clustering-no-jerárquico.html#distancias-homogéneas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Las distancias basadas en la correlación son ampliamente usadas en múltiples análisis. Esta medida puede calcularse mediante <em>pearson</em>, <em>spearman</em> o <em>kendall</em>.</p>
+<div class="sourceCode" id="cb337"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb337-1"><a href="clustering-no-jerárquico.html#cb337-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> scale</span>
+<span id="cb337-2"><a href="clustering-no-jerárquico.html#cb337-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> pairwise_distances</span>
+<span id="cb337-3"><a href="clustering-no-jerárquico.html#cb337-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb337-4"><a href="clustering-no-jerárquico.html#cb337-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyclustertend <span class="im">import</span> vat, ivat, hopkins <span class="co"># from github git@github.com:lachhebo/pyclustertend.git</span></span>
+<span id="cb337-5"><a href="clustering-no-jerárquico.html#cb337-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb337-6"><a href="clustering-no-jerárquico.html#cb337-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb337-7"><a href="clustering-no-jerárquico.html#cb337-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb337-8"><a href="clustering-no-jerárquico.html#cb337-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb337-9"><a href="clustering-no-jerárquico.html#cb337-9" aria-hidden="true" tabindex="-1"></a>USArrests <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/USArrests.csv&quot;</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb337-10"><a href="clustering-no-jerárquico.html#cb337-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb337-11"><a href="clustering-no-jerárquico.html#cb337-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Escalar los datos</span></span>
+<span id="cb337-12"><a href="clustering-no-jerárquico.html#cb337-12" aria-hidden="true" tabindex="-1"></a>USArrests_scaled <span class="op">=</span> scale(USArrests)</span>
+<span id="cb337-13"><a href="clustering-no-jerárquico.html#cb337-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb337-14"><a href="clustering-no-jerárquico.html#cb337-14" aria-hidden="true" tabindex="-1"></a>dist_cor <span class="op">=</span> pairwise_distances(USArrests_scaled, metric<span class="op">=</span><span class="st">&#39;correlation&#39;</span>)</span>
+<span id="cb337-15"><a href="clustering-no-jerárquico.html#cb337-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb337-16"><a href="clustering-no-jerárquico.html#cb337-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Imprimir la matriz de distancias</span></span>
+<span id="cb337-17"><a href="clustering-no-jerárquico.html#cb337-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(dist_cor[<span class="dv">0</span>:<span class="dv">7</span>, <span class="dv">0</span>:<span class="dv">7</span>], <span class="dv">1</span>))</span></code></pre></div>
+<pre><code>## [[0.  0.7 1.4 0.1 1.9 1.7 1.7]
+##  [0.7 0.  0.8 0.4 0.8 0.5 1.9]
+##  [1.4 0.8 0.  1.2 0.3 0.6 0.8]
+##  [0.1 0.4 1.2 0.  1.6 1.4 1.9]
+##  [1.9 0.8 0.3 1.6 0.  0.1 0.7]
+##  [1.7 0.5 0.6 1.4 0.1 0.  1. ]
+##  [1.7 1.9 0.8 1.9 0.7 1.  0. ]]</code></pre>
+</div>
+<div id="visualización-de-distancias" class="section level3 hasAnchor" number="9.1.2">
+<h3><span class="header-section-number">9.1.2</span> Visualización de distancias<a href="clustering-no-jerárquico.html#visualización-de-distancias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En cualquier análisis, es de gran valor contar con un gráfico que permita conocer de manera práctica y simple el resumen de distancias. Un mapa de calor es una solución bastante útil, el cual representará de en una escala de color a los elementos cerca y lejos.</p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb339-1"><a href="clustering-no-jerárquico.html#cb339-1" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb339-2"><a href="clustering-no-jerárquico.html#cb339-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>))  </span></code></pre></div>
+<pre><code>## &lt;Figure size 800x800 with 0 Axes&gt;</code></pre>
+<div class="sourceCode" id="cb341"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb341-1"><a href="clustering-no-jerárquico.html#cb341-1" aria-hidden="true" tabindex="-1"></a>vat(dist_cor, figure_size <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb341-2"><a href="clustering-no-jerárquico.html#cb341-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&#39;Gráfico VAT (Visual Assessment of Cluster Tendency)&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 1.0, &#39;Gráfico VAT (Visual Assessment of Cluster Tendency)&#39;)</code></pre>
+<div class="sourceCode" id="cb343"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb343-1"><a href="clustering-no-jerárquico.html#cb343-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-251-1.png" width="384" /></p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb344-1"><a href="clustering-no-jerárquico.html#cb344-1" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb344-2"><a href="clustering-no-jerárquico.html#cb344-2" aria-hidden="true" tabindex="-1"></a>ivat(dist_cor, figure_size <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb344-3"><a href="clustering-no-jerárquico.html#cb344-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&#39;Gráfico VAT mejorado&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 1.0, &#39;Gráfico VAT mejorado&#39;)</code></pre>
+<div class="sourceCode" id="cb346"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb346-1"><a href="clustering-no-jerárquico.html#cb346-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-251-2.png" width="384" /><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-251-3.png" width="384" /></p>
+<p>La intensidad del color es proporcional al valor de similaridad entre observaciones.
+Cuando la distancia es cero, el color es negro y cuando la distancia es amplia, el color es blanco. Los elementos que pertenecen a un mismo cluster se muestran en orden consecutivo.</p>
+</div>
+</div>
+<div id="tendencia-de-factibilidad" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Tendencia de factibilidad<a href="clustering-no-jerárquico.html#tendencia-de-factibilidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Este análisis es considerado como la evaluación de factibilidad de implementar análisis de clustering. Antes de aplicar cualquier técnica de clustering vale la pena <strong>evaluar si el conjunto de datos contiene clusters naturales significativos</strong> (i.e. estructuras no aleatorias) o no. En caso de que sí existan estructuras conglomeradas naturales, se deberá proceder a identificar el número de clusters a extraer.</p>
+<p><img src="img/09-not-hclus/14-blindly_analysis.jpg" width="600pt" style="display: block; margin: auto;" /></p>
+<p>A diferencia de otros tipos de análisis, una desventaja que tiene el análisis de clustering es que en todo momento regresarán clusters incluso cuando los datos no contengan tal estructura, por lo que si <strong>ciegamente</strong> se implementa un método de clustering, este dividirá los datos en clusters debido a que es lo esperado a realizar.</p>
+<div class="sourceCode" id="cb347"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb347-1"><a href="clustering-no-jerárquico.html#cb347-1" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> pd.DataFrame(load_iris().data, columns<span class="op">=</span>load_iris().feature_names)</span>
+<span id="cb347-2"><a href="clustering-no-jerárquico.html#cb347-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb347-3"><a href="clustering-no-jerárquico.html#cb347-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar un DataFrame aleatorio con las mismas dimensiones que iris</span></span>
+<span id="cb347-4"><a href="clustering-no-jerárquico.html#cb347-4" aria-hidden="true" tabindex="-1"></a>random_df <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb347-5"><a href="clustering-no-jerárquico.html#cb347-5" aria-hidden="true" tabindex="-1"></a>  np.random.uniform(</span>
+<span id="cb347-6"><a href="clustering-no-jerárquico.html#cb347-6" aria-hidden="true" tabindex="-1"></a>    iris.<span class="bu">min</span>(axis<span class="op">=</span><span class="dv">0</span>), </span>
+<span id="cb347-7"><a href="clustering-no-jerárquico.html#cb347-7" aria-hidden="true" tabindex="-1"></a>    iris.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">0</span>), </span>
+<span id="cb347-8"><a href="clustering-no-jerárquico.html#cb347-8" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span>iris.shape),</span>
+<span id="cb347-9"><a href="clustering-no-jerárquico.html#cb347-9" aria-hidden="true" tabindex="-1"></a>    columns<span class="op">=</span>load_iris().feature_names</span>
+<span id="cb347-10"><a href="clustering-no-jerárquico.html#cb347-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb347-11"><a href="clustering-no-jerárquico.html#cb347-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb347-12"><a href="clustering-no-jerárquico.html#cb347-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> iris.copy()</span></code></pre></div>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-253-1.png" width="672" /></p>
+<p>Se comienza con una evaluación visual sobre los datos para evaluar la significancia de los clusters. Debido a que los más probable es que los datos tengan más de dos dimensiones, se aprovecha el análisis de componentes principales para representar los datos en un espacio de dimensión menor.</p>
+<div class="sourceCode" id="cb348"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb348-1"><a href="clustering-no-jerárquico.html#cb348-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> patchworklib <span class="im">as</span> pw</span>
+<span id="cb348-2"><a href="clustering-no-jerárquico.html#cb348-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb348-3"><a href="clustering-no-jerárquico.html#cb348-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb348-4"><a href="clustering-no-jerárquico.html#cb348-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb348-5"><a href="clustering-no-jerárquico.html#cb348-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb348-6"><a href="clustering-no-jerárquico.html#cb348-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_pca(data, title):</span>
+<span id="cb348-7"><a href="clustering-no-jerárquico.html#cb348-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Escala los datos utilizando StandardScaler</span></span>
+<span id="cb348-8"><a href="clustering-no-jerárquico.html#cb348-8" aria-hidden="true" tabindex="-1"></a>  scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb348-9"><a href="clustering-no-jerárquico.html#cb348-9" aria-hidden="true" tabindex="-1"></a>  data_scaled <span class="op">=</span> scaler.fit_transform(data)</span>
+<span id="cb348-10"><a href="clustering-no-jerárquico.html#cb348-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb348-11"><a href="clustering-no-jerárquico.html#cb348-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Realiza el análisis de componentes principales (PCA)</span></span>
+<span id="cb348-12"><a href="clustering-no-jerárquico.html#cb348-12" aria-hidden="true" tabindex="-1"></a>  pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb348-13"><a href="clustering-no-jerárquico.html#cb348-13" aria-hidden="true" tabindex="-1"></a>  principal_components <span class="op">=</span> pca.fit_transform(data_scaled)</span>
+<span id="cb348-14"><a href="clustering-no-jerárquico.html#cb348-14" aria-hidden="true" tabindex="-1"></a>  df_pca <span class="op">=</span> pd.DataFrame(data<span class="op">=</span>principal_components, columns<span class="op">=</span>[<span class="st">&#39;PC1&#39;</span>, <span class="st">&#39;PC2&#39;</span>])</span>
+<span id="cb348-15"><a href="clustering-no-jerárquico.html#cb348-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb348-16"><a href="clustering-no-jerárquico.html#cb348-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(</span>
+<span id="cb348-17"><a href="clustering-no-jerárquico.html#cb348-17" aria-hidden="true" tabindex="-1"></a>      ggplot(df_pca, aes(x<span class="op">=</span><span class="st">&#39;PC1&#39;</span>, y<span class="op">=</span><span class="st">&#39;PC2&#39;</span>))</span>
+<span id="cb348-18"><a href="clustering-no-jerárquico.html#cb348-18" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> geom_point()</span>
+<span id="cb348-19"><a href="clustering-no-jerárquico.html#cb348-19" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> labs(title<span class="op">=</span>title)</span>
+<span id="cb348-20"><a href="clustering-no-jerárquico.html#cb348-20" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> theme_classic()</span>
+<span id="cb348-21"><a href="clustering-no-jerárquico.html#cb348-21" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-254-3.png" width="96" /></p>
+<div class="sourceCode" id="cb349"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb349-1"><a href="clustering-no-jerárquico.html#cb349-1" aria-hidden="true" tabindex="-1"></a>iris_plot <span class="op">=</span> plot_pca(df, <span class="st">&quot;PCA - Iris data&quot;</span>)</span>
+<span id="cb349-2"><a href="clustering-no-jerárquico.html#cb349-2" aria-hidden="true" tabindex="-1"></a>random_plot <span class="op">=</span> plot_pca(random_df, <span class="st">&quot;PCA - Random data&quot;</span>)</span>
+<span id="cb349-3"><a href="clustering-no-jerárquico.html#cb349-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb349-4"><a href="clustering-no-jerárquico.html#cb349-4" aria-hidden="true" tabindex="-1"></a>iris_plot2 <span class="op">=</span> pw.load_ggplot(iris_plot, figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">4</span>))</span>
+<span id="cb349-5"><a href="clustering-no-jerárquico.html#cb349-5" aria-hidden="true" tabindex="-1"></a>random_plot2 <span class="op">=</span> pw.load_ggplot(random_plot, figsize<span class="op">=</span>(<span class="dv">4</span>,<span class="dv">4</span>))</span>
+<span id="cb349-6"><a href="clustering-no-jerárquico.html#cb349-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb349-7"><a href="clustering-no-jerárquico.html#cb349-7" aria-hidden="true" tabindex="-1"></a>iris_plot_vs_random_plot <span class="op">=</span> (iris_plot2<span class="op">|</span>random_plot2)</span>
+<span id="cb349-8"><a href="clustering-no-jerárquico.html#cb349-8" aria-hidden="true" tabindex="-1"></a>iris_plot_vs_random_plot.savefig(<span class="st">&quot;img/09-not-hclus/iris_plot_vs_random_plot2.png&quot;</span>)</span></code></pre></div>
+<p><img src="img/09-not-hclus/iris_plot_vs_random_plot2.png" width="600pt" style="display: block; margin: auto;" /></p>
+<p>Puede observarse en el primer gráfico que, al menos existen 2 clusters significativos, con posibilidad de que sean 3. A diferencia del gráfico de la derecha que no muestra una tendencia en la estructura conglomerativa.</p>
+<p>Es sumamente importante realizar esta evaluación porque</p>
+<div class="sourceCode" id="cb350"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb350-1"><a href="clustering-no-jerárquico.html#cb350-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb350-2"><a href="clustering-no-jerárquico.html#cb350-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.cluster.hierarchy <span class="im">import</span> dendrogram, linkage</span>
+<span id="cb350-3"><a href="clustering-no-jerárquico.html#cb350-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb350-4"><a href="clustering-no-jerárquico.html#cb350-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb350-5"><a href="clustering-no-jerárquico.html#cb350-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb350-6"><a href="clustering-no-jerárquico.html#cb350-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb350-7"><a href="clustering-no-jerárquico.html#cb350-7" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb350-8"><a href="clustering-no-jerárquico.html#cb350-8" aria-hidden="true" tabindex="-1"></a>random_df_scaled <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb350-9"><a href="clustering-no-jerárquico.html#cb350-9" aria-hidden="true" tabindex="-1"></a>  data <span class="op">=</span> scaler.fit_transform(random_df), </span>
+<span id="cb350-10"><a href="clustering-no-jerárquico.html#cb350-10" aria-hidden="true" tabindex="-1"></a>  columns <span class="op">=</span> random_df.columns).iloc[:,:<span class="dv">2</span>]</span>
+<span id="cb350-11"><a href="clustering-no-jerárquico.html#cb350-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb350-12"><a href="clustering-no-jerárquico.html#cb350-12" aria-hidden="true" tabindex="-1"></a><span class="co"># K-means clustering</span></span>
+<span id="cb350-13"><a href="clustering-no-jerárquico.html#cb350-13" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">12345</span>)</span>
+<span id="cb350-14"><a href="clustering-no-jerárquico.html#cb350-14" aria-hidden="true" tabindex="-1"></a>km_res2 <span class="op">=</span> kmeans.fit_predict(random_df_scaled)</span>
+<span id="cb350-15"><a href="clustering-no-jerárquico.html#cb350-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb350-16"><a href="clustering-no-jerárquico.html#cb350-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un DataFrame con los resultados del clustering</span></span>
+<span id="cb350-17"><a href="clustering-no-jerárquico.html#cb350-17" aria-hidden="true" tabindex="-1"></a>random_df_scaled[<span class="st">&#39;cluster&#39;</span>] <span class="op">=</span> km_res2</span>
+<span id="cb350-18"><a href="clustering-no-jerárquico.html#cb350-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb350-19"><a href="clustering-no-jerárquico.html#cb350-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Elegir una paleta de colores con tres colores contrastantes</span></span>
+<span id="cb350-20"><a href="clustering-no-jerárquico.html#cb350-20" aria-hidden="true" tabindex="-1"></a>palette <span class="op">=</span> sns.color_palette(<span class="st">&quot;husl&quot;</span>, <span class="dv">3</span>)</span>
+<span id="cb350-21"><a href="clustering-no-jerárquico.html#cb350-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb350-22"><a href="clustering-no-jerárquico.html#cb350-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de puntos coloreados por clúster utilizando seaborn</span></span>
+<span id="cb350-23"><a href="clustering-no-jerárquico.html#cb350-23" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb350-24"><a href="clustering-no-jerárquico.html#cb350-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb350-25"><a href="clustering-no-jerárquico.html#cb350-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot con tres colores contrastantes</span></span>
+<span id="cb350-26"><a href="clustering-no-jerárquico.html#cb350-26" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## &lt;Axes: &gt;</code></pre>
+<div class="sourceCode" id="cb352"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb352-1"><a href="clustering-no-jerárquico.html#cb352-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(</span>
+<span id="cb352-2"><a href="clustering-no-jerárquico.html#cb352-2" aria-hidden="true" tabindex="-1"></a>  data<span class="op">=</span>random_df_scaled, </span>
+<span id="cb352-3"><a href="clustering-no-jerárquico.html#cb352-3" aria-hidden="true" tabindex="-1"></a>  x<span class="op">=</span><span class="st">&#39;sepal length (cm)&#39;</span>, </span>
+<span id="cb352-4"><a href="clustering-no-jerárquico.html#cb352-4" aria-hidden="true" tabindex="-1"></a>  y<span class="op">=</span><span class="st">&#39;sepal width (cm)&#39;</span>, </span>
+<span id="cb352-5"><a href="clustering-no-jerárquico.html#cb352-5" aria-hidden="true" tabindex="-1"></a>  hue<span class="op">=</span><span class="st">&#39;cluster&#39;</span>, </span>
+<span id="cb352-6"><a href="clustering-no-jerárquico.html#cb352-6" aria-hidden="true" tabindex="-1"></a>  palette<span class="op">=</span>palette</span>
+<span id="cb352-7"><a href="clustering-no-jerárquico.html#cb352-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## &lt;Axes: xlabel=&#39;sepal length (cm)&#39;, ylabel=&#39;sepal width (cm)&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb354"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb354-1"><a href="clustering-no-jerárquico.html#cb354-1" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;K-Means Clustering&quot;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 1.0, &#39;K-Means Clustering&#39;)</code></pre>
+<div class="sourceCode" id="cb356"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb356-1"><a href="clustering-no-jerárquico.html#cb356-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dendrograma jerárquico utilizando scipy</span></span>
+<span id="cb356-2"><a href="clustering-no-jerárquico.html#cb356-2" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## &lt;Axes: &gt;</code></pre>
+<div class="sourceCode" id="cb358"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb358-1"><a href="clustering-no-jerárquico.html#cb358-1" aria-hidden="true" tabindex="-1"></a>linkage_matrix <span class="op">=</span> linkage(random_df_scaled, method<span class="op">=</span><span class="st">&#39;ward&#39;</span>)</span>
+<span id="cb358-2"><a href="clustering-no-jerárquico.html#cb358-2" aria-hidden="true" tabindex="-1"></a>dendro <span class="op">=</span> dendrogram(linkage_matrix, no_labels<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb358-3"><a href="clustering-no-jerárquico.html#cb358-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Dendrograma&quot;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 1.0, &#39;Dendrograma&#39;)</code></pre>
+<div class="sourceCode" id="cb360"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb360-1"><a href="clustering-no-jerárquico.html#cb360-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el diseño y mostrar la figura</span></span>
+<span id="cb360-2"><a href="clustering-no-jerárquico.html#cb360-2" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb360-3"><a href="clustering-no-jerárquico.html#cb360-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-257-1.png" width="672" /></p>
+<p>Puede observarse que ambos métodos imponen una segmentación a los datos que son <strong>uniformemente aleatorios</strong> y que no contienen ninguna segmentación natural. Por esta razón, <strong>siempre</strong> deberá realizarse este análisis previamente y elegir si se desea proceder con el análisis.</p>
+<p>El método anterior fue totalmente gráfico. Se procede a continuación a mostrar una metodología estadística para determinar la factibilidad de implementar análisis de clustering.</p>
+<p><strong>El estadístico Hopkins</strong> es usado para evaluar la tendencia de clustering en un conjunto de datos. Mide la probabilidad de que un conjunto de datos dado sea generado por una distribución uniforme. En otras palabras, <strong>prueba la aleatoriedad espacial de los datos</strong>. Por ejemplo, Sea <em>D</em> un conjunto de datos real, el estadístico de Hopkins puede ser calculado de la siguiente forma:</p>
+<div class="infobox note">
+<p><strong>Proceso:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Muestrear aleatoriamente <em>n</em> puntos <span class="math inline">\((p_1, p_2, p_3, ..., p_n)\)</span> de D</p></li>
+<li><p>Para cada punto <span class="math inline">\(p_i \in D\)</span>, encontrar su vecino más cercano <span class="math inline">\(p_j\)</span>; luego calcular la distancia entre <span class="math inline">\(p_i\)</span> y <span class="math inline">\(p_j\)</span> y denotarla como <span class="math inline">\(x_i = dist(p_i, p_j)\)</span></p></li>
+<li><p>Generar un conjunto de datos simulado <span class="math inline">\((random_D)\)</span> tomado de una distribución uniformemente aleatoria con <em>n</em> puntos <span class="math inline">\((q_1, q_2, q_3, ..., q_n)\)</span> y de la misma variación que la original del conjunto <em>D</em>.</p></li>
+<li><p>Para cada punto <span class="math inline">\(q_i \in random_D\)</span>, encontrar su vecino más cercano <span class="math inline">\(q_j\)</span> en <em>D</em>; posteriormente, calcular la distancia entre <span class="math inline">\(q_i\)</span> y <span class="math inline">\(q_j\)</span> y denotarla como <span class="math inline">\(y_i=dist(q_i, q_j)\)</span>.</p></li>
+<li><p>Calcular el <strong>estadístico de Hopkins</strong> como la distancia media más cercana de vecinos en los datos aleatorios y dividirlos por la suma de las distancias medias de vecinos más cercanos de los datos reales y aleatorios:</p></li>
+</ol>
+<p><span class="math display">\[H=\frac{\sum_{i=1}^{n}{y_i}}{\sum_{i=1}^{n}{x_i} + \sum_{i=1}^{n}{y_i}}\]</span></p>
+</div>
+<p>Un valor cercano a 0.5 significa que <span class="math inline">\(\sum_{i=1}^{n}{y_i}\)</span> y <span class="math inline">\(\sum_{i=1}^{n}{x_i}\)</span> son similares uno del otro y por lo tanto, <em>D</em> es distribuida aleatoriamente.</p>
+<p>Por lo tanto, las hipótesis nula y alternativa son definidas como sigue:</p>
+<blockquote>
+<ul>
+<li><p>Hipótesis Nula: El conjunto de datos <em>D</em> es uniformemente distribuido (sin clusters significativos).</p></li>
+<li><p>Hipótesis Alternativa: El conjunto de datos <em>D</em> no es distribuido uniformemente (contiene clusters significativos).</p></li>
+</ul>
+</blockquote>
+<p><strong>Cuando el estadístico de Hopkins tiene valores cercanos a cero, entonces puede rechazarse la hipótesis nula y concluir que el conjunto de datos <em>D</em> tiene datos conglomerables significativos.</strong></p>
+<div class="sourceCode" id="cb361"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb361-1"><a href="clustering-no-jerárquico.html#cb361-1" aria-hidden="true" tabindex="-1"></a>df_scaled <span class="op">=</span> scaler.fit_transform(df)</span>
+<span id="cb361-2"><a href="clustering-no-jerárquico.html#cb361-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb361-3"><a href="clustering-no-jerárquico.html#cb361-3" aria-hidden="true" tabindex="-1"></a>hopkins(df_scaled, df_scaled.shape[<span class="dv">0</span>])</span></code></pre></div>
+<pre><code>## 0.1824699352503313</code></pre>
+<p><strong>Este valor sugiere rechazar la hipótesis nula en favor de la alternativa.</strong></p>
+<p>Por último, se compararán otros 2 gráficos con la disimilitud de los dos conjuntos de datos. La metodología de este gráfico lleva por nombre “Visual Assessment of Cluster Tendency” (VAT). Este método consiste de 3 pasos:</p>
+<ol style="list-style-type: decimal">
+<li><p>Calcula la matriz de disimilaridad (DM) entre objetos usando la distancia Euclidiana.</p></li>
+<li><p>Re-ordena la DM de forma que los elementos similares estén cercanos unos de otros. Este proceso crea una Matriz de Di-similaridad Ordenada (ODM).</p></li>
+<li><p>La ODM es mostrada como una imagen de disimilaridad ordenada, la cual es la salida visual de VAT.</p></li>
+</ol>
+<div class="sourceCode" id="cb363"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb363-1"><a href="clustering-no-jerárquico.html#cb363-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>))  </span></code></pre></div>
+<pre><code>## &lt;Figure size 800x800 with 0 Axes&gt;</code></pre>
+<div class="sourceCode" id="cb365"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb365-1"><a href="clustering-no-jerárquico.html#cb365-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Original data</span></span>
+<span id="cb365-2"><a href="clustering-no-jerárquico.html#cb365-2" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb365-3"><a href="clustering-no-jerárquico.html#cb365-3" aria-hidden="true" tabindex="-1"></a>ivat(pairwise_distances(df, metric<span class="op">=</span><span class="st">&#39;correlation&#39;</span>), figure_size <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb365-4"><a href="clustering-no-jerárquico.html#cb365-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&#39;Gráfico VAT - Datos reales&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 1.0, &#39;Gráfico VAT - Datos reales&#39;)</code></pre>
+<div class="sourceCode" id="cb367"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb367-1"><a href="clustering-no-jerárquico.html#cb367-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-259-3.png" width="384" /></p>
+<div class="sourceCode" id="cb368"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb368-1"><a href="clustering-no-jerárquico.html#cb368-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Random data</span></span>
+<span id="cb368-2"><a href="clustering-no-jerárquico.html#cb368-2" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb368-3"><a href="clustering-no-jerárquico.html#cb368-3" aria-hidden="true" tabindex="-1"></a>ivat(pairwise_distances(random_df, metric<span class="op">=</span><span class="st">&#39;correlation&#39;</span>), figure_size <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb368-4"><a href="clustering-no-jerárquico.html#cb368-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&#39;Gráfico VAT - Datos aleatorios&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 1.0, &#39;Gráfico VAT - Datos aleatorios&#39;)</code></pre>
+<div class="sourceCode" id="cb370"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb370-1"><a href="clustering-no-jerárquico.html#cb370-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-259-4.png" width="384" /><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-259-5.png" width="384" /></p>
+<p><strong>Donde:</strong></p>
+<ul>
+<li><p>Oscuro: Alta similaridad</p></li>
+<li><p>Claro: Baja similaridad</p></li>
+</ul>
+<p>La matriz de disimilaridad anterior confirma que existe una estructura de cluster en el conjunto de datos Iris, pero no en el aleatorio.</p>
+<p>La técnica <em>VAT</em> detecta la tendencia de clustering de forma visual al contar el número de bloques cuadradas sobre la diagonal en la imagen VAT.</p>
+</div>
+<div id="k---means" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> K - means<a href="clustering-no-jerárquico.html#k---means" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La agrupación en grupos con <em>K-means</em> es uno de los algoritmos de aprendizaje de máquina no supervisados más simples y populares.</p>
+<p>K-medias es un método de <strong>agrupamiento</strong>, que tiene como objetivo la partición de un conjunto de n observaciones en k grupos en el que <strong>cada observación pertenece al grupo cuyo valor medio es más cercano</strong>.</p>
+<p>Un <em>cluster</em> se refiere a una colección de puntos de datos agregados a a un grupo debido a ciertas similitudes.</p>
+<p><img src="img/09-not-hclus/3-12-1-kmeans.jpeg" width="500pt" height="300pt" style="display: block; margin: auto;" /></p>
+<div id="ajuste-de-modelo-cómo-funciona-el-algortimo" class="section level3 hasAnchor" number="9.3.1">
+<h3><span class="header-section-number">9.3.1</span> Ajuste de modelo: ¿Cómo funciona el algortimo?<a href="clustering-no-jerárquico.html#ajuste-de-modelo-cómo-funciona-el-algortimo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Paso 1:</strong> Seleccionar el número de <em>clusters</em> K</li>
+</ul>
+<p>El primer paso en <em>k-means</em> es elegir el número de conglomerados, K. Como estamos en un problema de análisis no supervisado, no hay K correcto, existen métodos para seleccionar algún K pero no hay respuesta correcta.</p>
+<ul>
+<li><strong>Paso 2:</strong> Seleccionar K puntos aleatorios de los datos como centroides.</li>
+</ul>
+<p>A continuación, seleccionamos aleatoriamente el centroide para cada grupo. Supongamos que queremos tener 2 grupos, por lo que K es igual a 2, seleccionamos aleatoriamente los centroides:</p>
+<p><img src="img/09-not-hclus/3-12-1-paso2.png" width="350pt" height="250pt" style="display: block; margin: auto;" /></p>
+<ul>
+<li><strong>Paso 3:</strong> Asignamos todos los puntos al centroide del cluster más cercano.</li>
+</ul>
+<p>Una vez que hemos inicializado los centroides, asignamos cada punto al centroide del cluster más cercano:</p>
+<p><img src="img/09-not-hclus/3-12-1-paso3.png" width="350pt" height="250pt" style="display: block; margin: auto;" /></p>
+<ul>
+<li><strong>Paso 4:</strong> Volvemos a calcular los centroides de los <em>clusters</em> recién formados.</li>
+</ul>
+<p>Ahora, una vez que hayamos asignado todos los puntos a cualquiera de los grupos, el siguiente paso es calcular los centroides de los grupos recién formados:</p>
+<p><img src="img/09-not-hclus/3-12-1-paso4.png" width="350pt" height="250pt" style="display: block; margin: auto;" /></p>
+<ul>
+<li><strong>Paso 5:</strong> Repetir los pasos 3 y 4.</li>
+</ul>
+<p><img src="img/09-not-hclus/3-12-1-paso5.png" width="350pt" height="250pt" style="display: block; margin: auto;" /></p>
+<p><img src="img/09-not-hclus/kmeans%20step.png" width="550pt" height="450pt" style="display: block; margin: auto;" /></p>
+<ul>
+<li><strong>Criterios de paro:</strong></li>
+</ul>
+<p>Existen tres criterios de paro para detener el algoritmo:</p>
+<ol style="list-style-type: decimal">
+<li>Los centroides de los grupos recién formados no cambian:</li>
+</ol>
+<p>Podemos detener el algoritmo si <strong>los centroides no cambian</strong>. Incluso después de múltiples iteraciones, si obtenemos los mismos centroides para todos los clusters, podemos decir que el algoritmo no está aprendiendo ningún patrón nuevo y es una señal para detener el entrenamiento.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Los puntos permanecen en el mismo grupo:</li>
+</ol>
+<p>Otra señal clara de que debemos detener el proceso de entrenamiento si <strong>los puntos permanecen en el mismo cluster</strong> incluso después de entrenar el algoritmo para múltiples iteraciones.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Se alcanza el número máximo de iteraciones:</li>
+</ol>
+<p>Finalmente, podemos detener el entrenamiento si se alcanza el número <strong>máximo de iteraciones</strong>. Supongamos que hemos establecido el número de iteraciones en 100. El proceso se repetirá durante 100 iteraciones antes de detenerse.</p>
+</div>
+<div id="calidad-de-ajuste" class="section level3 hasAnchor" number="9.3.2">
+<h3><span class="header-section-number">9.3.2</span> Calidad de ajuste<a href="clustering-no-jerárquico.html#calidad-de-ajuste" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="inercia" class="section level4 hasAnchor" number="9.3.2.1">
+<h4><span class="header-section-number">9.3.2.1</span> Inercia<a href="clustering-no-jerárquico.html#inercia" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>La idea detrás de la agrupación de k-medias consiste en definir agrupaciones de modo que se minimice la variación total dentro de la agrupación (conocida como <em>within cluster variation</em> o <em>inertia</em>).</p>
+<p>Existen distintos algoritmos de k-medias, el algoritmo estándar es el algoritmo de Hartigan-Wong, que define <em>within cluster variation</em> como la suma de las distancias euclidianas entre los elementos y el centroide correspondiente al cuadrado:</p>
+<p><span class="math display">\[W(C_k)=\sum_{x_i \in C_k}(x_i-\mu_k)²\]</span></p>
+<p>donde <span class="math inline">\(x_i\)</span> es una observación que pertenece al <em>cluster</em> <span class="math inline">\(C_k\)</span> y <span class="math inline">\(\mu_k\)</span> es la media del <em>cluster</em> <span class="math inline">\(C_k\)</span></p>
+<p>Cada observación <span class="math inline">\(x_i\)</span> se asigna a un grupo de modo que la suma de cuadrados de la distancia de la observación a sus centroide del grupo asignado <span class="math inline">\(\mu_k\)</span> es mínima.</p>
+<p>Definimos la <em>total within cluster variation</em> total de la siguiente manera:</p>
+<p><span class="math display">\[total \quad within = \sum_{k=1}^{K}W(C_k) = \sum_{k=1}^{K}\sum_{x_i \in C_k}(x_i-\mu_k)²\]</span></p>
+</div>
+</div>
+<div id="cómo-seleccionamos-k" class="section level3 hasAnchor" number="9.3.3">
+<h3><span class="header-section-number">9.3.3</span> ¿Cómo seleccionamos K?<a href="clustering-no-jerárquico.html#cómo-seleccionamos-k" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Una de las dudas más comunes que se tienen al trabajar con K-Means es seleccionar el número correcto de clusters.</p>
+<p>El número máximo posible de conglomerados será igual al número de observaciones en el conjunto de datos.</p>
+<p>Pero entonces, ¿cómo podemos decidir el número óptimo de agrupaciones? Una cosa que podemos hacer es trazar un gráfico, también conocido como gráfica de codo, donde el eje x representará el <strong>número de conglomerados</strong> y el eje y será una métrica de evaluación, en este caso usaremos <strong>inertia</strong>.</p>
+<p>Comenzaremos con un valor de K pequeño, digamos 2. Entrenaremos el modelo usando 2 grupos, calculamos la inercia para ese modelo y, finalmente, agregamos el punto en el gráfico mencionado. Digamos que tenemos un valor de inercia de alrededor de 1000:</p>
+<p><img src="img/09-not-hclus/3-12-1-inertia1.png" width="500pt" height="400pt" style="display: block; margin: auto;" /></p>
+<p>Ahora, aumentaremos el número de conglomerados, entrenaremos el modelo nuevamente y agregaremos el valor de inercia en la gráfica con distintos números de K:</p>
+<p><img src="img/09-not-hclus/3-12-1-inertia2.png" width="500pt" height="400pt" style="display: block; margin: auto;" /></p>
+<p>Cuando cambiamos el valor de K de 2 a 4, el valor de inercia se redujo de forma muy pronunciada. Esta disminución en el valor de inercia se reduce y eventualmente se vuelve constante a medida que aumentamos más el número de grupos.</p>
+<p>Entonces, el valor de K donde esta disminución en <strong>el valor de inercia se vuelve constante</strong> se puede elegir como el valor de grupo correcto para nuestros datos.</p>
+<p><img src="img/09-not-hclus/3-12-1-inertia3.png" width="500pt" height="400pt" style="display: block; margin: auto;" /></p>
+<p>Aquí, podemos elegir cualquier número de conglomerados entre 6 y 10. Podemos tener 7, 8 o incluso 9 conglomerados. También debe tener en cuenta el costo de cálculo al decidir la cantidad de clusters. Si aumentamos el número de clusters, el costo de cálculo también aumentará. Entonces, si no tiene recursos computacionales altos, deberíamos un número menor de clusters.</p>
+</div>
+<div id="implementación-en-python-3" class="section level3 hasAnchor" number="9.3.4">
+<h3><span class="header-section-number">9.3.4</span> Implementación en Python<a href="clustering-no-jerárquico.html#implementación-en-python-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Usaremos los datos <em>USArrests</em>, que contiene estadísticas, en arrestos por cada 100,000 residentes por asalto, asesinato y violación en cada uno de los 50 estados de EE. UU. En 1973. También se da el porcentaje de la población que vive en áreas urbanas.</p>
+<div class="sourceCode" id="cb371"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb371-1"><a href="clustering-no-jerárquico.html#cb371-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb371-2"><a href="clustering-no-jerárquico.html#cb371-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb371-3"><a href="clustering-no-jerárquico.html#cb371-3" aria-hidden="true" tabindex="-1"></a>USArrests <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/USArrests.csv&quot;</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb371-4"><a href="clustering-no-jerárquico.html#cb371-4" aria-hidden="true" tabindex="-1"></a>USArrests.head()</span></code></pre></div>
+<pre><code>##             Murder  Assault  UrbanPop  Rape
+## Alabama      13.20      236        58 21.20
+## Alaska       10.00      263        48 44.50
+## Arizona       8.10      294        80 31.00
+## Arkansas      8.80      190        50 19.50
+## California    9.00      276        91 40.60</code></pre>
+<div class="sourceCode" id="cb373"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb373-1"><a href="clustering-no-jerárquico.html#cb373-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Escalar los datos</span></span>
+<span id="cb373-2"><a href="clustering-no-jerárquico.html#cb373-2" aria-hidden="true" tabindex="-1"></a>USArrests_scaled <span class="op">=</span> pd.DataFrame(data <span class="op">=</span> scale(USArrests), columns <span class="op">=</span> USArrests.columns)</span>
+<span id="cb373-3"><a href="clustering-no-jerárquico.html#cb373-3" aria-hidden="true" tabindex="-1"></a>USArrests_scaled.head()</span></code></pre></div>
+<pre><code>##    Murder  Assault  UrbanPop  Rape
+## 0    1.26     0.79     -0.53 -0.00
+## 1    0.51     1.12     -1.22  2.51
+## 2    0.07     1.49      1.01  1.05
+## 3    0.23     0.23     -1.08 -0.19
+## 4    0.28     1.28      1.78  2.09</code></pre>
+<p>Usaremos la función <em>KMeans()</em>, los siguientes parámetros son los más usados:</p>
+<ul>
+<li><p><strong>n_clusters:</strong> Número de clústeres que se deben formar. Este es un parámetro crítico y debes ajustarlo según el conocimiento del dominio o mediante técnicas como el codo (elbow method) para encontrar el número óptimo de clústeres.</p></li>
+<li><p><strong>init:</strong> Método de inicialización de centroides. ‘k-means++’ es una opción común y efectiva.</p></li>
+<li><p><strong>n_init:</strong> Número de veces que se ejecuta el algoritmo con diferentes centroides iniciales. El resultado final será el mejor de estas ejecuciones.</p></li>
+<li><p><strong>max_iter:</strong> Número máximo de iteraciones del algoritmo en una sola ejecución. Es importante establecer un límite para evitar bucles infinitos.</p></li>
+<li><p><strong>tol:</strong> Tolerancia para declarar la convergencia. Cuando el cambio en los centroides es menor que tol, se considera que el algoritmo ha convergido.</p></li>
+<li><p><strong>random_state:</strong> Semilla para la reproducibilidad de los resultados.</p></li>
+<li><p><strong>fit:</strong> Método que ajusta el modelo a los datos.</p></li>
+</ul>
+<p>En el siguiente ejemplo se agruparán los datos en seis grupos (<em>n_centers</em> = 3). Como se había mencionado, la función KMeans también tiene una opción <em>n_init</em> que intenta múltiples configuraciones iniciales y regresa la mejor, agregar n_init = 25 generará 25 configuraciones iniciales.</p>
+<div class="sourceCode" id="cb375"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb375-1"><a href="clustering-no-jerárquico.html#cb375-1" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(</span>
+<span id="cb375-2"><a href="clustering-no-jerárquico.html#cb375-2" aria-hidden="true" tabindex="-1"></a>    n_clusters<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb375-3"><a href="clustering-no-jerárquico.html#cb375-3" aria-hidden="true" tabindex="-1"></a>    init<span class="op">=</span><span class="st">&#39;k-means++&#39;</span>,</span>
+<span id="cb375-4"><a href="clustering-no-jerárquico.html#cb375-4" aria-hidden="true" tabindex="-1"></a>    n_init<span class="op">=</span><span class="dv">25</span>,</span>
+<span id="cb375-5"><a href="clustering-no-jerárquico.html#cb375-5" aria-hidden="true" tabindex="-1"></a>    max_iter<span class="op">=</span><span class="dv">300</span>,</span>
+<span id="cb375-6"><a href="clustering-no-jerárquico.html#cb375-6" aria-hidden="true" tabindex="-1"></a>    tol<span class="op">=</span><span class="fl">1e-4</span>,</span>
+<span id="cb375-7"><a href="clustering-no-jerárquico.html#cb375-7" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb375-8"><a href="clustering-no-jerárquico.html#cb375-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb375-9"><a href="clustering-no-jerárquico.html#cb375-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb375-10"><a href="clustering-no-jerárquico.html#cb375-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo a los datos</span></span>
+<span id="cb375-11"><a href="clustering-no-jerárquico.html#cb375-11" aria-hidden="true" tabindex="-1"></a>kmeans.fit(USArrests_scaled)</span></code></pre></div>
+<pre><code>## KMeans(n_clusters=2, n_init=25, random_state=42)</code></pre>
+<div class="sourceCode" id="cb377"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb377-1"><a href="clustering-no-jerárquico.html#cb377-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener las etiquetas de los clústeres asignadas a cada punto de datos</span></span>
+<span id="cb377-2"><a href="clustering-no-jerárquico.html#cb377-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> kmeans.labels_</span>
+<span id="cb377-3"><a href="clustering-no-jerárquico.html#cb377-3" aria-hidden="true" tabindex="-1"></a>labels</span></code></pre></div>
+<pre><code>## array([1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1,
+##        0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
+##        0, 0, 0, 0, 0, 0], dtype=int32)</code></pre>
+<div class="sourceCode" id="cb379"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb379-1"><a href="clustering-no-jerárquico.html#cb379-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener las coordenadas de los centroides finales</span></span>
+<span id="cb379-2"><a href="clustering-no-jerárquico.html#cb379-2" aria-hidden="true" tabindex="-1"></a>centroids <span class="op">=</span> kmeans.cluster_centers_</span>
+<span id="cb379-3"><a href="clustering-no-jerárquico.html#cb379-3" aria-hidden="true" tabindex="-1"></a>centroids</span></code></pre></div>
+<pre><code>## array([[-0.67675778, -0.68274685, -0.13306084, -0.57037591],
+##        [ 1.01513667,  1.02412028,  0.19959126,  0.85556386]])</code></pre>
+<div class="sourceCode" id="cb381"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb381-1"><a href="clustering-no-jerárquico.html#cb381-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener la inercia (suma de las distancias cuadradas de cada punto al centroide de su clúster)</span></span>
+<span id="cb381-2"><a href="clustering-no-jerárquico.html#cb381-2" aria-hidden="true" tabindex="-1"></a>inertia <span class="op">=</span> kmeans.inertia_</span>
+<span id="cb381-3"><a href="clustering-no-jerárquico.html#cb381-3" aria-hidden="true" tabindex="-1"></a>inertia</span></code></pre></div>
+<pre><code>## 104.96163315756871</code></pre>
+<p>La salida de kmeans contiene la siguiente información:</p>
+<ul>
+<li><p><strong>labels_:</strong> Atributo que contiene las etiquetas de los clústeres asignadas a cada punto de datos.</p></li>
+<li><p><strong>cluster_centers_:</strong> Atributo que contiene las coordenadas de los centroides finales de los clústeres.</p></li>
+<li><p><strong>inertia_:</strong> Atributo que contiene la inercia, que es la suma de las distancias cuadradas de cada punto al centroide de su clúster.</p></li>
+</ul>
+<div class="sourceCode" id="cb383"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb383-1"><a href="clustering-no-jerárquico.html#cb383-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Realiza el análisis de componentes principales (PCA)</span></span>
+<span id="cb383-2"><a href="clustering-no-jerárquico.html#cb383-2" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb383-3"><a href="clustering-no-jerárquico.html#cb383-3" aria-hidden="true" tabindex="-1"></a>principal_components <span class="op">=</span> pca.fit_transform(USArrests_scaled)</span>
+<span id="cb383-4"><a href="clustering-no-jerárquico.html#cb383-4" aria-hidden="true" tabindex="-1"></a>df_pca <span class="op">=</span> pd.DataFrame(data<span class="op">=</span>principal_components, columns<span class="op">=</span>[<span class="st">&#39;PC1&#39;</span>, <span class="st">&#39;PC2&#39;</span>])</span>
+<span id="cb383-5"><a href="clustering-no-jerárquico.html#cb383-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb383-6"><a href="clustering-no-jerárquico.html#cb383-6" aria-hidden="true" tabindex="-1"></a>df_pca[<span class="st">&quot;cluster2&quot;</span>] <span class="op">=</span> kmeans.labels_<span class="op">+</span><span class="dv">1</span></span>
+<span id="cb383-7"><a href="clustering-no-jerárquico.html#cb383-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb383-8"><a href="clustering-no-jerárquico.html#cb383-8" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb383-9"><a href="clustering-no-jerárquico.html#cb383-9" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span><span class="st">&quot;PC1&quot;</span>, y<span class="op">=</span><span class="st">&quot;PC2&quot;</span>, hue<span class="op">=</span><span class="st">&quot;cluster2&quot;</span>, data<span class="op">=</span>df_pca, palette<span class="op">=</span><span class="st">&quot;rainbow&quot;</span>)</span></code></pre></div>
+<pre><code>## &lt;Axes: xlabel=&#39;PC1&#39;, ylabel=&#39;PC2&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb385"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb385-1"><a href="clustering-no-jerárquico.html#cb385-1" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Visualización de los resultados de k-means&quot;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 1.0, &#39;Visualización de los resultados de k-means&#39;)</code></pre>
+<div class="sourceCode" id="cb387"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb387-1"><a href="clustering-no-jerárquico.html#cb387-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-271-1.png" width="672" /></p>
+<p>Debido a que el número de conglomerados (K) debe establecerse antes de iniciar el algoritmo, a menudo es recomendado utilizar varios valores diferentes de K y examinar las diferencias en los resultados. Podemos ejecutar el mismo proceso para 3, 4 y 5 clusters, y los resultados se muestran en la siguiente figura:</p>
+<div class="sourceCode" id="cb388"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb388-1"><a href="clustering-no-jerárquico.html#cb388-1" aria-hidden="true" tabindex="-1"></a>k3 <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, n_init <span class="op">=</span> <span class="dv">25</span>, random_state<span class="op">=</span><span class="dv">333</span>)</span>
+<span id="cb388-2"><a href="clustering-no-jerárquico.html#cb388-2" aria-hidden="true" tabindex="-1"></a>k3.fit(USArrests_scaled)</span></code></pre></div>
+<pre><code>## KMeans(n_clusters=3, n_init=25, random_state=333)</code></pre>
+<div class="sourceCode" id="cb390"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb390-1"><a href="clustering-no-jerárquico.html#cb390-1" aria-hidden="true" tabindex="-1"></a>df_pca[<span class="st">&quot;cluster3&quot;</span>] <span class="op">=</span> k3.labels_ <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb390-2"><a href="clustering-no-jerárquico.html#cb390-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb390-3"><a href="clustering-no-jerárquico.html#cb390-3" aria-hidden="true" tabindex="-1"></a>k4 <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">4</span>, n_init <span class="op">=</span> <span class="dv">25</span>, random_state<span class="op">=</span><span class="dv">444</span>)</span>
+<span id="cb390-4"><a href="clustering-no-jerárquico.html#cb390-4" aria-hidden="true" tabindex="-1"></a>k4.fit(USArrests_scaled)</span></code></pre></div>
+<pre><code>## KMeans(n_clusters=4, n_init=25, random_state=444)</code></pre>
+<div class="sourceCode" id="cb392"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb392-1"><a href="clustering-no-jerárquico.html#cb392-1" aria-hidden="true" tabindex="-1"></a>df_pca[<span class="st">&quot;cluster4&quot;</span>] <span class="op">=</span> k4.labels_ <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb392-2"><a href="clustering-no-jerárquico.html#cb392-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb392-3"><a href="clustering-no-jerárquico.html#cb392-3" aria-hidden="true" tabindex="-1"></a>k5 <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">5</span>, n_init <span class="op">=</span> <span class="dv">25</span>, random_state<span class="op">=</span><span class="dv">555</span>)</span>
+<span id="cb392-4"><a href="clustering-no-jerárquico.html#cb392-4" aria-hidden="true" tabindex="-1"></a>k5.fit(USArrests_scaled)</span></code></pre></div>
+<pre><code>## KMeans(n_clusters=5, n_init=25, random_state=555)</code></pre>
+<div class="sourceCode" id="cb394"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb394-1"><a href="clustering-no-jerárquico.html#cb394-1" aria-hidden="true" tabindex="-1"></a>df_pca[<span class="st">&quot;cluster5&quot;</span>] <span class="op">=</span> k5.labels_ <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb394-2"><a href="clustering-no-jerárquico.html#cb394-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb394-3"><a href="clustering-no-jerárquico.html#cb394-3" aria-hidden="true" tabindex="-1"></a>df_pca.head()</span></code></pre></div>
+<pre><code>##     PC1   PC2  cluster2  cluster3  cluster4  cluster5
+## 0  0.99  1.13         2         3         3         3
+## 1  1.95  1.07         2         3         4         4
+## 2  1.76 -0.75         2         3         4         4
+## 3 -0.14  1.12         1         1         3         5
+## 4  2.52 -1.54         2         3         4         4</code></pre>
+<div class="sourceCode" id="cb396"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb396-1"><a href="clustering-no-jerárquico.html#cb396-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plydata.tidy <span class="im">import</span> pivot_longer</span>
+<span id="cb396-2"><a href="clustering-no-jerárquico.html#cb396-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plydata.one_table_verbs <span class="im">import</span> select</span>
+<span id="cb396-3"><a href="clustering-no-jerárquico.html#cb396-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb396-4"><a href="clustering-no-jerárquico.html#cb396-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb396-5"><a href="clustering-no-jerárquico.html#cb396-5" aria-hidden="true" tabindex="-1"></a>colores_por_valor <span class="op">=</span> {<span class="dv">1</span>: <span class="st">&#39;red&#39;</span>, <span class="dv">2</span>: <span class="st">&#39;green&#39;</span>, <span class="dv">3</span>: <span class="st">&#39;blue&#39;</span>, <span class="dv">4</span>: <span class="st">&#39;purple&#39;</span>, <span class="dv">5</span>: <span class="st">&#39;yellow&#39;</span>}</span>
+<span id="cb396-6"><a href="clustering-no-jerárquico.html#cb396-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb396-7"><a href="clustering-no-jerárquico.html#cb396-7" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb396-8"><a href="clustering-no-jerárquico.html#cb396-8" aria-hidden="true" tabindex="-1"></a>  df_pca <span class="op">&gt;&gt;</span></span>
+<span id="cb396-9"><a href="clustering-no-jerárquico.html#cb396-9" aria-hidden="true" tabindex="-1"></a>  pivot_longer(</span>
+<span id="cb396-10"><a href="clustering-no-jerárquico.html#cb396-10" aria-hidden="true" tabindex="-1"></a>    cols<span class="op">=</span>select(startswith<span class="op">=</span><span class="st">&#39;cluster&#39;</span>),</span>
+<span id="cb396-11"><a href="clustering-no-jerárquico.html#cb396-11" aria-hidden="true" tabindex="-1"></a>    names_to <span class="op">=</span> <span class="st">&quot;n_cluster&quot;</span>,</span>
+<span id="cb396-12"><a href="clustering-no-jerárquico.html#cb396-12" aria-hidden="true" tabindex="-1"></a>    values_to<span class="op">=</span><span class="st">&#39;value&#39;</span></span>
+<span id="cb396-13"><a href="clustering-no-jerárquico.html#cb396-13" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">&gt;&gt;</span></span>
+<span id="cb396-14"><a href="clustering-no-jerárquico.html#cb396-14" aria-hidden="true" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;PC1&quot;</span>, y <span class="op">=</span> <span class="st">&quot;PC2&quot;</span>, fill <span class="op">=</span> <span class="st">&quot;factor(value)&quot;</span>, color <span class="op">=</span> <span class="st">&quot;factor(value)&quot;</span>)) <span class="op">+</span></span>
+<span id="cb396-15"><a href="clustering-no-jerárquico.html#cb396-15" aria-hidden="true" tabindex="-1"></a>  geom_point() <span class="op">+</span></span>
+<span id="cb396-16"><a href="clustering-no-jerárquico.html#cb396-16" aria-hidden="true" tabindex="-1"></a>  scale_color_manual(values<span class="op">=</span>colores_por_valor) <span class="op">+</span></span>
+<span id="cb396-17"><a href="clustering-no-jerárquico.html#cb396-17" aria-hidden="true" tabindex="-1"></a>  facet_wrap(<span class="st">&quot;~n_cluster&quot;</span>, ncol<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb396-18"><a href="clustering-no-jerárquico.html#cb396-18" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (1280 x 960)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-273-3.png" width="614" /></p>
+<p>Recordemos que podemos usar la gráfica de codo para obtener el número óptimo de K, usaremos la función <em>fviz_nbclust()</em> para esto.</p>
+<div class="sourceCode" id="cb398"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb398-1"><a href="clustering-no-jerárquico.html#cb398-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> yellowbrick.cluster <span class="im">import</span> KElbowVisualizer</span>
+<span id="cb398-2"><a href="clustering-no-jerárquico.html#cb398-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb398-3"><a href="clustering-no-jerárquico.html#cb398-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar el modelo KMeans</span></span>
+<span id="cb398-4"><a href="clustering-no-jerárquico.html#cb398-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> KMeans(n_init <span class="op">=</span> <span class="dv">25</span>)</span>
+<span id="cb398-5"><a href="clustering-no-jerárquico.html#cb398-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb398-6"><a href="clustering-no-jerárquico.html#cb398-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear visualizador de codo para determinar el número óptimo de clústeres (K)</span></span>
+<span id="cb398-7"><a href="clustering-no-jerárquico.html#cb398-7" aria-hidden="true" tabindex="-1"></a>plt.clf()</span>
+<span id="cb398-8"><a href="clustering-no-jerárquico.html#cb398-8" aria-hidden="true" tabindex="-1"></a>visualizer <span class="op">=</span> KElbowVisualizer(model, k<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">10</span>), metric<span class="op">=</span><span class="st">&#39;distortion&#39;</span>)</span>
+<span id="cb398-9"><a href="clustering-no-jerárquico.html#cb398-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb398-10"><a href="clustering-no-jerárquico.html#cb398-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo y visualizar el codo</span></span>
+<span id="cb398-11"><a href="clustering-no-jerárquico.html#cb398-11" aria-hidden="true" tabindex="-1"></a>visualizer.fit(USArrests_scaled)</span></code></pre></div>
+<pre><code>## KElbowVisualizer(ax=&lt;Axes: &gt;, estimator=KMeans(n_clusters=9, n_init=25),
+##                  k=(1, 10))</code></pre>
+<div class="sourceCode" id="cb400"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb400-1"><a href="clustering-no-jerárquico.html#cb400-1" aria-hidden="true" tabindex="-1"></a>visualizer.show()</span></code></pre></div>
+<pre><code>## &lt;Axes: title={&#39;center&#39;: &#39;Distortion Score Elbow for KMeans Clustering&#39;}, xlabel=&#39;k&#39;, ylabel=&#39;distortion score&#39;&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-274-5.png" width="768" /></p>
+<p>Ejercicio</p>
+<p>Comparar el grado de marginación original de CONAPO con el método de kmeans y comentar las diferencias.</p>
+</div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+$('.pipehover_incremental tr').hover(function() {
+  $(this).removeClass()
+  $(this).prevAll().removeClass()
+  $(this).nextAll().removeClass()
+  $(this).addClass('hover');
+  $(this).prevAll().addClass('hover');
+  $(this).closest('div').next().find('img').attr("src", $(this).attr("link"));
+});
+
+
+$('.pipehover_select_one_row tr').hover(function() {
+  $(this).removeClass()
+  $(this).prevAll().removeClass()
+  $(this).nextAll().removeClass()
+  $(this).addClass('hover');
+  $(this).closest('div').next().find('img').attr("src", $(this).attr("link"));
+});
+
+</script>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="árboles-de-decisión.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="despedida.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["amt23_01intro2dsml_py.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

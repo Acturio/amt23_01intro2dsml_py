@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+import warnings
 
 
 #### CARGA DE DATOS ####
@@ -168,6 +169,7 @@ confusion_df = pd.DataFrame(
   )
 
 # Crear una figura utilizando Seaborn
+plt.clf();
 plt.plot();
 sns.heatmap(confusion_df, annot=True, fmt='d', cmap='Blues', cbar=False);
 
@@ -237,7 +239,7 @@ kf = KFold(n_splits=k, shuffle=True, random_state=42)
 param_grid = {
  'n_neighbors': range(2, 21),
  'weights': ['uniform', 'distance'],
- 'metric': ['euclidean', 'manhattan'],
+ 'metric': ['euclidean', 'manhattan', 'minkowski'],
  'p': [1, 2]
 }
 
@@ -261,7 +263,7 @@ pipeline = Pipeline([
       scoring=scoring, 
       refit='average_precision',
       verbose=3, 
-      n_jobs=-1)
+      n_jobs=7)
      )
 ])
 
@@ -324,7 +326,10 @@ best_estimator
 
 final_knn_pipeline = Pipeline([
    ('preprocessor', preprocessor),
-   ('regressor', best_estimator)
+   ('regressor', KNeighborsClassifier(
+     metric='euclidean', 
+     n_neighbors=16, 
+     p=1))
 ])
 
 # Entrenar el pipeline
@@ -359,6 +364,7 @@ confusion_df = pd.DataFrame(
 
 
 # Crear una figura utilizando Seaborn
+plt.clf();
 plt.plot();
 sns.heatmap(confusion_df, annot=True, fmt='d', cmap='Blues', cbar=False);
 
@@ -415,7 +421,7 @@ pr_thresholds = pd.DataFrame({
 )
 
 
-roc_auc = average_precision_score(np.where(telco_y_test == "Yes", 0, 1), y_pred)
+pr_auc = average_precision_score(np.where(telco_y_test == "Yes", 0, 1), y_pred)
 
 
 #### Importancia de variables
