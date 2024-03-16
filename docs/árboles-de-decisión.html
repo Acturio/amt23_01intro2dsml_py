@@ -1091,17 +1091,17 @@ de características en el punto de división del nodo.</p></li>
 <span id="cb322-8"><a href="árboles-de-decisión.html#cb322-8" tabindex="-1"></a>)</span>
 <span id="cb322-9"><a href="árboles-de-decisión.html#cb322-9" tabindex="-1"></a>results_reg</span></code></pre></div>
 <pre><code>##       Sale_Price  final_rf_pred
-## 390       165000      217649.96
-## 1235      124000      169965.10
-## 2288       75000      154494.01
-## 107       206000      131148.27
-## 1861      190000      256721.82
+## 390       165000      215500.09
+## 1235      124000      174032.31
+## 2288       75000      155259.89
+## 107       206000      132227.35
+## 1861      190000      262111.40
 ## ...          ...            ...
-## 116       171000      155140.75
-## 398       120500      131148.27
-## 1253      146000      217649.96
-## 78        125000      134363.63
-## 714       110000      145488.29
+## 116       171000      151438.94
+## 398       120500      132227.35
+## 1253      146000      215500.09
+## 78        125000      135466.36
+## 714       110000      142209.44
 ## 
 ## [586 rows x 2 columns]</code></pre>
 <p><strong>Métricas de desempeño</strong></p>
@@ -1123,12 +1123,12 @@ de características en el punto de división del nodo.</p></li>
 <span id="cb324-15"><a href="árboles-de-decisión.html#cb324-15" tabindex="-1"></a>metrics_df <span class="op">=</span> pd.DataFrame(metrics_data)</span>
 <span id="cb324-16"><a href="árboles-de-decisión.html#cb324-16" tabindex="-1"></a>metrics_df</span></code></pre></div>
 <pre><code>##     Metric         Value
-## 0       ME       -461.12
-## 1      MAE      42028.12
+## 0       ME       -699.80
+## 1      MAE      41967.85
 ## 2     MAPE          0.25
-## 3      MSE 3853236465.40
-## 4     RMSE      62074.44
-## 5      R^2          0.41
+## 3      MSE 3841711323.15
+## 4     RMSE      61981.54
+## 5      R^2          0.42
 ## 6  R^2 Adj          0.41</code></pre>
 <div class="sourceCode" id="cb326"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb326-1"><a href="árboles-de-decisión.html#cb326-1" tabindex="-1"></a>(</span>
 <span id="cb326-2"><a href="árboles-de-decisión.html#cb326-2" tabindex="-1"></a>  results_reg <span class="op">&gt;&gt;</span></span>
@@ -1159,7 +1159,7 @@ de características en el punto de división del nodo.</p></li>
 <span id="cb328-12"><a href="árboles-de-decisión.html#cb328-12" tabindex="-1"></a><span class="co"># Calcula la importancia relativa</span></span>
 <span id="cb328-13"><a href="árboles-de-decisión.html#cb328-13" tabindex="-1"></a>importance <span class="op">=</span> importance <span class="op">/</span> importance.<span class="bu">sum</span>()</span>
 <span id="cb328-14"><a href="árboles-de-decisión.html#cb328-14" tabindex="-1"></a>importance</span></code></pre></div>
-<pre><code>## array([0.57505728, 0.10494229, 0.19829423, 0.1217062 ])</code></pre>
+<pre><code>## array([0.57015364, 0.1083689 , 0.19610925, 0.12536821])</code></pre>
 <div class="sourceCode" id="cb330"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb330-1"><a href="árboles-de-decisión.html#cb330-1" tabindex="-1"></a>importance_df <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb330-2"><a href="árboles-de-decisión.html#cb330-2" tabindex="-1"></a>  <span class="st">&#39;Variable&#39;</span>: columnas_seleccionadas, </span>
 <span id="cb330-3"><a href="árboles-de-decisión.html#cb330-3" tabindex="-1"></a>  <span class="st">&#39;Importance&#39;</span>: importance</span>
