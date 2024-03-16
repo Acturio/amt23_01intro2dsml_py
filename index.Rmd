@@ -56,20 +56,15 @@ knitr::include_graphics("img/00-presentacion/arturo.png")
 **LinkedIn:** [KaLizzyGam ](https://www.linkedin.com/in/kalizzygam/)
 **Email:**  lizzygamboap@gmail.com
 
-Actuaria egresada de la Facultad de Ciencias y candidata a Maestra en
-Ciencia de Datos por el ITAM.
+Actuaria egresada de la Facultad de Ciencias y candidata a Maestra en Ciencia de Datos por el ITAM, con una amplia experiencia en áreas de analítica predictiva e inteligencia empresarial. Ha ocupado roles de Manager y Senior Data Scientist en consultoría, trabajando en diversos sectores como tecnología, seguros, finanzas y banca.
 
-Experiencia en áreas de analítica predictiva e inteligencia del negocio. Manager y Senior
-Data Scientist en consultoría en diferentes sectores como tecnología, asegurador,
-financiero y bancario. Es experta en entendimiento de negocio para la correcta
-implementación de algoritmos de análisis de datos, desde la ingenieria y arquitectura de datos hasta BI y modelos de Machine Learning. 
-Actualmente se desarrolla como Data Analytics Manager para México, Chile y Colombia en Merama,
-startup mexicana clasificada como uno de los nuevos unicornios de Latinoamérica.
+Su especialidad radica en comprender las necesidades del negocio para implementar algoritmos de análisis de datos de manera efectiva, abarcando desde la ingeniería y arquitectura de datos hasta Business Intelligence y modelos de Machine Learning.
 
-Adicionalmente participa en proyectos como Senior Data Scientist en CLOSTER, como profesora del diplomado de Metodología de la Investigación Social por la UNAM y como instructora de cursos de Ciencia de Datos en AMAT.
+Cuenta con basta experiencia liderando equipos tecnológicos, incluyendo su papel más reciente como Data Analytics Manager para México, Chile y Colombia en Merama, una startup mexicana clasificada como uno de los nuevos unicornios de Latinoamérica. Actualmente, ocupa el cargo de Senior Manager Data Scientist en BBVA, centrado en banca corporativa.
 
-Empresas anteriores: GNP, Actinver Banco y Casa de Bolsa, PlayCity Casinos,
-RakenDataGroup Consulting, entre otros.
+Además, participa en proyectos de consultoría como Senior Data Scientist, es profesora del diplomado de Metodología de la Investigación Social por la UNAM y ejerce como instructora de cursos de Ciencia de Datos en AMAT.
+
+Entre sus experiencias anteriores se encuentran empresas como GNP, Actinver Banco y Casa de Bolsa, PlayCity Casinos, RakenDataGroup Consulting, Closter, Merama, entre otras.
 
 ```{r echo=FALSE,fig.align='center',  out.width='250pt'}
 knitr::include_graphics("img/00-presentacion/lizzy.png")
