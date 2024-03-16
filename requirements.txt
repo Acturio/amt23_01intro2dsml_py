@@ -46,7 +46,6 @@ psutil==5.9.5
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pyclustering==0.10.1.2
-pyclustertend @ file:///Users/mi20447/Downloads/pytend/pyclustertend
 Pygments==2.16.1
 pyparsing==3.1.0
 python-dateutil==2.8.2
