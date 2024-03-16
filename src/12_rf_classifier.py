@@ -90,7 +90,7 @@ transformed_df.info()
 # Crear el pipeline con la regresión lineal
 pipeline = Pipeline([
    ('preprocessor', preprocessor),
-   ('regressor', RandomForestClassifier(n_estimators=10,
+   ('classifier', RandomForestClassifier(n_estimators=10,
      min_samples_split=2,
      min_samples_leaf=2,
      random_state=12345))
@@ -132,6 +132,7 @@ confusion_df = pd.DataFrame(
 
 # Crear una figura utilizando Seaborn
 plt.plot();
+plt.clf()
 sns.heatmap(confusion_df, annot=True, fmt='d', cmap='Blues', cbar=False);
 
 plt.title('Matriz de Confusión');
@@ -239,10 +240,10 @@ k = 5
 kf = KFold(n_splits=k, shuffle=True, random_state=42)
 
 param_grid = {
- 'max_depth': range(2, 5),
- 'min_samples_split': range(2, 8),
- 'min_samples_leaf': range(2, 8),
- 'max_features': range(1, 5)
+ 'max_depth': range(2, 10),
+ 'min_samples_split': range(2, 10),
+ 'min_samples_leaf': range(2, 10),
+ 'max_features': range(1, 10)
 }
 
 # Algunas otras posibles distancias son:
@@ -258,8 +259,8 @@ scoring = {
 
 pipeline = Pipeline([
     ('preprocessor', preprocessor),
-    ('regressor', GridSearchCV(
-      RandomForestClassifier(), 
+    ('classifier', GridSearchCV(
+      RandomForestClassifier(n_estimators=10), 
       param_grid, 
       cv=kf, 
       scoring=scoring, 
@@ -276,7 +277,7 @@ pipeline.fit(telco_train_selected, 1-y)
 pickle.dump(pipeline, open('models/grid_search_random_forest_class.pkl', 'wb'))
 pipeline = pickle.load(open('models/grid_search_random_forest_class.pkl', 'rb'))
 
-results_cv = pipeline.named_steps['regressor'].cv_results_
+results_cv = pipeline.named_steps['classifier'].cv_results_
 
 # Convierte los resultados en un DataFrame
 pd.set_option('display.max_columns', 500)
@@ -296,7 +297,7 @@ summary_df
   ggplot(aes(x = "param_max_features", y = "mean_test_roc_auc")) +
   geom_point() +
   ggtitle("Parametrización de Random Forest vs ROC AUC") +
-  xlab("Parámetro: Número de vecinos cercanos") +
+  xlab("Parámetro: Número de variables máximas por árbol") +
   ylab("ROC AUC promedio")
 )
 
@@ -317,9 +318,9 @@ summary_df
 )
 
 
-best_params = pipeline.named_steps['regressor'].best_params_
+best_params = pipeline.named_steps['classifier'].best_params_
 best_params
-best_estimator = pipeline.named_steps['regressor'].best_estimator_
+best_estimator = pipeline.named_steps['classifier'].best_estimator_
 best_estimator
 
 
@@ -363,6 +364,7 @@ confusion_df = pd.DataFrame(
 
 # Crear una figura utilizando Seaborn
 plt.plot();
+plt.clf()
 sns.heatmap(confusion_df, annot=True, fmt='d', cmap='Blues', cbar=False);
 
 plt.title('Matriz de Confusión');
@@ -501,7 +503,7 @@ importance_df = pd.DataFrame({
   ylim(0, 0.5)
 )
 
-importances = final_rf_pipeline.named_steps['regressor'].feature_importances_
+importances = final_rf_pipeline.named_steps['classifier'].feature_importances_
 columns = final_rf_pipeline["preprocessor"].get_feature_names_out()
 
 (

@@ -571,29 +571,3 @@ knitr::include_graphics("img/Hastaprontomeme.png")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
