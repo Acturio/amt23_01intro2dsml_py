@@ -166,22 +166,15 @@ ames_xlsx.head(3)
 Un tipo de archivo que resulta de particular interés, es el *.pkl*. Este archivo comprime cualquier objeto o resultado que sea usado o producido en *python*. Uno puede almacenar el objeto de interés de la siguiente manera:
 
 ```{python}
-import pickle
 
-with open('data/ames.pkl', 'wb') as f:
-    pickle.dump(ames_xlsx, f, pickle.HIGHEST_PROTOCOL)
+ames_xlsx.to_pickle('data/ames.pkl')
 
 ```
 
 Puede observarse que en el explorador de archivos se encuentra ahora el nuevo archivo con extensión *.pkl*, el cual puede ser posteriormente incorporado a una sesión de *python* para seguir trabajando con él.
 
 ```{python}
-
-with open('data/ames.pkl', 'rb') as f:
-    ames_pkl = pickle.load(f)
-
-# alternativa
-# ames_pkl = pd.read_pickle('data/ames.pkl')
+ames_pkl = pd.read_pickle('data/ames.pkl')
 
 ames_pkl.head(3)
 ```
