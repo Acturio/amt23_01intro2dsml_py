@@ -479,62 +479,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="regresión-3" class="section level3 hasAnchor" number="7.4.1">
 <h3><span class="header-section-number">7.4.1</span> Regresión<a href="k-nearest-neighbor.html#regresión-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><strong>Paso 0: Carga de librerías</strong></p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb234-1"><a href="k-nearest-neighbor.html#cb234-1" tabindex="-1"></a><span class="im">from</span> mlxtend.feature_selection <span class="im">import</span> ColumnSelector</span>
-<span id="cb234-2"><a href="k-nearest-neighbor.html#cb234-2" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
-<span id="cb234-3"><a href="k-nearest-neighbor.html#cb234-3" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder</span>
-<span id="cb234-4"><a href="k-nearest-neighbor.html#cb234-4" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsRegressor</span>
-<span id="cb234-5"><a href="k-nearest-neighbor.html#cb234-5" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
-<span id="cb234-6"><a href="k-nearest-neighbor.html#cb234-6" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_absolute_percentage_error</span>
-<span id="cb234-7"><a href="k-nearest-neighbor.html#cb234-7" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error, r2_score, make_scorer</span>
-<span id="cb234-8"><a href="k-nearest-neighbor.html#cb234-8" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, KFold, cross_val_score, cross_validate</span>
-<span id="cb234-9"><a href="k-nearest-neighbor.html#cb234-9" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
-<span id="cb234-10"><a href="k-nearest-neighbor.html#cb234-10" tabindex="-1"></a><span class="im">from</span> sklearn.utils <span class="im">import</span> shuffle</span>
-<span id="cb234-11"><a href="k-nearest-neighbor.html#cb234-11" tabindex="-1"></a></span>
-<span id="cb234-12"><a href="k-nearest-neighbor.html#cb234-12" tabindex="-1"></a><span class="im">from</span> plydata.one_table_verbs <span class="im">import</span> pull</span>
-<span id="cb234-13"><a href="k-nearest-neighbor.html#cb234-13" tabindex="-1"></a><span class="im">from</span> mizani.formatters <span class="im">import</span> comma_format, dollar_format</span>
-<span id="cb234-14"><a href="k-nearest-neighbor.html#cb234-14" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
-<span id="cb234-15"><a href="k-nearest-neighbor.html#cb234-15" tabindex="-1"></a><span class="im">from</span> siuba <span class="im">import</span> <span class="op">*</span></span>
-<span id="cb234-16"><a href="k-nearest-neighbor.html#cb234-16" tabindex="-1"></a></span>
-<span id="cb234-17"><a href="k-nearest-neighbor.html#cb234-17" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb234-18"><a href="k-nearest-neighbor.html#cb234-18" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb232-1"><a href="k-nearest-neighbor.html#cb232-1" tabindex="-1"></a><span class="im">from</span> mlxtend.feature_selection <span class="im">import</span> ColumnSelector</span>
+<span id="cb232-2"><a href="k-nearest-neighbor.html#cb232-2" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+<span id="cb232-3"><a href="k-nearest-neighbor.html#cb232-3" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder</span>
+<span id="cb232-4"><a href="k-nearest-neighbor.html#cb232-4" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsRegressor</span>
+<span id="cb232-5"><a href="k-nearest-neighbor.html#cb232-5" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb232-6"><a href="k-nearest-neighbor.html#cb232-6" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_absolute_percentage_error</span>
+<span id="cb232-7"><a href="k-nearest-neighbor.html#cb232-7" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error, r2_score, make_scorer</span>
+<span id="cb232-8"><a href="k-nearest-neighbor.html#cb232-8" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, KFold, cross_val_score, cross_validate</span>
+<span id="cb232-9"><a href="k-nearest-neighbor.html#cb232-9" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
+<span id="cb232-10"><a href="k-nearest-neighbor.html#cb232-10" tabindex="-1"></a><span class="im">from</span> sklearn.utils <span class="im">import</span> shuffle</span>
+<span id="cb232-11"><a href="k-nearest-neighbor.html#cb232-11" tabindex="-1"></a></span>
+<span id="cb232-12"><a href="k-nearest-neighbor.html#cb232-12" tabindex="-1"></a><span class="im">from</span> plydata.one_table_verbs <span class="im">import</span> pull</span>
+<span id="cb232-13"><a href="k-nearest-neighbor.html#cb232-13" tabindex="-1"></a><span class="im">from</span> mizani.formatters <span class="im">import</span> comma_format, dollar_format</span>
+<span id="cb232-14"><a href="k-nearest-neighbor.html#cb232-14" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb232-15"><a href="k-nearest-neighbor.html#cb232-15" tabindex="-1"></a><span class="im">from</span> siuba <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb232-16"><a href="k-nearest-neighbor.html#cb232-16" tabindex="-1"></a></span>
+<span id="cb232-17"><a href="k-nearest-neighbor.html#cb232-17" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb232-18"><a href="k-nearest-neighbor.html#cb232-18" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
 <p><strong>Paso 1: Carga y separación inicial de datos ( test, train )</strong></p>
 <p>Comenzamos por cargar los datos completos e identificar la variable de respuesta para separarla de las explicativas</p>
-<div class="sourceCode" id="cb235"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb235-1"><a href="k-nearest-neighbor.html#cb235-1" tabindex="-1"></a><span class="co">#### CARGA DE DATOS ####</span></span>
-<span id="cb235-2"><a href="k-nearest-neighbor.html#cb235-2" tabindex="-1"></a>ames <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/ames.csv&quot;</span>)</span>
-<span id="cb235-3"><a href="k-nearest-neighbor.html#cb235-3" tabindex="-1"></a></span>
-<span id="cb235-4"><a href="k-nearest-neighbor.html#cb235-4" tabindex="-1"></a>ames_y <span class="op">=</span> ames <span class="op">&gt;&gt;</span> pull(<span class="st">&quot;Sale_Price&quot;</span>)    <span class="co"># ames[[&quot;Sale_Price&quot;]]</span></span>
-<span id="cb235-5"><a href="k-nearest-neighbor.html#cb235-5" tabindex="-1"></a>ames_x <span class="op">=</span> select(ames, <span class="op">-</span>_.Sale_Price)   <span class="co"># ames.drop(&#39;Sale_Price&#39;, axis=1)</span></span>
-<span id="cb235-6"><a href="k-nearest-neighbor.html#cb235-6" tabindex="-1"></a></span>
-<span id="cb235-7"><a href="k-nearest-neighbor.html#cb235-7" tabindex="-1"></a><span class="co">#### DIVISIÓN DE DATOS ####</span></span>
-<span id="cb235-8"><a href="k-nearest-neighbor.html#cb235-8" tabindex="-1"></a>ames_x_train, ames_x_test, ames_y_train, ames_y_test <span class="op">=</span> train_test_split(</span>
-<span id="cb235-9"><a href="k-nearest-neighbor.html#cb235-9" tabindex="-1"></a> ames_x, ames_y, </span>
-<span id="cb235-10"><a href="k-nearest-neighbor.html#cb235-10" tabindex="-1"></a> test_size <span class="op">=</span> <span class="fl">0.20</span>, </span>
-<span id="cb235-11"><a href="k-nearest-neighbor.html#cb235-11" tabindex="-1"></a> random_state <span class="op">=</span> <span class="dv">195</span></span>
-<span id="cb235-12"><a href="k-nearest-neighbor.html#cb235-12" tabindex="-1"></a> )</span></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb233-1"><a href="k-nearest-neighbor.html#cb233-1" tabindex="-1"></a><span class="co">#### CARGA DE DATOS ####</span></span>
+<span id="cb233-2"><a href="k-nearest-neighbor.html#cb233-2" tabindex="-1"></a>ames <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/ames.csv&quot;</span>)</span>
+<span id="cb233-3"><a href="k-nearest-neighbor.html#cb233-3" tabindex="-1"></a></span>
+<span id="cb233-4"><a href="k-nearest-neighbor.html#cb233-4" tabindex="-1"></a>ames_y <span class="op">=</span> ames <span class="op">&gt;&gt;</span> pull(<span class="st">&quot;Sale_Price&quot;</span>)    <span class="co"># ames[[&quot;Sale_Price&quot;]]</span></span>
+<span id="cb233-5"><a href="k-nearest-neighbor.html#cb233-5" tabindex="-1"></a>ames_x <span class="op">=</span> select(ames, <span class="op">-</span>_.Sale_Price)   <span class="co"># ames.drop(&#39;Sale_Price&#39;, axis=1)</span></span>
+<span id="cb233-6"><a href="k-nearest-neighbor.html#cb233-6" tabindex="-1"></a></span>
+<span id="cb233-7"><a href="k-nearest-neighbor.html#cb233-7" tabindex="-1"></a><span class="co">#### DIVISIÓN DE DATOS ####</span></span>
+<span id="cb233-8"><a href="k-nearest-neighbor.html#cb233-8" tabindex="-1"></a>ames_x_train, ames_x_test, ames_y_train, ames_y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb233-9"><a href="k-nearest-neighbor.html#cb233-9" tabindex="-1"></a> ames_x, ames_y, </span>
+<span id="cb233-10"><a href="k-nearest-neighbor.html#cb233-10" tabindex="-1"></a> test_size <span class="op">=</span> <span class="fl">0.20</span>, </span>
+<span id="cb233-11"><a href="k-nearest-neighbor.html#cb233-11" tabindex="-1"></a> random_state <span class="op">=</span> <span class="dv">195</span></span>
+<span id="cb233-12"><a href="k-nearest-neighbor.html#cb233-12" tabindex="-1"></a> )</span></code></pre></div>
 <p>Contando con datos de entrenamiento, procedemos a realizar el feature engineering para extraer las mejores características que permitirán realizar las estimaciones en el modelo.</p>
 <p><strong>Paso 2: Pre-procesamiento e ingeniería de variables</strong></p>
 <p>En este paso se pone a prueba la imaginación y conocimiento de transformaciones estadísticas que permitan ofrecer un mejor ajuste a la relación entre datos dependientes y de respuesta.</p>
 <p>EL primer pipeline es para facilitar las transformaciones sobre las columnas sugeridas inicialmente:</p>
-<div class="sourceCode" id="cb236"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb236-1"><a href="k-nearest-neighbor.html#cb236-1" tabindex="-1"></a><span class="co">## SELECCIÓN DE VARIABLES</span></span>
-<span id="cb236-2"><a href="k-nearest-neighbor.html#cb236-2" tabindex="-1"></a></span>
-<span id="cb236-3"><a href="k-nearest-neighbor.html#cb236-3" tabindex="-1"></a><span class="co"># Seleccionamos las variales numéricas de interés</span></span>
-<span id="cb236-4"><a href="k-nearest-neighbor.html#cb236-4" tabindex="-1"></a>num_cols <span class="op">=</span> [<span class="st">&quot;Full_Bath&quot;</span>, <span class="st">&quot;Half_Bath&quot;</span>]</span>
-<span id="cb236-5"><a href="k-nearest-neighbor.html#cb236-5" tabindex="-1"></a></span>
-<span id="cb236-6"><a href="k-nearest-neighbor.html#cb236-6" tabindex="-1"></a><span class="co"># Seleccionamos las variables categóricas de interés</span></span>
-<span id="cb236-7"><a href="k-nearest-neighbor.html#cb236-7" tabindex="-1"></a>cat_cols <span class="op">=</span> [<span class="st">&quot;Overall_Cond&quot;</span>]</span>
-<span id="cb236-8"><a href="k-nearest-neighbor.html#cb236-8" tabindex="-1"></a></span>
-<span id="cb236-9"><a href="k-nearest-neighbor.html#cb236-9" tabindex="-1"></a><span class="co"># Juntamos todas las variables de interés</span></span>
-<span id="cb236-10"><a href="k-nearest-neighbor.html#cb236-10" tabindex="-1"></a>columnas_seleccionadas <span class="op">=</span> num_cols <span class="op">+</span> cat_cols</span>
-<span id="cb236-11"><a href="k-nearest-neighbor.html#cb236-11" tabindex="-1"></a></span>
-<span id="cb236-12"><a href="k-nearest-neighbor.html#cb236-12" tabindex="-1"></a>pipe <span class="op">=</span> ColumnSelector(columnas_seleccionadas)</span>
-<span id="cb236-13"><a href="k-nearest-neighbor.html#cb236-13" tabindex="-1"></a>ames_x_train_selected <span class="op">=</span> pipe.fit_transform(ames_x_train)</span>
-<span id="cb236-14"><a href="k-nearest-neighbor.html#cb236-14" tabindex="-1"></a></span>
-<span id="cb236-15"><a href="k-nearest-neighbor.html#cb236-15" tabindex="-1"></a>ames_train_selected <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb236-16"><a href="k-nearest-neighbor.html#cb236-16" tabindex="-1"></a>  ames_x_train_selected, </span>
-<span id="cb236-17"><a href="k-nearest-neighbor.html#cb236-17" tabindex="-1"></a>  columns <span class="op">=</span> columnas_seleccionadas</span>
-<span id="cb236-18"><a href="k-nearest-neighbor.html#cb236-18" tabindex="-1"></a>  )</span>
-<span id="cb236-19"><a href="k-nearest-neighbor.html#cb236-19" tabindex="-1"></a></span>
-<span id="cb236-20"><a href="k-nearest-neighbor.html#cb236-20" tabindex="-1"></a>ames_train_selected.info()</span></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb234-1"><a href="k-nearest-neighbor.html#cb234-1" tabindex="-1"></a><span class="co">## SELECCIÓN DE VARIABLES</span></span>
+<span id="cb234-2"><a href="k-nearest-neighbor.html#cb234-2" tabindex="-1"></a></span>
+<span id="cb234-3"><a href="k-nearest-neighbor.html#cb234-3" tabindex="-1"></a><span class="co"># Seleccionamos las variales numéricas de interés</span></span>
+<span id="cb234-4"><a href="k-nearest-neighbor.html#cb234-4" tabindex="-1"></a>num_cols <span class="op">=</span> [<span class="st">&quot;Full_Bath&quot;</span>, <span class="st">&quot;Half_Bath&quot;</span>]</span>
+<span id="cb234-5"><a href="k-nearest-neighbor.html#cb234-5" tabindex="-1"></a></span>
+<span id="cb234-6"><a href="k-nearest-neighbor.html#cb234-6" tabindex="-1"></a><span class="co"># Seleccionamos las variables categóricas de interés</span></span>
+<span id="cb234-7"><a href="k-nearest-neighbor.html#cb234-7" tabindex="-1"></a>cat_cols <span class="op">=</span> [<span class="st">&quot;Overall_Cond&quot;</span>]</span>
+<span id="cb234-8"><a href="k-nearest-neighbor.html#cb234-8" tabindex="-1"></a></span>
+<span id="cb234-9"><a href="k-nearest-neighbor.html#cb234-9" tabindex="-1"></a><span class="co"># Juntamos todas las variables de interés</span></span>
+<span id="cb234-10"><a href="k-nearest-neighbor.html#cb234-10" tabindex="-1"></a>columnas_seleccionadas <span class="op">=</span> num_cols <span class="op">+</span> cat_cols</span>
+<span id="cb234-11"><a href="k-nearest-neighbor.html#cb234-11" tabindex="-1"></a></span>
+<span id="cb234-12"><a href="k-nearest-neighbor.html#cb234-12" tabindex="-1"></a>pipe <span class="op">=</span> ColumnSelector(columnas_seleccionadas)</span>
+<span id="cb234-13"><a href="k-nearest-neighbor.html#cb234-13" tabindex="-1"></a>ames_x_train_selected <span class="op">=</span> pipe.fit_transform(ames_x_train)</span>
+<span id="cb234-14"><a href="k-nearest-neighbor.html#cb234-14" tabindex="-1"></a></span>
+<span id="cb234-15"><a href="k-nearest-neighbor.html#cb234-15" tabindex="-1"></a>ames_train_selected <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb234-16"><a href="k-nearest-neighbor.html#cb234-16" tabindex="-1"></a>  ames_x_train_selected, </span>
+<span id="cb234-17"><a href="k-nearest-neighbor.html#cb234-17" tabindex="-1"></a>  columns <span class="op">=</span> columnas_seleccionadas</span>
+<span id="cb234-18"><a href="k-nearest-neighbor.html#cb234-18" tabindex="-1"></a>  )</span>
+<span id="cb234-19"><a href="k-nearest-neighbor.html#cb234-19" tabindex="-1"></a></span>
+<span id="cb234-20"><a href="k-nearest-neighbor.html#cb234-20" tabindex="-1"></a>ames_train_selected.info()</span></code></pre></div>
 <pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
 ## RangeIndex: 2344 entries, 0 to 2343
 ## Data columns (total 3 columns):
@@ -546,27 +546,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## dtypes: object(3)
 ## memory usage: 55.1+ KB</code></pre>
 <p>Y una vez que se han sugerido algunas columnas, se procede a realizar el pipeline de transformación:</p>
-<div class="sourceCode" id="cb238"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb238-1"><a href="k-nearest-neighbor.html#cb238-1" tabindex="-1"></a><span class="co">## TRANSFORMACIÓN DE COLUMNAS</span></span>
-<span id="cb238-2"><a href="k-nearest-neighbor.html#cb238-2" tabindex="-1"></a></span>
-<span id="cb238-3"><a href="k-nearest-neighbor.html#cb238-3" tabindex="-1"></a><span class="co"># ColumnTransformer para aplicar transformaciones</span></span>
-<span id="cb238-4"><a href="k-nearest-neighbor.html#cb238-4" tabindex="-1"></a>preprocessor <span class="op">=</span> ColumnTransformer(</span>
-<span id="cb238-5"><a href="k-nearest-neighbor.html#cb238-5" tabindex="-1"></a>    transformers <span class="op">=</span> [</span>
-<span id="cb238-6"><a href="k-nearest-neighbor.html#cb238-6" tabindex="-1"></a>        (<span class="st">&#39;scaler&#39;</span>, StandardScaler(), num_cols),</span>
-<span id="cb238-7"><a href="k-nearest-neighbor.html#cb238-7" tabindex="-1"></a>        (<span class="st">&#39;onehotencoding&#39;</span>, OneHotEncoder(drop<span class="op">=</span><span class="st">&#39;first&#39;</span>, sparse_output<span class="op">=</span><span class="va">False</span>), cat_cols)</span>
-<span id="cb238-8"><a href="k-nearest-neighbor.html#cb238-8" tabindex="-1"></a>    ],</span>
-<span id="cb238-9"><a href="k-nearest-neighbor.html#cb238-9" tabindex="-1"></a>    verbose_feature_names_out <span class="op">=</span> <span class="va">False</span>,</span>
-<span id="cb238-10"><a href="k-nearest-neighbor.html#cb238-10" tabindex="-1"></a>    remainder <span class="op">=</span> <span class="st">&#39;passthrough&#39;</span>  <span class="co"># Mantener las columnas restantes sin cambios</span></span>
-<span id="cb238-11"><a href="k-nearest-neighbor.html#cb238-11" tabindex="-1"></a>)</span>
-<span id="cb238-12"><a href="k-nearest-neighbor.html#cb238-12" tabindex="-1"></a></span>
-<span id="cb238-13"><a href="k-nearest-neighbor.html#cb238-13" tabindex="-1"></a>transformed_data <span class="op">=</span> preprocessor.fit_transform(ames_train_selected)</span>
-<span id="cb238-14"><a href="k-nearest-neighbor.html#cb238-14" tabindex="-1"></a>new_column_names <span class="op">=</span> preprocessor.get_feature_names_out()</span>
-<span id="cb238-15"><a href="k-nearest-neighbor.html#cb238-15" tabindex="-1"></a></span>
-<span id="cb238-16"><a href="k-nearest-neighbor.html#cb238-16" tabindex="-1"></a>transformed_df <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb238-17"><a href="k-nearest-neighbor.html#cb238-17" tabindex="-1"></a>  transformed_data,</span>
-<span id="cb238-18"><a href="k-nearest-neighbor.html#cb238-18" tabindex="-1"></a>  columns<span class="op">=</span>new_column_names</span>
-<span id="cb238-19"><a href="k-nearest-neighbor.html#cb238-19" tabindex="-1"></a>  )</span>
-<span id="cb238-20"><a href="k-nearest-neighbor.html#cb238-20" tabindex="-1"></a></span>
-<span id="cb238-21"><a href="k-nearest-neighbor.html#cb238-21" tabindex="-1"></a>transformed_df</span></code></pre></div>
+<div class="sourceCode" id="cb236"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb236-1"><a href="k-nearest-neighbor.html#cb236-1" tabindex="-1"></a><span class="co">## TRANSFORMACIÓN DE COLUMNAS</span></span>
+<span id="cb236-2"><a href="k-nearest-neighbor.html#cb236-2" tabindex="-1"></a></span>
+<span id="cb236-3"><a href="k-nearest-neighbor.html#cb236-3" tabindex="-1"></a><span class="co"># ColumnTransformer para aplicar transformaciones</span></span>
+<span id="cb236-4"><a href="k-nearest-neighbor.html#cb236-4" tabindex="-1"></a>preprocessor <span class="op">=</span> ColumnTransformer(</span>
+<span id="cb236-5"><a href="k-nearest-neighbor.html#cb236-5" tabindex="-1"></a>    transformers <span class="op">=</span> [</span>
+<span id="cb236-6"><a href="k-nearest-neighbor.html#cb236-6" tabindex="-1"></a>        (<span class="st">&#39;scaler&#39;</span>, StandardScaler(), num_cols),</span>
+<span id="cb236-7"><a href="k-nearest-neighbor.html#cb236-7" tabindex="-1"></a>        (<span class="st">&#39;onehotencoding&#39;</span>, OneHotEncoder(drop<span class="op">=</span><span class="st">&#39;first&#39;</span>, sparse_output<span class="op">=</span><span class="va">False</span>), cat_cols)</span>
+<span id="cb236-8"><a href="k-nearest-neighbor.html#cb236-8" tabindex="-1"></a>    ],</span>
+<span id="cb236-9"><a href="k-nearest-neighbor.html#cb236-9" tabindex="-1"></a>    verbose_feature_names_out <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb236-10"><a href="k-nearest-neighbor.html#cb236-10" tabindex="-1"></a>    remainder <span class="op">=</span> <span class="st">&#39;passthrough&#39;</span>  <span class="co"># Mantener las columnas restantes sin cambios</span></span>
+<span id="cb236-11"><a href="k-nearest-neighbor.html#cb236-11" tabindex="-1"></a>)</span>
+<span id="cb236-12"><a href="k-nearest-neighbor.html#cb236-12" tabindex="-1"></a></span>
+<span id="cb236-13"><a href="k-nearest-neighbor.html#cb236-13" tabindex="-1"></a>transformed_data <span class="op">=</span> preprocessor.fit_transform(ames_train_selected)</span>
+<span id="cb236-14"><a href="k-nearest-neighbor.html#cb236-14" tabindex="-1"></a>new_column_names <span class="op">=</span> preprocessor.get_feature_names_out()</span>
+<span id="cb236-15"><a href="k-nearest-neighbor.html#cb236-15" tabindex="-1"></a></span>
+<span id="cb236-16"><a href="k-nearest-neighbor.html#cb236-16" tabindex="-1"></a>transformed_df <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb236-17"><a href="k-nearest-neighbor.html#cb236-17" tabindex="-1"></a>  transformed_data,</span>
+<span id="cb236-18"><a href="k-nearest-neighbor.html#cb236-18" tabindex="-1"></a>  columns<span class="op">=</span>new_column_names</span>
+<span id="cb236-19"><a href="k-nearest-neighbor.html#cb236-19" tabindex="-1"></a>  )</span>
+<span id="cb236-20"><a href="k-nearest-neighbor.html#cb236-20" tabindex="-1"></a></span>
+<span id="cb236-21"><a href="k-nearest-neighbor.html#cb236-21" tabindex="-1"></a>transformed_df</span></code></pre></div>
 <pre><code>##       Full_Bath  Half_Bath  ...  Overall_Cond_Very_Good  \
 ## 0          0.78       1.24  ...                    0.00   
 ## 1          0.78      -0.75  ...                    0.00   
@@ -594,7 +594,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2343                    0.00  
 ## 
 ## [2344 rows x 10 columns]</code></pre>
-<div class="sourceCode" id="cb240"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb240-1"><a href="k-nearest-neighbor.html#cb240-1" tabindex="-1"></a>transformed_df.info()</span></code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb238-1"><a href="k-nearest-neighbor.html#cb238-1" tabindex="-1"></a>transformed_df.info()</span></code></pre></div>
 <pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
 ## RangeIndex: 2344 entries, 0 to 2343
 ## Data columns (total 10 columns):
@@ -616,27 +616,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Una vez que la receta de transformación de datos está lista, procedemos a implementar el pipeline del modelo de interés.</p>
 <p><strong>Paso 3: Selección de tipo de modelo con hiperparámetros iniciales</strong></p>
 <p>Ahora se procede a unir en un mismo flujo el proceso de ingeniería de datos y un modelo inicial sugerido. En este primer ejemplo, se muestra un modelo de 5 vecinos más cercanos.</p>
-<div class="sourceCode" id="cb242"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb242-1"><a href="k-nearest-neighbor.html#cb242-1" tabindex="-1"></a><span class="co"># Crear el pipeline con la regresión por KNN</span></span>
-<span id="cb242-2"><a href="k-nearest-neighbor.html#cb242-2" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline([</span>
-<span id="cb242-3"><a href="k-nearest-neighbor.html#cb242-3" tabindex="-1"></a>   (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
-<span id="cb242-4"><a href="k-nearest-neighbor.html#cb242-4" tabindex="-1"></a>   (<span class="st">&#39;regressor&#39;</span>, KNeighborsRegressor(n_neighbors<span class="op">=</span><span class="dv">5</span>))</span>
-<span id="cb242-5"><a href="k-nearest-neighbor.html#cb242-5" tabindex="-1"></a>])</span>
-<span id="cb242-6"><a href="k-nearest-neighbor.html#cb242-6" tabindex="-1"></a></span>
-<span id="cb242-7"><a href="k-nearest-neighbor.html#cb242-7" tabindex="-1"></a><span class="co"># Entrenar el pipeline</span></span>
-<span id="cb242-8"><a href="k-nearest-neighbor.html#cb242-8" tabindex="-1"></a>results <span class="op">=</span> pipeline.fit(ames_train_selected, ames_y_train)</span>
-<span id="cb242-9"><a href="k-nearest-neighbor.html#cb242-9" tabindex="-1"></a></span>
-<span id="cb242-10"><a href="k-nearest-neighbor.html#cb242-10" tabindex="-1"></a><span class="co">## PREDICCIONES</span></span>
-<span id="cb242-11"><a href="k-nearest-neighbor.html#cb242-11" tabindex="-1"></a>y_pred <span class="op">=</span> pipeline.predict(ames_x_test)</span>
-<span id="cb242-12"><a href="k-nearest-neighbor.html#cb242-12" tabindex="-1"></a></span>
-<span id="cb242-13"><a href="k-nearest-neighbor.html#cb242-13" tabindex="-1"></a>ames_test <span class="op">=</span> (</span>
-<span id="cb242-14"><a href="k-nearest-neighbor.html#cb242-14" tabindex="-1"></a>  ames_x_test <span class="op">&gt;&gt;</span></span>
-<span id="cb242-15"><a href="k-nearest-neighbor.html#cb242-15" tabindex="-1"></a>  mutate(Sale_Price_Pred <span class="op">=</span> y_pred, Sale_Price <span class="op">=</span> ames_y_test)</span>
-<span id="cb242-16"><a href="k-nearest-neighbor.html#cb242-16" tabindex="-1"></a>)</span>
-<span id="cb242-17"><a href="k-nearest-neighbor.html#cb242-17" tabindex="-1"></a></span>
-<span id="cb242-18"><a href="k-nearest-neighbor.html#cb242-18" tabindex="-1"></a>(</span>
-<span id="cb242-19"><a href="k-nearest-neighbor.html#cb242-19" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
-<span id="cb242-20"><a href="k-nearest-neighbor.html#cb242-20" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred)</span>
-<span id="cb242-21"><a href="k-nearest-neighbor.html#cb242-21" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb240-1"><a href="k-nearest-neighbor.html#cb240-1" tabindex="-1"></a><span class="co"># Crear el pipeline con la regresión por KNN</span></span>
+<span id="cb240-2"><a href="k-nearest-neighbor.html#cb240-2" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline([</span>
+<span id="cb240-3"><a href="k-nearest-neighbor.html#cb240-3" tabindex="-1"></a>   (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
+<span id="cb240-4"><a href="k-nearest-neighbor.html#cb240-4" tabindex="-1"></a>   (<span class="st">&#39;regressor&#39;</span>, KNeighborsRegressor(n_neighbors<span class="op">=</span><span class="dv">5</span>))</span>
+<span id="cb240-5"><a href="k-nearest-neighbor.html#cb240-5" tabindex="-1"></a>])</span>
+<span id="cb240-6"><a href="k-nearest-neighbor.html#cb240-6" tabindex="-1"></a></span>
+<span id="cb240-7"><a href="k-nearest-neighbor.html#cb240-7" tabindex="-1"></a><span class="co"># Entrenar el pipeline</span></span>
+<span id="cb240-8"><a href="k-nearest-neighbor.html#cb240-8" tabindex="-1"></a>results <span class="op">=</span> pipeline.fit(ames_train_selected, ames_y_train)</span>
+<span id="cb240-9"><a href="k-nearest-neighbor.html#cb240-9" tabindex="-1"></a></span>
+<span id="cb240-10"><a href="k-nearest-neighbor.html#cb240-10" tabindex="-1"></a><span class="co">## PREDICCIONES</span></span>
+<span id="cb240-11"><a href="k-nearest-neighbor.html#cb240-11" tabindex="-1"></a>y_pred <span class="op">=</span> pipeline.predict(ames_x_test)</span>
+<span id="cb240-12"><a href="k-nearest-neighbor.html#cb240-12" tabindex="-1"></a></span>
+<span id="cb240-13"><a href="k-nearest-neighbor.html#cb240-13" tabindex="-1"></a>ames_test <span class="op">=</span> (</span>
+<span id="cb240-14"><a href="k-nearest-neighbor.html#cb240-14" tabindex="-1"></a>  ames_x_test <span class="op">&gt;&gt;</span></span>
+<span id="cb240-15"><a href="k-nearest-neighbor.html#cb240-15" tabindex="-1"></a>  mutate(Sale_Price_Pred <span class="op">=</span> y_pred, Sale_Price <span class="op">=</span> ames_y_test)</span>
+<span id="cb240-16"><a href="k-nearest-neighbor.html#cb240-16" tabindex="-1"></a>)</span>
+<span id="cb240-17"><a href="k-nearest-neighbor.html#cb240-17" tabindex="-1"></a></span>
+<span id="cb240-18"><a href="k-nearest-neighbor.html#cb240-18" tabindex="-1"></a>(</span>
+<span id="cb240-19"><a href="k-nearest-neighbor.html#cb240-19" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
+<span id="cb240-20"><a href="k-nearest-neighbor.html#cb240-20" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred)</span>
+<span id="cb240-21"><a href="k-nearest-neighbor.html#cb240-21" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>##       Sale_Price  Sale_Price_Pred
 ## 390       165000        196553.00
 ## 1235      124000        179150.00
@@ -656,29 +656,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4><span class="header-section-number">7.4.1.1</span> Métricas de desempeño<a href="k-nearest-neighbor.html#métricas-de-desempeño-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Se procede en el siguiente paso a cuantificar los errores producidos por la predicción.</p>
 <p><strong>Paso 4: Cálculo de métricas de desempeño</strong></p>
-<div class="sourceCode" id="cb244"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb244-1"><a href="k-nearest-neighbor.html#cb244-1" tabindex="-1"></a>pd.options.display.float_format <span class="op">=</span> <span class="st">&#39;</span><span class="sc">{:.2f}</span><span class="st">&#39;</span>.<span class="bu">format</span></span>
-<span id="cb244-2"><a href="k-nearest-neighbor.html#cb244-2" tabindex="-1"></a></span>
-<span id="cb244-3"><a href="k-nearest-neighbor.html#cb244-3" tabindex="-1"></a>y_obs <span class="op">=</span> ames_test[<span class="st">&quot;Sale_Price&quot;</span>]</span>
-<span id="cb244-4"><a href="k-nearest-neighbor.html#cb244-4" tabindex="-1"></a>y_pred <span class="op">=</span> ames_test[<span class="st">&quot;Sale_Price_Pred&quot;</span>]</span>
-<span id="cb244-5"><a href="k-nearest-neighbor.html#cb244-5" tabindex="-1"></a></span>
-<span id="cb244-6"><a href="k-nearest-neighbor.html#cb244-6" tabindex="-1"></a>me <span class="op">=</span> np.mean(y_obs <span class="op">-</span> y_pred)</span>
-<span id="cb244-7"><a href="k-nearest-neighbor.html#cb244-7" tabindex="-1"></a>mae <span class="op">=</span> mean_absolute_error(y_obs, y_pred)</span>
-<span id="cb244-8"><a href="k-nearest-neighbor.html#cb244-8" tabindex="-1"></a>mape <span class="op">=</span> mean_absolute_percentage_error(y_obs, y_pred)</span>
-<span id="cb244-9"><a href="k-nearest-neighbor.html#cb244-9" tabindex="-1"></a>mse <span class="op">=</span> mean_squared_error(y_obs, y_pred)</span>
-<span id="cb244-10"><a href="k-nearest-neighbor.html#cb244-10" tabindex="-1"></a>rmse <span class="op">=</span> np.sqrt(mse)</span>
-<span id="cb244-11"><a href="k-nearest-neighbor.html#cb244-11" tabindex="-1"></a>r2 <span class="op">=</span> r2_score(y_obs, y_pred)</span>
-<span id="cb244-12"><a href="k-nearest-neighbor.html#cb244-12" tabindex="-1"></a></span>
-<span id="cb244-13"><a href="k-nearest-neighbor.html#cb244-13" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(y_obs)  <span class="co"># Número de observaciones</span></span>
-<span id="cb244-14"><a href="k-nearest-neighbor.html#cb244-14" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">9</span>  <span class="co"># Número de predictores </span></span>
-<span id="cb244-15"><a href="k-nearest-neighbor.html#cb244-15" tabindex="-1"></a>r2_adj <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (n <span class="op">-</span> p <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> r2)</span>
-<span id="cb244-16"><a href="k-nearest-neighbor.html#cb244-16" tabindex="-1"></a></span>
-<span id="cb244-17"><a href="k-nearest-neighbor.html#cb244-17" tabindex="-1"></a>metrics_data <span class="op">=</span> {</span>
-<span id="cb244-18"><a href="k-nearest-neighbor.html#cb244-18" tabindex="-1"></a>    <span class="st">&quot;Metric&quot;</span>: [<span class="st">&quot;ME&quot;</span>, <span class="st">&quot;MAE&quot;</span>, <span class="st">&quot;MAPE&quot;</span>, <span class="st">&quot;MSE&quot;</span>, <span class="st">&quot;RMSE&quot;</span>, <span class="st">&quot;R^2&quot;</span>, <span class="st">&quot;R^2 Adj&quot;</span>],</span>
-<span id="cb244-19"><a href="k-nearest-neighbor.html#cb244-19" tabindex="-1"></a>    <span class="st">&quot;Value&quot;</span>: [me, mae, mape, mse, rmse, r2, r2_adj]</span>
-<span id="cb244-20"><a href="k-nearest-neighbor.html#cb244-20" tabindex="-1"></a>}</span>
-<span id="cb244-21"><a href="k-nearest-neighbor.html#cb244-21" tabindex="-1"></a></span>
-<span id="cb244-22"><a href="k-nearest-neighbor.html#cb244-22" tabindex="-1"></a>metrics_df <span class="op">=</span> pd.DataFrame(metrics_data)</span>
-<span id="cb244-23"><a href="k-nearest-neighbor.html#cb244-23" tabindex="-1"></a>metrics_df</span></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb242-1"><a href="k-nearest-neighbor.html#cb242-1" tabindex="-1"></a>pd.options.display.float_format <span class="op">=</span> <span class="st">&#39;</span><span class="sc">{:.2f}</span><span class="st">&#39;</span>.<span class="bu">format</span></span>
+<span id="cb242-2"><a href="k-nearest-neighbor.html#cb242-2" tabindex="-1"></a></span>
+<span id="cb242-3"><a href="k-nearest-neighbor.html#cb242-3" tabindex="-1"></a>y_obs <span class="op">=</span> ames_test[<span class="st">&quot;Sale_Price&quot;</span>]</span>
+<span id="cb242-4"><a href="k-nearest-neighbor.html#cb242-4" tabindex="-1"></a>y_pred <span class="op">=</span> ames_test[<span class="st">&quot;Sale_Price_Pred&quot;</span>]</span>
+<span id="cb242-5"><a href="k-nearest-neighbor.html#cb242-5" tabindex="-1"></a></span>
+<span id="cb242-6"><a href="k-nearest-neighbor.html#cb242-6" tabindex="-1"></a>me <span class="op">=</span> np.mean(y_obs <span class="op">-</span> y_pred)</span>
+<span id="cb242-7"><a href="k-nearest-neighbor.html#cb242-7" tabindex="-1"></a>mae <span class="op">=</span> mean_absolute_error(y_obs, y_pred)</span>
+<span id="cb242-8"><a href="k-nearest-neighbor.html#cb242-8" tabindex="-1"></a>mape <span class="op">=</span> mean_absolute_percentage_error(y_obs, y_pred)</span>
+<span id="cb242-9"><a href="k-nearest-neighbor.html#cb242-9" tabindex="-1"></a>mse <span class="op">=</span> mean_squared_error(y_obs, y_pred)</span>
+<span id="cb242-10"><a href="k-nearest-neighbor.html#cb242-10" tabindex="-1"></a>rmse <span class="op">=</span> np.sqrt(mse)</span>
+<span id="cb242-11"><a href="k-nearest-neighbor.html#cb242-11" tabindex="-1"></a>r2 <span class="op">=</span> r2_score(y_obs, y_pred)</span>
+<span id="cb242-12"><a href="k-nearest-neighbor.html#cb242-12" tabindex="-1"></a></span>
+<span id="cb242-13"><a href="k-nearest-neighbor.html#cb242-13" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(y_obs)  <span class="co"># Número de observaciones</span></span>
+<span id="cb242-14"><a href="k-nearest-neighbor.html#cb242-14" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">9</span>  <span class="co"># Número de predictores </span></span>
+<span id="cb242-15"><a href="k-nearest-neighbor.html#cb242-15" tabindex="-1"></a>r2_adj <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (n <span class="op">-</span> p <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> r2)</span>
+<span id="cb242-16"><a href="k-nearest-neighbor.html#cb242-16" tabindex="-1"></a></span>
+<span id="cb242-17"><a href="k-nearest-neighbor.html#cb242-17" tabindex="-1"></a>metrics_data <span class="op">=</span> {</span>
+<span id="cb242-18"><a href="k-nearest-neighbor.html#cb242-18" tabindex="-1"></a>    <span class="st">&quot;Metric&quot;</span>: [<span class="st">&quot;ME&quot;</span>, <span class="st">&quot;MAE&quot;</span>, <span class="st">&quot;MAPE&quot;</span>, <span class="st">&quot;MSE&quot;</span>, <span class="st">&quot;RMSE&quot;</span>, <span class="st">&quot;R^2&quot;</span>, <span class="st">&quot;R^2 Adj&quot;</span>],</span>
+<span id="cb242-19"><a href="k-nearest-neighbor.html#cb242-19" tabindex="-1"></a>    <span class="st">&quot;Value&quot;</span>: [me, mae, mape, mse, rmse, r2, r2_adj]</span>
+<span id="cb242-20"><a href="k-nearest-neighbor.html#cb242-20" tabindex="-1"></a>}</span>
+<span id="cb242-21"><a href="k-nearest-neighbor.html#cb242-21" tabindex="-1"></a></span>
+<span id="cb242-22"><a href="k-nearest-neighbor.html#cb242-22" tabindex="-1"></a>metrics_df <span class="op">=</span> pd.DataFrame(metrics_data)</span>
+<span id="cb242-23"><a href="k-nearest-neighbor.html#cb242-23" tabindex="-1"></a>metrics_df</span></code></pre></div>
 <pre><code>##     Metric         Value
 ## 0       ME       2948.31
 ## 1      MAE      47359.00
@@ -688,61 +688,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 5      R^2          0.26
 ## 6  R^2 Adj          0.25</code></pre>
 <p>Una manera amigable de dimensionar los errores y el buen desempeño es mediante gráficos</p>
-<div class="sourceCode" id="cb246"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb246-1"><a href="k-nearest-neighbor.html#cb246-1" tabindex="-1"></a><span class="co">#### Gráficos de desempeño de modelo</span></span>
-<span id="cb246-2"><a href="k-nearest-neighbor.html#cb246-2" tabindex="-1"></a></span>
-<span id="cb246-3"><a href="k-nearest-neighbor.html#cb246-3" tabindex="-1"></a>(</span>
-<span id="cb246-4"><a href="k-nearest-neighbor.html#cb246-4" tabindex="-1"></a>  ames_test <span class="op">&gt;&gt;</span></span>
-<span id="cb246-5"><a href="k-nearest-neighbor.html#cb246-5" tabindex="-1"></a>    ggplot(aes(x <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>, y <span class="op">=</span> <span class="st">&quot;Sale_Price_Pred&quot;</span>)) <span class="op">+</span></span>
-<span id="cb246-6"><a href="k-nearest-neighbor.html#cb246-6" tabindex="-1"></a>    geom_point() <span class="op">+</span></span>
-<span id="cb246-7"><a href="k-nearest-neighbor.html#cb246-7" tabindex="-1"></a>    scale_y_continuous(labels <span class="op">=</span> dollar_format(digits<span class="op">=</span><span class="dv">0</span>, big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>), limits <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">600000</span>] ) <span class="op">+</span></span>
-<span id="cb246-8"><a href="k-nearest-neighbor.html#cb246-8" tabindex="-1"></a>    scale_x_continuous(labels <span class="op">=</span> dollar_format(digits<span class="op">=</span><span class="dv">0</span>, big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>), limits <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">500000</span>] ) <span class="op">+</span></span>
-<span id="cb246-9"><a href="k-nearest-neighbor.html#cb246-9" tabindex="-1"></a>    geom_abline(color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
-<span id="cb246-10"><a href="k-nearest-neighbor.html#cb246-10" tabindex="-1"></a>    coord_equal() <span class="op">+</span></span>
-<span id="cb246-11"><a href="k-nearest-neighbor.html#cb246-11" tabindex="-1"></a>    labs(</span>
-<span id="cb246-12"><a href="k-nearest-neighbor.html#cb246-12" tabindex="-1"></a>      title <span class="op">=</span> <span class="st">&quot;Comparación entre predicción y observación&quot;</span>,</span>
-<span id="cb246-13"><a href="k-nearest-neighbor.html#cb246-13" tabindex="-1"></a>      y <span class="op">=</span> <span class="st">&quot;Predicción&quot;</span>,</span>
-<span id="cb246-14"><a href="k-nearest-neighbor.html#cb246-14" tabindex="-1"></a>      x <span class="op">=</span> <span class="st">&quot;Observación&quot;</span>)</span>
-<span id="cb246-15"><a href="k-nearest-neighbor.html#cb246-15" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb244-1"><a href="k-nearest-neighbor.html#cb244-1" tabindex="-1"></a><span class="co">#### Gráficos de desempeño de modelo</span></span>
+<span id="cb244-2"><a href="k-nearest-neighbor.html#cb244-2" tabindex="-1"></a></span>
+<span id="cb244-3"><a href="k-nearest-neighbor.html#cb244-3" tabindex="-1"></a>(</span>
+<span id="cb244-4"><a href="k-nearest-neighbor.html#cb244-4" tabindex="-1"></a>  ames_test <span class="op">&gt;&gt;</span></span>
+<span id="cb244-5"><a href="k-nearest-neighbor.html#cb244-5" tabindex="-1"></a>    ggplot(aes(x <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>, y <span class="op">=</span> <span class="st">&quot;Sale_Price_Pred&quot;</span>)) <span class="op">+</span></span>
+<span id="cb244-6"><a href="k-nearest-neighbor.html#cb244-6" tabindex="-1"></a>    geom_point() <span class="op">+</span></span>
+<span id="cb244-7"><a href="k-nearest-neighbor.html#cb244-7" tabindex="-1"></a>    scale_y_continuous(labels <span class="op">=</span> dollar_format(digits<span class="op">=</span><span class="dv">0</span>, big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>), limits <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">600000</span>] ) <span class="op">+</span></span>
+<span id="cb244-8"><a href="k-nearest-neighbor.html#cb244-8" tabindex="-1"></a>    scale_x_continuous(labels <span class="op">=</span> dollar_format(digits<span class="op">=</span><span class="dv">0</span>, big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>), limits <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">500000</span>] ) <span class="op">+</span></span>
+<span id="cb244-9"><a href="k-nearest-neighbor.html#cb244-9" tabindex="-1"></a>    geom_abline(color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb244-10"><a href="k-nearest-neighbor.html#cb244-10" tabindex="-1"></a>    coord_equal() <span class="op">+</span></span>
+<span id="cb244-11"><a href="k-nearest-neighbor.html#cb244-11" tabindex="-1"></a>    labs(</span>
+<span id="cb244-12"><a href="k-nearest-neighbor.html#cb244-12" tabindex="-1"></a>      title <span class="op">=</span> <span class="st">&quot;Comparación entre predicción y observación&quot;</span>,</span>
+<span id="cb244-13"><a href="k-nearest-neighbor.html#cb244-13" tabindex="-1"></a>      y <span class="op">=</span> <span class="st">&quot;Predicción&quot;</span>,</span>
+<span id="cb244-14"><a href="k-nearest-neighbor.html#cb244-14" tabindex="-1"></a>      x <span class="op">=</span> <span class="st">&quot;Observación&quot;</span>)</span>
+<span id="cb244-15"><a href="k-nearest-neighbor.html#cb244-15" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-195-1.png" width="614" /></p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb246-1"><a href="k-nearest-neighbor.html#cb246-1" tabindex="-1"></a>(</span>
+<span id="cb246-2"><a href="k-nearest-neighbor.html#cb246-2" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
+<span id="cb246-3"><a href="k-nearest-neighbor.html#cb246-3" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
+<span id="cb246-4"><a href="k-nearest-neighbor.html#cb246-4" tabindex="-1"></a>  mutate(error <span class="op">=</span> _.Sale_Price <span class="op">-</span> _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
+<span id="cb246-5"><a href="k-nearest-neighbor.html#cb246-5" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;error&quot;</span>)) <span class="op">+</span></span>
+<span id="cb246-6"><a href="k-nearest-neighbor.html#cb246-6" tabindex="-1"></a>  geom_histogram(color <span class="op">=</span> <span class="st">&quot;white&quot;</span>, fill <span class="op">=</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></span>
+<span id="cb246-7"><a href="k-nearest-neighbor.html#cb246-7" tabindex="-1"></a>  geom_vline(xintercept <span class="op">=</span> <span class="dv">0</span>, color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb246-8"><a href="k-nearest-neighbor.html#cb246-8" tabindex="-1"></a>  scale_x_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits<span class="op">=</span><span class="dv">0</span>)) <span class="op">+</span> </span>
+<span id="cb246-9"><a href="k-nearest-neighbor.html#cb246-9" tabindex="-1"></a>  ylab(<span class="st">&quot;Conteos de clase&quot;</span>) <span class="op">+</span> xlab(<span class="st">&quot;Errores&quot;</span>) <span class="op">+</span></span>
+<span id="cb246-10"><a href="k-nearest-neighbor.html#cb246-10" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Distribución de error&quot;</span>)</span>
+<span id="cb246-11"><a href="k-nearest-neighbor.html#cb246-11" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-195-2.png" width="614" /></p>
 <div class="sourceCode" id="cb248"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb248-1"><a href="k-nearest-neighbor.html#cb248-1" tabindex="-1"></a>(</span>
 <span id="cb248-2"><a href="k-nearest-neighbor.html#cb248-2" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
 <span id="cb248-3"><a href="k-nearest-neighbor.html#cb248-3" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
 <span id="cb248-4"><a href="k-nearest-neighbor.html#cb248-4" tabindex="-1"></a>  mutate(error <span class="op">=</span> _.Sale_Price <span class="op">-</span> _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
-<span id="cb248-5"><a href="k-nearest-neighbor.html#cb248-5" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;error&quot;</span>)) <span class="op">+</span></span>
-<span id="cb248-6"><a href="k-nearest-neighbor.html#cb248-6" tabindex="-1"></a>  geom_histogram(color <span class="op">=</span> <span class="st">&quot;white&quot;</span>, fill <span class="op">=</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></span>
-<span id="cb248-7"><a href="k-nearest-neighbor.html#cb248-7" tabindex="-1"></a>  geom_vline(xintercept <span class="op">=</span> <span class="dv">0</span>, color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
-<span id="cb248-8"><a href="k-nearest-neighbor.html#cb248-8" tabindex="-1"></a>  scale_x_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits<span class="op">=</span><span class="dv">0</span>)) <span class="op">+</span> </span>
-<span id="cb248-9"><a href="k-nearest-neighbor.html#cb248-9" tabindex="-1"></a>  ylab(<span class="st">&quot;Conteos de clase&quot;</span>) <span class="op">+</span> xlab(<span class="st">&quot;Errores&quot;</span>) <span class="op">+</span></span>
-<span id="cb248-10"><a href="k-nearest-neighbor.html#cb248-10" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Distribución de error&quot;</span>)</span>
-<span id="cb248-11"><a href="k-nearest-neighbor.html#cb248-11" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb248-5"><a href="k-nearest-neighbor.html#cb248-5" tabindex="-1"></a>  ggplot(aes(sample <span class="op">=</span> <span class="st">&quot;error&quot;</span>)) <span class="op">+</span></span>
+<span id="cb248-6"><a href="k-nearest-neighbor.html#cb248-6" tabindex="-1"></a>  geom_qq(alpha <span class="op">=</span> <span class="fl">0.3</span>) <span class="op">+</span> stat_qq_line(color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb248-7"><a href="k-nearest-neighbor.html#cb248-7" tabindex="-1"></a>  scale_y_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits <span class="op">=</span> <span class="dv">0</span>)) <span class="op">+</span> </span>
+<span id="cb248-8"><a href="k-nearest-neighbor.html#cb248-8" tabindex="-1"></a>  xlab(<span class="st">&quot;Distribución normal&quot;</span>) <span class="op">+</span> ylab(<span class="st">&quot;Distribución de errores&quot;</span>) <span class="op">+</span></span>
+<span id="cb248-9"><a href="k-nearest-neighbor.html#cb248-9" tabindex="-1"></a>  ggtitle(<span class="st">&quot;QQ-Plot&quot;</span>)</span>
+<span id="cb248-10"><a href="k-nearest-neighbor.html#cb248-10" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
-<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-195-2.png" width="614" /></p>
+<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-195-3.png" width="614" /></p>
 <div class="sourceCode" id="cb250"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb250-1"><a href="k-nearest-neighbor.html#cb250-1" tabindex="-1"></a>(</span>
 <span id="cb250-2"><a href="k-nearest-neighbor.html#cb250-2" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
 <span id="cb250-3"><a href="k-nearest-neighbor.html#cb250-3" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
 <span id="cb250-4"><a href="k-nearest-neighbor.html#cb250-4" tabindex="-1"></a>  mutate(error <span class="op">=</span> _.Sale_Price <span class="op">-</span> _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
-<span id="cb250-5"><a href="k-nearest-neighbor.html#cb250-5" tabindex="-1"></a>  ggplot(aes(sample <span class="op">=</span> <span class="st">&quot;error&quot;</span>)) <span class="op">+</span></span>
-<span id="cb250-6"><a href="k-nearest-neighbor.html#cb250-6" tabindex="-1"></a>  geom_qq(alpha <span class="op">=</span> <span class="fl">0.3</span>) <span class="op">+</span> stat_qq_line(color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
-<span id="cb250-7"><a href="k-nearest-neighbor.html#cb250-7" tabindex="-1"></a>  scale_y_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits <span class="op">=</span> <span class="dv">0</span>)) <span class="op">+</span> </span>
-<span id="cb250-8"><a href="k-nearest-neighbor.html#cb250-8" tabindex="-1"></a>  xlab(<span class="st">&quot;Distribución normal&quot;</span>) <span class="op">+</span> ylab(<span class="st">&quot;Distribución de errores&quot;</span>) <span class="op">+</span></span>
-<span id="cb250-9"><a href="k-nearest-neighbor.html#cb250-9" tabindex="-1"></a>  ggtitle(<span class="st">&quot;QQ-Plot&quot;</span>)</span>
-<span id="cb250-10"><a href="k-nearest-neighbor.html#cb250-10" tabindex="-1"></a>)</span></code></pre></div>
-<pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
-<p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-195-3.png" width="614" /></p>
-<div class="sourceCode" id="cb252"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb252-1"><a href="k-nearest-neighbor.html#cb252-1" tabindex="-1"></a>(</span>
-<span id="cb252-2"><a href="k-nearest-neighbor.html#cb252-2" tabindex="-1"></a>ames_test <span class="op">&gt;&gt;</span></span>
-<span id="cb252-3"><a href="k-nearest-neighbor.html#cb252-3" tabindex="-1"></a>  select(_.Sale_Price, _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
-<span id="cb252-4"><a href="k-nearest-neighbor.html#cb252-4" tabindex="-1"></a>  mutate(error <span class="op">=</span> _.Sale_Price <span class="op">-</span> _.Sale_Price_Pred) <span class="op">&gt;&gt;</span></span>
-<span id="cb252-5"><a href="k-nearest-neighbor.html#cb252-5" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>)) <span class="op">+</span></span>
-<span id="cb252-6"><a href="k-nearest-neighbor.html#cb252-6" tabindex="-1"></a>  geom_linerange(aes(ymin <span class="op">=</span> <span class="dv">0</span>, ymax <span class="op">=</span> <span class="st">&quot;error&quot;</span>), colour <span class="op">=</span> <span class="st">&quot;purple&quot;</span>) <span class="op">+</span></span>
-<span id="cb252-7"><a href="k-nearest-neighbor.html#cb252-7" tabindex="-1"></a>  geom_point(aes(y <span class="op">=</span> <span class="st">&quot;error&quot;</span>), size <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>) <span class="op">+</span></span>
-<span id="cb252-8"><a href="k-nearest-neighbor.html#cb252-8" tabindex="-1"></a>  geom_abline(intercept <span class="op">=</span> <span class="dv">0</span>, slope <span class="op">=</span> <span class="dv">0</span>) <span class="op">+</span></span>
-<span id="cb252-9"><a href="k-nearest-neighbor.html#cb252-9" tabindex="-1"></a>  scale_x_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits<span class="op">=</span><span class="dv">0</span>)) <span class="op">+</span> </span>
-<span id="cb252-10"><a href="k-nearest-neighbor.html#cb252-10" tabindex="-1"></a>  scale_y_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits<span class="op">=</span><span class="dv">0</span>)) <span class="op">+</span></span>
-<span id="cb252-11"><a href="k-nearest-neighbor.html#cb252-11" tabindex="-1"></a>  xlab(<span class="st">&quot;Precio real&quot;</span>) <span class="op">+</span> ylab(<span class="st">&quot;Error de estimación&quot;</span>) <span class="op">+</span></span>
-<span id="cb252-12"><a href="k-nearest-neighbor.html#cb252-12" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Relación entre error y precio de venta&quot;</span>)</span>
-<span id="cb252-13"><a href="k-nearest-neighbor.html#cb252-13" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb250-5"><a href="k-nearest-neighbor.html#cb250-5" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>)) <span class="op">+</span></span>
+<span id="cb250-6"><a href="k-nearest-neighbor.html#cb250-6" tabindex="-1"></a>  geom_linerange(aes(ymin <span class="op">=</span> <span class="dv">0</span>, ymax <span class="op">=</span> <span class="st">&quot;error&quot;</span>), colour <span class="op">=</span> <span class="st">&quot;purple&quot;</span>) <span class="op">+</span></span>
+<span id="cb250-7"><a href="k-nearest-neighbor.html#cb250-7" tabindex="-1"></a>  geom_point(aes(y <span class="op">=</span> <span class="st">&quot;error&quot;</span>), size <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>) <span class="op">+</span></span>
+<span id="cb250-8"><a href="k-nearest-neighbor.html#cb250-8" tabindex="-1"></a>  geom_abline(intercept <span class="op">=</span> <span class="dv">0</span>, slope <span class="op">=</span> <span class="dv">0</span>) <span class="op">+</span></span>
+<span id="cb250-9"><a href="k-nearest-neighbor.html#cb250-9" tabindex="-1"></a>  scale_x_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits<span class="op">=</span><span class="dv">0</span>)) <span class="op">+</span> </span>
+<span id="cb250-10"><a href="k-nearest-neighbor.html#cb250-10" tabindex="-1"></a>  scale_y_continuous(labels<span class="op">=</span>dollar_format(big_mark<span class="op">=</span><span class="st">&#39;,&#39;</span>, digits<span class="op">=</span><span class="dv">0</span>)) <span class="op">+</span></span>
+<span id="cb250-11"><a href="k-nearest-neighbor.html#cb250-11" tabindex="-1"></a>  xlab(<span class="st">&quot;Precio real&quot;</span>) <span class="op">+</span> ylab(<span class="st">&quot;Error de estimación&quot;</span>) <span class="op">+</span></span>
+<span id="cb250-12"><a href="k-nearest-neighbor.html#cb250-12" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Relación entre error y precio de venta&quot;</span>)</span>
+<span id="cb250-13"><a href="k-nearest-neighbor.html#cb250-13" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-195-4.png" width="614" /></p>
 </div>
@@ -751,16 +751,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Para determinar cuáles son los hiper-parámetros que funcionan mejor, es necesario realizar experimentos mediante <strong>ensayo-error</strong> hasta determinar la mejor solución. En cada partición del método de muestreo <em>KFCV</em> se implementan las distintas configuraciones y se calculan predicciones. Con las predicciones hechas en cada <em>fold</em>, se obtienen intervalos de confianza para conocer la variación asociada al modelo a través de los hiper-parámetros implementados.</p>
 <p>Usaremos las recetas antes implementadas para ajustar tanto el modelo de regresión como el de clasificación. Exploraremos un conjunto de hiperparámetros para elegir el mejor modelo, sin embargo, para realizar este proceso de forma ágil, se inicializará un flujo de trabajo que se encargue de realizar todos los experimentos deseados y elegir el modelo adecuado.</p>
 <p><strong>Paso 5: Creación de grid search y métricas de desempeño</strong></p>
-<div class="sourceCode" id="cb254"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb254-1"><a href="k-nearest-neighbor.html#cb254-1" tabindex="-1"></a><span class="co"># Definir el objeto K-Fold Cross Validator</span></span>
-<span id="cb254-2"><a href="k-nearest-neighbor.html#cb254-2" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb254-3"><a href="k-nearest-neighbor.html#cb254-3" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits<span class="op">=</span>k, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb254-4"><a href="k-nearest-neighbor.html#cb254-4" tabindex="-1"></a></span>
-<span id="cb254-5"><a href="k-nearest-neighbor.html#cb254-5" tabindex="-1"></a>param_grid <span class="op">=</span> {</span>
-<span id="cb254-6"><a href="k-nearest-neighbor.html#cb254-6" tabindex="-1"></a> <span class="st">&#39;n_neighbors&#39;</span>: <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">21</span>),</span>
-<span id="cb254-7"><a href="k-nearest-neighbor.html#cb254-7" tabindex="-1"></a> <span class="st">&#39;weights&#39;</span>: [<span class="st">&#39;uniform&#39;</span>, <span class="st">&#39;distance&#39;</span>],</span>
-<span id="cb254-8"><a href="k-nearest-neighbor.html#cb254-8" tabindex="-1"></a> <span class="st">&#39;metric&#39;</span>: [<span class="st">&#39;euclidean&#39;</span>, <span class="st">&#39;manhattan&#39;</span>],</span>
-<span id="cb254-9"><a href="k-nearest-neighbor.html#cb254-9" tabindex="-1"></a> <span class="st">&#39;p&#39;</span>: [<span class="dv">1</span>, <span class="dv">2</span>]</span>
-<span id="cb254-10"><a href="k-nearest-neighbor.html#cb254-10" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb252-1"><a href="k-nearest-neighbor.html#cb252-1" tabindex="-1"></a><span class="co"># Definir el objeto K-Fold Cross Validator</span></span>
+<span id="cb252-2"><a href="k-nearest-neighbor.html#cb252-2" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb252-3"><a href="k-nearest-neighbor.html#cb252-3" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits<span class="op">=</span>k, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb252-4"><a href="k-nearest-neighbor.html#cb252-4" tabindex="-1"></a></span>
+<span id="cb252-5"><a href="k-nearest-neighbor.html#cb252-5" tabindex="-1"></a>param_grid <span class="op">=</span> {</span>
+<span id="cb252-6"><a href="k-nearest-neighbor.html#cb252-6" tabindex="-1"></a> <span class="st">&#39;n_neighbors&#39;</span>: <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">21</span>),</span>
+<span id="cb252-7"><a href="k-nearest-neighbor.html#cb252-7" tabindex="-1"></a> <span class="st">&#39;weights&#39;</span>: [<span class="st">&#39;uniform&#39;</span>, <span class="st">&#39;distance&#39;</span>],</span>
+<span id="cb252-8"><a href="k-nearest-neighbor.html#cb252-8" tabindex="-1"></a> <span class="st">&#39;metric&#39;</span>: [<span class="st">&#39;euclidean&#39;</span>, <span class="st">&#39;manhattan&#39;</span>],</span>
+<span id="cb252-9"><a href="k-nearest-neighbor.html#cb252-9" tabindex="-1"></a> <span class="st">&#39;p&#39;</span>: [<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb252-10"><a href="k-nearest-neighbor.html#cb252-10" tabindex="-1"></a>}</span></code></pre></div>
 <p>Algunas otras posibles distancias son:</p>
 <ul>
 <li>euclidean</li>
@@ -772,36 +772,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>cosine</li>
 </ul>
 <p>Una vez definidos los posibles hiperparámetros, procedemos a definir las métricas que serán usadas para cuantificar la bondad del ajuste.</p>
-<div class="sourceCode" id="cb255"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb255-1"><a href="k-nearest-neighbor.html#cb255-1" tabindex="-1"></a><span class="co"># Definir las métricas de desempeño que deseas calcular como funciones de puntuación</span></span>
-<span id="cb255-2"><a href="k-nearest-neighbor.html#cb255-2" tabindex="-1"></a></span>
-<span id="cb255-3"><a href="k-nearest-neighbor.html#cb255-3" tabindex="-1"></a><span class="kw">def</span> adjusted_r2_score(y_true, y_pred, n, p):</span>
-<span id="cb255-4"><a href="k-nearest-neighbor.html#cb255-4" tabindex="-1"></a>  r2 <span class="op">=</span> r2_score(y_true, y_pred)</span>
-<span id="cb255-5"><a href="k-nearest-neighbor.html#cb255-5" tabindex="-1"></a>  adjusted_r2 <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> r2) <span class="op">*</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (n <span class="op">-</span> p <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb255-6"><a href="k-nearest-neighbor.html#cb255-6" tabindex="-1"></a>  <span class="cf">return</span> adjusted_r2</span>
-<span id="cb255-7"><a href="k-nearest-neighbor.html#cb255-7" tabindex="-1"></a></span>
-<span id="cb255-8"><a href="k-nearest-neighbor.html#cb255-8" tabindex="-1"></a>scoring <span class="op">=</span> {</span>
-<span id="cb255-9"><a href="k-nearest-neighbor.html#cb255-9" tabindex="-1"></a>    <span class="st">&#39;neg_mean_squared_error&#39;</span>: make_scorer(mean_squared_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
-<span id="cb255-10"><a href="k-nearest-neighbor.html#cb255-10" tabindex="-1"></a>    <span class="st">&#39;r2&#39;</span>: make_scorer(adjusted_r2_score, greater_is_better<span class="op">=</span><span class="va">True</span>, </span>
-<span id="cb255-11"><a href="k-nearest-neighbor.html#cb255-11" tabindex="-1"></a>                      n<span class="op">=</span>np.ceil(<span class="bu">len</span>(ames_train_selected)), p<span class="op">=</span><span class="bu">len</span>(ames_train_selected.columns)),</span>
-<span id="cb255-12"><a href="k-nearest-neighbor.html#cb255-12" tabindex="-1"></a>    <span class="st">&#39;neg_mean_absolute_error&#39;</span>: make_scorer(mean_absolute_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
-<span id="cb255-13"><a href="k-nearest-neighbor.html#cb255-13" tabindex="-1"></a>    <span class="st">&#39;mape&#39;</span>: make_scorer(mean_absolute_percentage_error, greater_is_better<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb255-14"><a href="k-nearest-neighbor.html#cb255-14" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb253"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb253-1"><a href="k-nearest-neighbor.html#cb253-1" tabindex="-1"></a><span class="co"># Definir las métricas de desempeño que deseas calcular como funciones de puntuación</span></span>
+<span id="cb253-2"><a href="k-nearest-neighbor.html#cb253-2" tabindex="-1"></a></span>
+<span id="cb253-3"><a href="k-nearest-neighbor.html#cb253-3" tabindex="-1"></a><span class="kw">def</span> adjusted_r2_score(y_true, y_pred, n, p):</span>
+<span id="cb253-4"><a href="k-nearest-neighbor.html#cb253-4" tabindex="-1"></a>  r2 <span class="op">=</span> r2_score(y_true, y_pred)</span>
+<span id="cb253-5"><a href="k-nearest-neighbor.html#cb253-5" tabindex="-1"></a>  adjusted_r2 <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> r2) <span class="op">*</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (n <span class="op">-</span> p <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb253-6"><a href="k-nearest-neighbor.html#cb253-6" tabindex="-1"></a>  <span class="cf">return</span> adjusted_r2</span>
+<span id="cb253-7"><a href="k-nearest-neighbor.html#cb253-7" tabindex="-1"></a></span>
+<span id="cb253-8"><a href="k-nearest-neighbor.html#cb253-8" tabindex="-1"></a>scoring <span class="op">=</span> {</span>
+<span id="cb253-9"><a href="k-nearest-neighbor.html#cb253-9" tabindex="-1"></a>    <span class="st">&#39;neg_mean_squared_error&#39;</span>: make_scorer(mean_squared_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb253-10"><a href="k-nearest-neighbor.html#cb253-10" tabindex="-1"></a>    <span class="st">&#39;r2&#39;</span>: make_scorer(adjusted_r2_score, greater_is_better<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb253-11"><a href="k-nearest-neighbor.html#cb253-11" tabindex="-1"></a>                      n<span class="op">=</span>np.ceil(<span class="bu">len</span>(ames_train_selected)), p<span class="op">=</span><span class="bu">len</span>(ames_train_selected.columns)),</span>
+<span id="cb253-12"><a href="k-nearest-neighbor.html#cb253-12" tabindex="-1"></a>    <span class="st">&#39;neg_mean_absolute_error&#39;</span>: make_scorer(mean_absolute_error, greater_is_better<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb253-13"><a href="k-nearest-neighbor.html#cb253-13" tabindex="-1"></a>    <span class="st">&#39;mape&#39;</span>: make_scorer(mean_absolute_percentage_error, greater_is_better<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb253-14"><a href="k-nearest-neighbor.html#cb253-14" tabindex="-1"></a>}</span></code></pre></div>
 <p><strong>Paso 6: Entrenamiento de modelos con hiperparámetros definidos</strong></p>
 <p>Teniendo todos los elementos anteriores listos, se procede con el ajuste de todas las posibles configuraciones del modelo a través de la validación cruzada. Esto permitirá contar con medidas de tendencia central para los resultados de cada uno de las configuraciones y evaluar si estadísticamente hay diferencia entre los mejores resultados.</p>
-<div class="sourceCode" id="cb256"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb256-1"><a href="k-nearest-neighbor.html#cb256-1" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline([</span>
-<span id="cb256-2"><a href="k-nearest-neighbor.html#cb256-2" tabindex="-1"></a>    (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
-<span id="cb256-3"><a href="k-nearest-neighbor.html#cb256-3" tabindex="-1"></a>    (<span class="st">&#39;regressor&#39;</span>, GridSearchCV(</span>
-<span id="cb256-4"><a href="k-nearest-neighbor.html#cb256-4" tabindex="-1"></a>      KNeighborsRegressor(), </span>
-<span id="cb256-5"><a href="k-nearest-neighbor.html#cb256-5" tabindex="-1"></a>      param_grid, </span>
-<span id="cb256-6"><a href="k-nearest-neighbor.html#cb256-6" tabindex="-1"></a>      cv<span class="op">=</span>kf, </span>
-<span id="cb256-7"><a href="k-nearest-neighbor.html#cb256-7" tabindex="-1"></a>      scoring<span class="op">=</span>scoring, </span>
-<span id="cb256-8"><a href="k-nearest-neighbor.html#cb256-8" tabindex="-1"></a>      refit<span class="op">=</span><span class="st">&#39;neg_mean_squared_error&#39;</span>,</span>
-<span id="cb256-9"><a href="k-nearest-neighbor.html#cb256-9" tabindex="-1"></a>      verbose<span class="op">=</span><span class="dv">3</span>, </span>
-<span id="cb256-10"><a href="k-nearest-neighbor.html#cb256-10" tabindex="-1"></a>      n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
-<span id="cb256-11"><a href="k-nearest-neighbor.html#cb256-11" tabindex="-1"></a>     )</span>
-<span id="cb256-12"><a href="k-nearest-neighbor.html#cb256-12" tabindex="-1"></a>])</span>
-<span id="cb256-13"><a href="k-nearest-neighbor.html#cb256-13" tabindex="-1"></a></span>
-<span id="cb256-14"><a href="k-nearest-neighbor.html#cb256-14" tabindex="-1"></a>pipeline.fit(ames_train_selected, ames_y_train)</span></code></pre></div>
+<div class="sourceCode" id="cb254"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb254-1"><a href="k-nearest-neighbor.html#cb254-1" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline([</span>
+<span id="cb254-2"><a href="k-nearest-neighbor.html#cb254-2" tabindex="-1"></a>    (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
+<span id="cb254-3"><a href="k-nearest-neighbor.html#cb254-3" tabindex="-1"></a>    (<span class="st">&#39;regressor&#39;</span>, GridSearchCV(</span>
+<span id="cb254-4"><a href="k-nearest-neighbor.html#cb254-4" tabindex="-1"></a>      KNeighborsRegressor(), </span>
+<span id="cb254-5"><a href="k-nearest-neighbor.html#cb254-5" tabindex="-1"></a>      param_grid, </span>
+<span id="cb254-6"><a href="k-nearest-neighbor.html#cb254-6" tabindex="-1"></a>      cv<span class="op">=</span>kf, </span>
+<span id="cb254-7"><a href="k-nearest-neighbor.html#cb254-7" tabindex="-1"></a>      scoring<span class="op">=</span>scoring, </span>
+<span id="cb254-8"><a href="k-nearest-neighbor.html#cb254-8" tabindex="-1"></a>      refit<span class="op">=</span><span class="st">&#39;neg_mean_squared_error&#39;</span>,</span>
+<span id="cb254-9"><a href="k-nearest-neighbor.html#cb254-9" tabindex="-1"></a>      verbose<span class="op">=</span><span class="dv">3</span>, </span>
+<span id="cb254-10"><a href="k-nearest-neighbor.html#cb254-10" tabindex="-1"></a>      n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb254-11"><a href="k-nearest-neighbor.html#cb254-11" tabindex="-1"></a>     )</span>
+<span id="cb254-12"><a href="k-nearest-neighbor.html#cb254-12" tabindex="-1"></a>])</span>
+<span id="cb254-13"><a href="k-nearest-neighbor.html#cb254-13" tabindex="-1"></a></span>
+<span id="cb254-14"><a href="k-nearest-neighbor.html#cb254-14" tabindex="-1"></a>pipeline.fit(ames_train_selected, ames_y_train)</span></code></pre></div>
 <pre><code>## Fitting 10 folds for each of 152 candidates, totalling 1520 fits
 ## Pipeline(steps=[(&#39;preprocessor&#39;,
 ##                  ColumnTransformer(remainder=&#39;passthrough&#39;,
@@ -824,12 +824,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##                               verbose=3))])</code></pre>
 <p><strong>Paso 7: Análisis de métricas de error e hiperparámetros (Vuelve al paso 3, si es necesario)</strong></p>
 <p>Podemos obtener las métricas de los resultados de cada <em>fold</em>:</p>
-<div class="sourceCode" id="cb258"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb258-1"><a href="k-nearest-neighbor.html#cb258-1" tabindex="-1"></a>results_cv <span class="op">=</span> pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].cv_results_</span>
-<span id="cb258-2"><a href="k-nearest-neighbor.html#cb258-2" tabindex="-1"></a></span>
-<span id="cb258-3"><a href="k-nearest-neighbor.html#cb258-3" tabindex="-1"></a><span class="co"># Convierte los resultados en un DataFrame</span></span>
-<span id="cb258-4"><a href="k-nearest-neighbor.html#cb258-4" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="dv">500</span>)</span>
-<span id="cb258-5"><a href="k-nearest-neighbor.html#cb258-5" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results_cv)</span>
-<span id="cb258-6"><a href="k-nearest-neighbor.html#cb258-6" tabindex="-1"></a>results_df.columns</span></code></pre></div>
+<div class="sourceCode" id="cb256"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb256-1"><a href="k-nearest-neighbor.html#cb256-1" tabindex="-1"></a>results_cv <span class="op">=</span> pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].cv_results_</span>
+<span id="cb256-2"><a href="k-nearest-neighbor.html#cb256-2" tabindex="-1"></a></span>
+<span id="cb256-3"><a href="k-nearest-neighbor.html#cb256-3" tabindex="-1"></a><span class="co"># Convierte los resultados en un DataFrame</span></span>
+<span id="cb256-4"><a href="k-nearest-neighbor.html#cb256-4" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="dv">500</span>)</span>
+<span id="cb256-5"><a href="k-nearest-neighbor.html#cb256-5" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results_cv)</span>
+<span id="cb256-6"><a href="k-nearest-neighbor.html#cb256-6" tabindex="-1"></a>results_df.columns</span></code></pre></div>
 <pre><code>## Index([&#39;mean_fit_time&#39;, &#39;std_fit_time&#39;, &#39;mean_score_time&#39;, &#39;std_score_time&#39;,
 ##        &#39;param_metric&#39;, &#39;param_n_neighbors&#39;, &#39;param_p&#39;, &#39;param_weights&#39;,
 ##        &#39;params&#39;, &#39;split0_test_neg_mean_squared_error&#39;,
@@ -864,13 +864,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##        &#39;split7_test_mape&#39;, &#39;split8_test_mape&#39;, &#39;split9_test_mape&#39;,
 ##        &#39;mean_test_mape&#39;, &#39;std_test_mape&#39;, &#39;rank_test_mape&#39;],
 ##       dtype=&#39;object&#39;)</code></pre>
-<div class="sourceCode" id="cb260"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb260-1"><a href="k-nearest-neighbor.html#cb260-1" tabindex="-1"></a><span class="co"># Puedes seleccionar las columnas de interés, por ejemplo:</span></span>
-<span id="cb260-2"><a href="k-nearest-neighbor.html#cb260-2" tabindex="-1"></a></span>
-<span id="cb260-3"><a href="k-nearest-neighbor.html#cb260-3" tabindex="-1"></a>summary_df <span class="op">=</span> (</span>
-<span id="cb260-4"><a href="k-nearest-neighbor.html#cb260-4" tabindex="-1"></a>  results_df <span class="op">&gt;&gt;</span></span>
-<span id="cb260-5"><a href="k-nearest-neighbor.html#cb260-5" tabindex="-1"></a>  select(<span class="op">-</span>_.contains(<span class="st">&quot;split&quot;</span>), <span class="op">-</span>_.contains(<span class="st">&quot;time&quot;</span>), <span class="op">-</span>_.params)</span>
-<span id="cb260-6"><a href="k-nearest-neighbor.html#cb260-6" tabindex="-1"></a>)</span>
-<span id="cb260-7"><a href="k-nearest-neighbor.html#cb260-7" tabindex="-1"></a>summary_df</span></code></pre></div>
+<div class="sourceCode" id="cb258"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb258-1"><a href="k-nearest-neighbor.html#cb258-1" tabindex="-1"></a><span class="co"># Puedes seleccionar las columnas de interés, por ejemplo:</span></span>
+<span id="cb258-2"><a href="k-nearest-neighbor.html#cb258-2" tabindex="-1"></a></span>
+<span id="cb258-3"><a href="k-nearest-neighbor.html#cb258-3" tabindex="-1"></a>summary_df <span class="op">=</span> (</span>
+<span id="cb258-4"><a href="k-nearest-neighbor.html#cb258-4" tabindex="-1"></a>  results_df <span class="op">&gt;&gt;</span></span>
+<span id="cb258-5"><a href="k-nearest-neighbor.html#cb258-5" tabindex="-1"></a>  select(<span class="op">-</span>_.contains(<span class="st">&quot;split&quot;</span>), <span class="op">-</span>_.contains(<span class="st">&quot;time&quot;</span>), <span class="op">-</span>_.params)</span>
+<span id="cb258-6"><a href="k-nearest-neighbor.html#cb258-6" tabindex="-1"></a>)</span>
+<span id="cb258-7"><a href="k-nearest-neighbor.html#cb258-7" tabindex="-1"></a>summary_df</span></code></pre></div>
 <pre><code>##     param_metric param_n_neighbors param_p param_weights  \
 ## 0      euclidean                 2       1       uniform   
 ## 1      euclidean                 2       1      distance   
@@ -951,57 +951,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## [152 rows x 16 columns]</code></pre>
 <p>En la siguiente gráfica observamos las distintas métricas de error asociados a los hiperparámetros elegidos:</p>
-<div class="sourceCode" id="cb262"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb262-1"><a href="k-nearest-neighbor.html#cb262-1" tabindex="-1"></a>(</span>
-<span id="cb262-2"><a href="k-nearest-neighbor.html#cb262-2" tabindex="-1"></a>  summary_df <span class="op">&gt;&gt;</span></span>
-<span id="cb262-3"><a href="k-nearest-neighbor.html#cb262-3" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;param_n_neighbors&quot;</span>, y <span class="op">=</span> <span class="st">&quot;mean_test_r2&quot;</span>, size <span class="op">=</span> <span class="st">&quot;param_p&quot;</span>,</span>
-<span id="cb262-4"><a href="k-nearest-neighbor.html#cb262-4" tabindex="-1"></a>             color <span class="op">=</span> <span class="st">&quot;param_metric&quot;</span>, shape <span class="op">=</span> <span class="st">&quot;param_weights&quot;</span>)) <span class="op">+</span></span>
-<span id="cb262-5"><a href="k-nearest-neighbor.html#cb262-5" tabindex="-1"></a>  geom_point(alpha <span class="op">=</span> <span class="fl">0.65</span>) <span class="op">+</span></span>
-<span id="cb262-6"><a href="k-nearest-neighbor.html#cb262-6" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Parametrización de KNN vs R^2&quot;</span>) <span class="op">+</span></span>
-<span id="cb262-7"><a href="k-nearest-neighbor.html#cb262-7" tabindex="-1"></a>  xlab(<span class="st">&quot;Parámetro: Número de vecinos cercanos&quot;</span>) <span class="op">+</span></span>
-<span id="cb262-8"><a href="k-nearest-neighbor.html#cb262-8" tabindex="-1"></a>  ylab(<span class="st">&quot;R^2 promedio&quot;</span>)</span>
-<span id="cb262-9"><a href="k-nearest-neighbor.html#cb262-9" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb260-1"><a href="k-nearest-neighbor.html#cb260-1" tabindex="-1"></a>(</span>
+<span id="cb260-2"><a href="k-nearest-neighbor.html#cb260-2" tabindex="-1"></a>  summary_df <span class="op">&gt;&gt;</span></span>
+<span id="cb260-3"><a href="k-nearest-neighbor.html#cb260-3" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;param_n_neighbors&quot;</span>, y <span class="op">=</span> <span class="st">&quot;mean_test_r2&quot;</span>, size <span class="op">=</span> <span class="st">&quot;param_p&quot;</span>,</span>
+<span id="cb260-4"><a href="k-nearest-neighbor.html#cb260-4" tabindex="-1"></a>             color <span class="op">=</span> <span class="st">&quot;param_metric&quot;</span>, shape <span class="op">=</span> <span class="st">&quot;param_weights&quot;</span>)) <span class="op">+</span></span>
+<span id="cb260-5"><a href="k-nearest-neighbor.html#cb260-5" tabindex="-1"></a>  geom_point(alpha <span class="op">=</span> <span class="fl">0.65</span>) <span class="op">+</span></span>
+<span id="cb260-6"><a href="k-nearest-neighbor.html#cb260-6" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Parametrización de KNN vs R^2&quot;</span>) <span class="op">+</span></span>
+<span id="cb260-7"><a href="k-nearest-neighbor.html#cb260-7" tabindex="-1"></a>  xlab(<span class="st">&quot;Parámetro: Número de vecinos cercanos&quot;</span>) <span class="op">+</span></span>
+<span id="cb260-8"><a href="k-nearest-neighbor.html#cb260-8" tabindex="-1"></a>  ylab(<span class="st">&quot;R^2 promedio&quot;</span>)</span>
+<span id="cb260-9"><a href="k-nearest-neighbor.html#cb260-9" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-200-9.png" width="614" /></p>
 <p>Seleccionando la mejor parametrización, se puede definir la siguiente gráfica para comparar la diferencia entre hiperparámetros a un nivel más granular.</p>
-<div class="sourceCode" id="cb264"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb264-1"><a href="k-nearest-neighbor.html#cb264-1" tabindex="-1"></a>(</span>
-<span id="cb264-2"><a href="k-nearest-neighbor.html#cb264-2" tabindex="-1"></a>  summary_df <span class="op">&gt;&gt;</span></span>
-<span id="cb264-3"><a href="k-nearest-neighbor.html#cb264-3" tabindex="-1"></a>  <span class="bu">filter</span>(</span>
-<span id="cb264-4"><a href="k-nearest-neighbor.html#cb264-4" tabindex="-1"></a>    _.param_weights <span class="op">==</span> <span class="st">&quot;uniform&quot;</span>,</span>
-<span id="cb264-5"><a href="k-nearest-neighbor.html#cb264-5" tabindex="-1"></a>    _.param_p <span class="op">==</span> <span class="dv">1</span>,</span>
-<span id="cb264-6"><a href="k-nearest-neighbor.html#cb264-6" tabindex="-1"></a>    _.param_metric <span class="op">==</span> <span class="st">&quot;manhattan&quot;</span>) <span class="op">&gt;&gt;</span></span>
-<span id="cb264-7"><a href="k-nearest-neighbor.html#cb264-7" tabindex="-1"></a>  mutate(</span>
-<span id="cb264-8"><a href="k-nearest-neighbor.html#cb264-8" tabindex="-1"></a>    ymin <span class="op">=</span> np.maximum(<span class="dv">0</span>, _.mean_test_r2 <span class="op">-</span> _.std_test_r2),</span>
-<span id="cb264-9"><a href="k-nearest-neighbor.html#cb264-9" tabindex="-1"></a>    ymax <span class="op">=</span> np.minimum(<span class="dv">1</span>, _.mean_test_r2 <span class="op">+</span> _.std_test_r2)) <span class="op">&gt;&gt;</span></span>
-<span id="cb264-10"><a href="k-nearest-neighbor.html#cb264-10" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;param_n_neighbors&quot;</span>, y <span class="op">=</span> <span class="st">&quot;mean_test_r2&quot;</span>)) <span class="op">+</span></span>
-<span id="cb264-11"><a href="k-nearest-neighbor.html#cb264-11" tabindex="-1"></a>  geom_errorbar(aes(ymin<span class="op">=</span><span class="st">&#39;ymin&#39;</span>, ymax<span class="op">=</span><span class="st">&#39;ymax&#39;</span>),</span>
-<span id="cb264-12"><a href="k-nearest-neighbor.html#cb264-12" tabindex="-1"></a>    width<span class="op">=</span><span class="fl">0.3</span>, position<span class="op">=</span>position_dodge(<span class="fl">0.9</span>)) <span class="op">+</span></span>
-<span id="cb264-13"><a href="k-nearest-neighbor.html#cb264-13" tabindex="-1"></a>  geom_point(alpha <span class="op">=</span> <span class="fl">0.65</span>) <span class="op">+</span></span>
-<span id="cb264-14"><a href="k-nearest-neighbor.html#cb264-14" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Parametrización de KNN vs R^2&quot;</span>) <span class="op">+</span></span>
-<span id="cb264-15"><a href="k-nearest-neighbor.html#cb264-15" tabindex="-1"></a>  xlab(<span class="st">&quot;Parámetro: Número de vecinos cercanos&quot;</span>) <span class="op">+</span></span>
-<span id="cb264-16"><a href="k-nearest-neighbor.html#cb264-16" tabindex="-1"></a>  ylab(<span class="st">&quot;R^2 promedio&quot;</span>)</span>
-<span id="cb264-17"><a href="k-nearest-neighbor.html#cb264-17" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb262-1"><a href="k-nearest-neighbor.html#cb262-1" tabindex="-1"></a>(</span>
+<span id="cb262-2"><a href="k-nearest-neighbor.html#cb262-2" tabindex="-1"></a>  summary_df <span class="op">&gt;&gt;</span></span>
+<span id="cb262-3"><a href="k-nearest-neighbor.html#cb262-3" tabindex="-1"></a>  <span class="bu">filter</span>(</span>
+<span id="cb262-4"><a href="k-nearest-neighbor.html#cb262-4" tabindex="-1"></a>    _.param_weights <span class="op">==</span> <span class="st">&quot;uniform&quot;</span>,</span>
+<span id="cb262-5"><a href="k-nearest-neighbor.html#cb262-5" tabindex="-1"></a>    _.param_p <span class="op">==</span> <span class="dv">1</span>,</span>
+<span id="cb262-6"><a href="k-nearest-neighbor.html#cb262-6" tabindex="-1"></a>    _.param_metric <span class="op">==</span> <span class="st">&quot;manhattan&quot;</span>) <span class="op">&gt;&gt;</span></span>
+<span id="cb262-7"><a href="k-nearest-neighbor.html#cb262-7" tabindex="-1"></a>  mutate(</span>
+<span id="cb262-8"><a href="k-nearest-neighbor.html#cb262-8" tabindex="-1"></a>    ymin <span class="op">=</span> np.maximum(<span class="dv">0</span>, _.mean_test_r2 <span class="op">-</span> _.std_test_r2),</span>
+<span id="cb262-9"><a href="k-nearest-neighbor.html#cb262-9" tabindex="-1"></a>    ymax <span class="op">=</span> np.minimum(<span class="dv">1</span>, _.mean_test_r2 <span class="op">+</span> _.std_test_r2)) <span class="op">&gt;&gt;</span></span>
+<span id="cb262-10"><a href="k-nearest-neighbor.html#cb262-10" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&quot;param_n_neighbors&quot;</span>, y <span class="op">=</span> <span class="st">&quot;mean_test_r2&quot;</span>)) <span class="op">+</span></span>
+<span id="cb262-11"><a href="k-nearest-neighbor.html#cb262-11" tabindex="-1"></a>  geom_errorbar(aes(ymin<span class="op">=</span><span class="st">&#39;ymin&#39;</span>, ymax<span class="op">=</span><span class="st">&#39;ymax&#39;</span>),</span>
+<span id="cb262-12"><a href="k-nearest-neighbor.html#cb262-12" tabindex="-1"></a>    width<span class="op">=</span><span class="fl">0.3</span>, position<span class="op">=</span>position_dodge(<span class="fl">0.9</span>)) <span class="op">+</span></span>
+<span id="cb262-13"><a href="k-nearest-neighbor.html#cb262-13" tabindex="-1"></a>  geom_point(alpha <span class="op">=</span> <span class="fl">0.65</span>) <span class="op">+</span></span>
+<span id="cb262-14"><a href="k-nearest-neighbor.html#cb262-14" tabindex="-1"></a>  ggtitle(<span class="st">&quot;Parametrización de KNN vs R^2&quot;</span>) <span class="op">+</span></span>
+<span id="cb262-15"><a href="k-nearest-neighbor.html#cb262-15" tabindex="-1"></a>  xlab(<span class="st">&quot;Parámetro: Número de vecinos cercanos&quot;</span>) <span class="op">+</span></span>
+<span id="cb262-16"><a href="k-nearest-neighbor.html#cb262-16" tabindex="-1"></a>  ylab(<span class="st">&quot;R^2 promedio&quot;</span>)</span>
+<span id="cb262-17"><a href="k-nearest-neighbor.html#cb262-17" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-201-11.png" width="614" /></p>
 <p>En la anterior gráfica observamos la <code>R^2</code> con distintos números de vecinos.</p>
 <p><strong>Paso 8: Selección de modelo a usar</strong></p>
 <p>Habiendo realizado un análisis de los hiperparámetros, se procede a elegir el mejor modelo. Esto a veces a muy evidente y otras no. En cualquier caso, puede automatizarse la extracción del mejor modelo:</p>
-<div class="sourceCode" id="cb266"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb266-1"><a href="k-nearest-neighbor.html#cb266-1" tabindex="-1"></a>best_params <span class="op">=</span> pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].best_params_</span>
-<span id="cb266-2"><a href="k-nearest-neighbor.html#cb266-2" tabindex="-1"></a>best_params</span></code></pre></div>
+<div class="sourceCode" id="cb264"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb264-1"><a href="k-nearest-neighbor.html#cb264-1" tabindex="-1"></a>best_params <span class="op">=</span> pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].best_params_</span>
+<span id="cb264-2"><a href="k-nearest-neighbor.html#cb264-2" tabindex="-1"></a>best_params</span></code></pre></div>
 <pre><code>## {&#39;metric&#39;: &#39;manhattan&#39;, &#39;n_neighbors&#39;: 19, &#39;p&#39;: 1, &#39;weights&#39;: &#39;uniform&#39;}</code></pre>
 <p>Sabiendo cuáles son los mejores hiperparámetros, se procede a extraer el modelo que <strong>DEBEREMOS AJUSTAR A TODOS LOS DATOS DE ENTRENAMIENTO</strong>.</p>
-<div class="sourceCode" id="cb268"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb268-1"><a href="k-nearest-neighbor.html#cb268-1" tabindex="-1"></a>best_estimator <span class="op">=</span> pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].best_estimator_</span>
-<span id="cb268-2"><a href="k-nearest-neighbor.html#cb268-2" tabindex="-1"></a>best_estimator</span></code></pre></div>
+<div class="sourceCode" id="cb266"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb266-1"><a href="k-nearest-neighbor.html#cb266-1" tabindex="-1"></a>best_estimator <span class="op">=</span> pipeline.named_steps[<span class="st">&#39;regressor&#39;</span>].best_estimator_</span>
+<span id="cb266-2"><a href="k-nearest-neighbor.html#cb266-2" tabindex="-1"></a>best_estimator</span></code></pre></div>
 <pre><code>## KNeighborsRegressor(metric=&#39;manhattan&#39;, n_neighbors=19, p=1)</code></pre>
 <p><strong>Paso 9: Ajuste de modelo final con todos los datos (Vuelve al paso 2, si es necesario)</strong></p>
 <p>Ahora obtendremos el modelo que mejor desempeño tiene y haremos las predicciones del conjunto de prueba con este modelo.</p>
 <p>Es importante volver a hacer el ajuste con el modelo elegido.</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb270-1"><a href="k-nearest-neighbor.html#cb270-1" tabindex="-1"></a>final_knn_pipeline <span class="op">=</span> Pipeline([</span>
-<span id="cb270-2"><a href="k-nearest-neighbor.html#cb270-2" tabindex="-1"></a>   (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
-<span id="cb270-3"><a href="k-nearest-neighbor.html#cb270-3" tabindex="-1"></a>   (<span class="st">&#39;regressor&#39;</span>, best_estimator)</span>
-<span id="cb270-4"><a href="k-nearest-neighbor.html#cb270-4" tabindex="-1"></a>])</span>
-<span id="cb270-5"><a href="k-nearest-neighbor.html#cb270-5" tabindex="-1"></a></span>
-<span id="cb270-6"><a href="k-nearest-neighbor.html#cb270-6" tabindex="-1"></a><span class="co"># Entrenar el pipeline</span></span>
-<span id="cb270-7"><a href="k-nearest-neighbor.html#cb270-7" tabindex="-1"></a>final_knn_pipeline.fit(ames_train_selected, ames_y_train)</span></code></pre></div>
+<div class="sourceCode" id="cb268"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb268-1"><a href="k-nearest-neighbor.html#cb268-1" tabindex="-1"></a>final_knn_pipeline <span class="op">=</span> Pipeline([</span>
+<span id="cb268-2"><a href="k-nearest-neighbor.html#cb268-2" tabindex="-1"></a>   (<span class="st">&#39;preprocessor&#39;</span>, preprocessor),</span>
+<span id="cb268-3"><a href="k-nearest-neighbor.html#cb268-3" tabindex="-1"></a>   (<span class="st">&#39;regressor&#39;</span>, best_estimator)</span>
+<span id="cb268-4"><a href="k-nearest-neighbor.html#cb268-4" tabindex="-1"></a>])</span>
+<span id="cb268-5"><a href="k-nearest-neighbor.html#cb268-5" tabindex="-1"></a></span>
+<span id="cb268-6"><a href="k-nearest-neighbor.html#cb268-6" tabindex="-1"></a><span class="co"># Entrenar el pipeline</span></span>
+<span id="cb268-7"><a href="k-nearest-neighbor.html#cb268-7" tabindex="-1"></a>final_knn_pipeline.fit(ames_train_selected, ames_y_train)</span></code></pre></div>
 <pre><code>## Pipeline(steps=[(&#39;preprocessor&#39;,
 ##                  ColumnTransformer(remainder=&#39;passthrough&#39;,
 ##                                    transformers=[(&#39;scaler&#39;, StandardScaler(),
@@ -1016,15 +1016,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Este último objeto creado es el modelo final entrenado, el cual contiene toda la información del pre-procesamiento de datos, por lo que en caso de ponerse en producción, sólo se necesita de los nuevos datos y de este último elemento para poder realizar nuevas predicciones.</p>
 <p><strong>Paso 10: Validar poder predictivo con datos de prueba</strong></p>
 <p>Imaginemos por un momento que pasa un mes de tiempo desde que hicimos nuestro modelo, es hora de ponerlo a prueba prediciendo valores de nuevos elementos:</p>
-<div class="sourceCode" id="cb272"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb272-1"><a href="k-nearest-neighbor.html#cb272-1" tabindex="-1"></a><span class="co">## Predicciones finales</span></span>
-<span id="cb272-2"><a href="k-nearest-neighbor.html#cb272-2" tabindex="-1"></a>y_pred_knn <span class="op">=</span> final_knn_pipeline.predict(ames_x_test)</span>
-<span id="cb272-3"><a href="k-nearest-neighbor.html#cb272-3" tabindex="-1"></a></span>
-<span id="cb272-4"><a href="k-nearest-neighbor.html#cb272-4" tabindex="-1"></a>results_reg <span class="op">=</span> (</span>
-<span id="cb272-5"><a href="k-nearest-neighbor.html#cb272-5" tabindex="-1"></a>  ames_x_test <span class="op">&gt;&gt;</span></span>
-<span id="cb272-6"><a href="k-nearest-neighbor.html#cb272-6" tabindex="-1"></a>  mutate(final_knn_pred <span class="op">=</span> y_pred_knn, Sale_Price <span class="op">=</span> ames_y_test) <span class="op">&gt;&gt;</span></span>
-<span id="cb272-7"><a href="k-nearest-neighbor.html#cb272-7" tabindex="-1"></a>  select(_.Sale_Price, _.final_knn_pred)</span>
-<span id="cb272-8"><a href="k-nearest-neighbor.html#cb272-8" tabindex="-1"></a>)</span>
-<span id="cb272-9"><a href="k-nearest-neighbor.html#cb272-9" tabindex="-1"></a>results_reg</span></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb270-1"><a href="k-nearest-neighbor.html#cb270-1" tabindex="-1"></a><span class="co">## Predicciones finales</span></span>
+<span id="cb270-2"><a href="k-nearest-neighbor.html#cb270-2" tabindex="-1"></a>y_pred_knn <span class="op">=</span> final_knn_pipeline.predict(ames_x_test)</span>
+<span id="cb270-3"><a href="k-nearest-neighbor.html#cb270-3" tabindex="-1"></a></span>
+<span id="cb270-4"><a href="k-nearest-neighbor.html#cb270-4" tabindex="-1"></a>results_reg <span class="op">=</span> (</span>
+<span id="cb270-5"><a href="k-nearest-neighbor.html#cb270-5" tabindex="-1"></a>  ames_x_test <span class="op">&gt;&gt;</span></span>
+<span id="cb270-6"><a href="k-nearest-neighbor.html#cb270-6" tabindex="-1"></a>  mutate(final_knn_pred <span class="op">=</span> y_pred_knn, Sale_Price <span class="op">=</span> ames_y_test) <span class="op">&gt;&gt;</span></span>
+<span id="cb270-7"><a href="k-nearest-neighbor.html#cb270-7" tabindex="-1"></a>  select(_.Sale_Price, _.final_knn_pred)</span>
+<span id="cb270-8"><a href="k-nearest-neighbor.html#cb270-8" tabindex="-1"></a>)</span>
+<span id="cb270-9"><a href="k-nearest-neighbor.html#cb270-9" tabindex="-1"></a>results_reg</span></code></pre></div>
 <pre><code>##       Sale_Price  final_knn_pred
 ## 390       165000       212511.16
 ## 1235      124000       186756.74
@@ -1041,22 +1041,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [586 rows x 2 columns]</code></pre>
 <p><strong>Métricas de desempeño</strong></p>
 <p>Ahora para calcular las métricas de desempeño usaremos la paquetería <em>MLmetrics</em>. Es posible definir nuestro propio conjunto de métricas que deseamos reportar creando el objeto <em>metric_set</em>:</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb274-1"><a href="k-nearest-neighbor.html#cb274-1" tabindex="-1"></a>me <span class="op">=</span> np.mean(y_obs <span class="op">-</span> y_pred_knn)</span>
-<span id="cb274-2"><a href="k-nearest-neighbor.html#cb274-2" tabindex="-1"></a>mae <span class="op">=</span> mean_absolute_error(y_obs, y_pred_knn)</span>
-<span id="cb274-3"><a href="k-nearest-neighbor.html#cb274-3" tabindex="-1"></a>mape <span class="op">=</span> mean_absolute_percentage_error(y_obs, y_pred_knn)</span>
-<span id="cb274-4"><a href="k-nearest-neighbor.html#cb274-4" tabindex="-1"></a>mse <span class="op">=</span> mean_squared_error(y_obs, y_pred_knn)</span>
-<span id="cb274-5"><a href="k-nearest-neighbor.html#cb274-5" tabindex="-1"></a>rmse <span class="op">=</span> np.sqrt(mse)</span>
-<span id="cb274-6"><a href="k-nearest-neighbor.html#cb274-6" tabindex="-1"></a>r2 <span class="op">=</span> r2_score(y_obs, y_pred_knn)</span>
-<span id="cb274-7"><a href="k-nearest-neighbor.html#cb274-7" tabindex="-1"></a>r2_adj <span class="op">=</span> adjusted_r2_score(y_true <span class="op">=</span> y_obs, y_pred <span class="op">=</span> y_pred_knn,</span>
-<span id="cb274-8"><a href="k-nearest-neighbor.html#cb274-8" tabindex="-1"></a>  n<span class="op">=</span>np.ceil(<span class="bu">len</span>(ames_train_selected)), p<span class="op">=</span><span class="bu">len</span>(ames_train_selected.columns))</span>
-<span id="cb274-9"><a href="k-nearest-neighbor.html#cb274-9" tabindex="-1"></a></span>
-<span id="cb274-10"><a href="k-nearest-neighbor.html#cb274-10" tabindex="-1"></a>metrics_data <span class="op">=</span> {</span>
-<span id="cb274-11"><a href="k-nearest-neighbor.html#cb274-11" tabindex="-1"></a>    <span class="st">&quot;Metric&quot;</span>: [<span class="st">&quot;ME&quot;</span>, <span class="st">&quot;MAE&quot;</span>, <span class="st">&quot;MAPE&quot;</span>, <span class="st">&quot;MSE&quot;</span>, <span class="st">&quot;RMSE&quot;</span>, <span class="st">&quot;R^2&quot;</span>, <span class="st">&quot;R^2 Adj&quot;</span>],</span>
-<span id="cb274-12"><a href="k-nearest-neighbor.html#cb274-12" tabindex="-1"></a>    <span class="st">&quot;Value&quot;</span>: [me, mae, mape, mse, rmse, r2, r2_adj]</span>
-<span id="cb274-13"><a href="k-nearest-neighbor.html#cb274-13" tabindex="-1"></a>}</span>
-<span id="cb274-14"><a href="k-nearest-neighbor.html#cb274-14" tabindex="-1"></a></span>
-<span id="cb274-15"><a href="k-nearest-neighbor.html#cb274-15" tabindex="-1"></a>metrics_df <span class="op">=</span> pd.DataFrame(metrics_data)</span>
-<span id="cb274-16"><a href="k-nearest-neighbor.html#cb274-16" tabindex="-1"></a>metrics_df</span></code></pre></div>
+<div class="sourceCode" id="cb272"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb272-1"><a href="k-nearest-neighbor.html#cb272-1" tabindex="-1"></a>me <span class="op">=</span> np.mean(y_obs <span class="op">-</span> y_pred_knn)</span>
+<span id="cb272-2"><a href="k-nearest-neighbor.html#cb272-2" tabindex="-1"></a>mae <span class="op">=</span> mean_absolute_error(y_obs, y_pred_knn)</span>
+<span id="cb272-3"><a href="k-nearest-neighbor.html#cb272-3" tabindex="-1"></a>mape <span class="op">=</span> mean_absolute_percentage_error(y_obs, y_pred_knn)</span>
+<span id="cb272-4"><a href="k-nearest-neighbor.html#cb272-4" tabindex="-1"></a>mse <span class="op">=</span> mean_squared_error(y_obs, y_pred_knn)</span>
+<span id="cb272-5"><a href="k-nearest-neighbor.html#cb272-5" tabindex="-1"></a>rmse <span class="op">=</span> np.sqrt(mse)</span>
+<span id="cb272-6"><a href="k-nearest-neighbor.html#cb272-6" tabindex="-1"></a>r2 <span class="op">=</span> r2_score(y_obs, y_pred_knn)</span>
+<span id="cb272-7"><a href="k-nearest-neighbor.html#cb272-7" tabindex="-1"></a>r2_adj <span class="op">=</span> adjusted_r2_score(y_true <span class="op">=</span> y_obs, y_pred <span class="op">=</span> y_pred_knn,</span>
+<span id="cb272-8"><a href="k-nearest-neighbor.html#cb272-8" tabindex="-1"></a>  n<span class="op">=</span>np.ceil(<span class="bu">len</span>(ames_train_selected)), p<span class="op">=</span><span class="bu">len</span>(ames_train_selected.columns))</span>
+<span id="cb272-9"><a href="k-nearest-neighbor.html#cb272-9" tabindex="-1"></a></span>
+<span id="cb272-10"><a href="k-nearest-neighbor.html#cb272-10" tabindex="-1"></a>metrics_data <span class="op">=</span> {</span>
+<span id="cb272-11"><a href="k-nearest-neighbor.html#cb272-11" tabindex="-1"></a>    <span class="st">&quot;Metric&quot;</span>: [<span class="st">&quot;ME&quot;</span>, <span class="st">&quot;MAE&quot;</span>, <span class="st">&quot;MAPE&quot;</span>, <span class="st">&quot;MSE&quot;</span>, <span class="st">&quot;RMSE&quot;</span>, <span class="st">&quot;R^2&quot;</span>, <span class="st">&quot;R^2 Adj&quot;</span>],</span>
+<span id="cb272-12"><a href="k-nearest-neighbor.html#cb272-12" tabindex="-1"></a>    <span class="st">&quot;Value&quot;</span>: [me, mae, mape, mse, rmse, r2, r2_adj]</span>
+<span id="cb272-13"><a href="k-nearest-neighbor.html#cb272-13" tabindex="-1"></a>}</span>
+<span id="cb272-14"><a href="k-nearest-neighbor.html#cb272-14" tabindex="-1"></a></span>
+<span id="cb272-15"><a href="k-nearest-neighbor.html#cb272-15" tabindex="-1"></a>metrics_df <span class="op">=</span> pd.DataFrame(metrics_data)</span>
+<span id="cb272-16"><a href="k-nearest-neighbor.html#cb272-16" tabindex="-1"></a>metrics_df</span></code></pre></div>
 <pre><code>##     Metric         Value
 ## 0       ME      -2465.53
 ## 1      MAE      45521.92
@@ -1065,86 +1065,86 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4     RMSE      65171.58
 ## 5      R^2          0.35
 ## 6  R^2 Adj          0.35</code></pre>
-<div class="sourceCode" id="cb276"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb276-1"><a href="k-nearest-neighbor.html#cb276-1" tabindex="-1"></a>(</span>
-<span id="cb276-2"><a href="k-nearest-neighbor.html#cb276-2" tabindex="-1"></a>  results_reg <span class="op">&gt;&gt;</span></span>
-<span id="cb276-3"><a href="k-nearest-neighbor.html#cb276-3" tabindex="-1"></a>    ggplot(aes(x <span class="op">=</span> <span class="st">&quot;final_knn_pred&quot;</span>, y <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>)) <span class="op">+</span></span>
-<span id="cb276-4"><a href="k-nearest-neighbor.html#cb276-4" tabindex="-1"></a>    geom_point() <span class="op">+</span></span>
-<span id="cb276-5"><a href="k-nearest-neighbor.html#cb276-5" tabindex="-1"></a>    geom_abline(color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
-<span id="cb276-6"><a href="k-nearest-neighbor.html#cb276-6" tabindex="-1"></a>    xlab(<span class="st">&quot;Prediction&quot;</span>) <span class="op">+</span></span>
-<span id="cb276-7"><a href="k-nearest-neighbor.html#cb276-7" tabindex="-1"></a>    ylab(<span class="st">&quot;Observation&quot;</span>) <span class="op">+</span></span>
-<span id="cb276-8"><a href="k-nearest-neighbor.html#cb276-8" tabindex="-1"></a>    ggtitle(<span class="st">&quot;Comparisson&quot;</span>)</span>
-<span id="cb276-9"><a href="k-nearest-neighbor.html#cb276-9" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb274"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb274-1"><a href="k-nearest-neighbor.html#cb274-1" tabindex="-1"></a>(</span>
+<span id="cb274-2"><a href="k-nearest-neighbor.html#cb274-2" tabindex="-1"></a>  results_reg <span class="op">&gt;&gt;</span></span>
+<span id="cb274-3"><a href="k-nearest-neighbor.html#cb274-3" tabindex="-1"></a>    ggplot(aes(x <span class="op">=</span> <span class="st">&quot;final_knn_pred&quot;</span>, y <span class="op">=</span> <span class="st">&quot;Sale_Price&quot;</span>)) <span class="op">+</span></span>
+<span id="cb274-4"><a href="k-nearest-neighbor.html#cb274-4" tabindex="-1"></a>    geom_point() <span class="op">+</span></span>
+<span id="cb274-5"><a href="k-nearest-neighbor.html#cb274-5" tabindex="-1"></a>    geom_abline(color <span class="op">=</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb274-6"><a href="k-nearest-neighbor.html#cb274-6" tabindex="-1"></a>    xlab(<span class="st">&quot;Prediction&quot;</span>) <span class="op">+</span></span>
+<span id="cb274-7"><a href="k-nearest-neighbor.html#cb274-7" tabindex="-1"></a>    ylab(<span class="st">&quot;Observation&quot;</span>) <span class="op">+</span></span>
+<span id="cb274-8"><a href="k-nearest-neighbor.html#cb274-8" tabindex="-1"></a>    ggtitle(<span class="st">&quot;Comparisson&quot;</span>)</span>
+<span id="cb274-9"><a href="k-nearest-neighbor.html#cb274-9" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-207-13.png" width="614" /></p>
 </div>
 <div id="importancia-de-variables" class="section level4 hasAnchor" number="7.4.1.3">
 <h4><span class="header-section-number">7.4.1.3</span> Importancia de variables<a href="k-nearest-neighbor.html#importancia-de-variables" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Antes de pasar al siguiente paso, es importante validar que hayamos hecho un uso correcto de las variables predictivas. En este momento es posible detectar variables que no estén aportando valor o variables que no debiéramos estar usando debido a que cometeríamos <a href="https://towardsdatascience.com/data-leakage-in-machine-learning-6161c167e8ba">data leakage</a>. Para enfrentar esto, ayuda estimar y ordenar el valor de importancia de cada variable en el modelo.</p>
-<div class="sourceCode" id="cb278"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb278-1"><a href="k-nearest-neighbor.html#cb278-1" tabindex="-1"></a>importance <span class="op">=</span> np.zeros(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>])</span>
-<span id="cb278-2"><a href="k-nearest-neighbor.html#cb278-2" tabindex="-1"></a></span>
-<span id="cb278-3"><a href="k-nearest-neighbor.html#cb278-3" tabindex="-1"></a><span class="co"># Realiza el procedimiento de permutación</span></span>
-<span id="cb278-4"><a href="k-nearest-neighbor.html#cb278-4" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>]):</span>
-<span id="cb278-5"><a href="k-nearest-neighbor.html#cb278-5" tabindex="-1"></a>    ames_x_test_permuted <span class="op">=</span> ames_x_test[columnas_seleccionadas].copy()</span>
-<span id="cb278-6"><a href="k-nearest-neighbor.html#cb278-6" tabindex="-1"></a>    ames_x_test_permuted.iloc[:, i] <span class="op">=</span> shuffle(ames_x_test_permuted.iloc[:, i], random_state<span class="op">=</span><span class="dv">42</span>)  </span>
-<span id="cb278-7"><a href="k-nearest-neighbor.html#cb278-7" tabindex="-1"></a>    <span class="co"># Permuta una característica</span></span>
-<span id="cb278-8"><a href="k-nearest-neighbor.html#cb278-8" tabindex="-1"></a>    y_pred_permuted <span class="op">=</span> final_knn_pipeline.predict(ames_x_test_permuted)</span>
-<span id="cb278-9"><a href="k-nearest-neighbor.html#cb278-9" tabindex="-1"></a>    mse_permuted <span class="op">=</span> mean_squared_error(ames_y_test, y_pred_permuted)</span>
-<span id="cb278-10"><a href="k-nearest-neighbor.html#cb278-10" tabindex="-1"></a>    importance[i] <span class="op">=</span> mse <span class="op">-</span> mse_permuted</span>
-<span id="cb278-11"><a href="k-nearest-neighbor.html#cb278-11" tabindex="-1"></a></span>
-<span id="cb278-12"><a href="k-nearest-neighbor.html#cb278-12" tabindex="-1"></a><span class="co"># Calcula la importancia relativa</span></span>
-<span id="cb278-13"><a href="k-nearest-neighbor.html#cb278-13" tabindex="-1"></a>importance <span class="op">=</span> importance <span class="op">/</span> importance.<span class="bu">sum</span>()</span>
-<span id="cb278-14"><a href="k-nearest-neighbor.html#cb278-14" tabindex="-1"></a>importance</span></code></pre></div>
+<div class="sourceCode" id="cb276"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb276-1"><a href="k-nearest-neighbor.html#cb276-1" tabindex="-1"></a>importance <span class="op">=</span> np.zeros(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>])</span>
+<span id="cb276-2"><a href="k-nearest-neighbor.html#cb276-2" tabindex="-1"></a></span>
+<span id="cb276-3"><a href="k-nearest-neighbor.html#cb276-3" tabindex="-1"></a><span class="co"># Realiza el procedimiento de permutación</span></span>
+<span id="cb276-4"><a href="k-nearest-neighbor.html#cb276-4" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>]):</span>
+<span id="cb276-5"><a href="k-nearest-neighbor.html#cb276-5" tabindex="-1"></a>    ames_x_test_permuted <span class="op">=</span> ames_x_test[columnas_seleccionadas].copy()</span>
+<span id="cb276-6"><a href="k-nearest-neighbor.html#cb276-6" tabindex="-1"></a>    ames_x_test_permuted.iloc[:, i] <span class="op">=</span> shuffle(ames_x_test_permuted.iloc[:, i], random_state<span class="op">=</span><span class="dv">42</span>)  </span>
+<span id="cb276-7"><a href="k-nearest-neighbor.html#cb276-7" tabindex="-1"></a>    <span class="co"># Permuta una característica</span></span>
+<span id="cb276-8"><a href="k-nearest-neighbor.html#cb276-8" tabindex="-1"></a>    y_pred_permuted <span class="op">=</span> final_knn_pipeline.predict(ames_x_test_permuted)</span>
+<span id="cb276-9"><a href="k-nearest-neighbor.html#cb276-9" tabindex="-1"></a>    mse_permuted <span class="op">=</span> mean_squared_error(ames_y_test, y_pred_permuted)</span>
+<span id="cb276-10"><a href="k-nearest-neighbor.html#cb276-10" tabindex="-1"></a>    importance[i] <span class="op">=</span> mse <span class="op">-</span> mse_permuted</span>
+<span id="cb276-11"><a href="k-nearest-neighbor.html#cb276-11" tabindex="-1"></a></span>
+<span id="cb276-12"><a href="k-nearest-neighbor.html#cb276-12" tabindex="-1"></a><span class="co"># Calcula la importancia relativa</span></span>
+<span id="cb276-13"><a href="k-nearest-neighbor.html#cb276-13" tabindex="-1"></a>importance <span class="op">=</span> importance <span class="op">/</span> importance.<span class="bu">sum</span>()</span>
+<span id="cb276-14"><a href="k-nearest-neighbor.html#cb276-14" tabindex="-1"></a>importance</span></code></pre></div>
 <pre><code>## array([0.71249685, 0.12976432, 0.15773883])</code></pre>
-<div class="sourceCode" id="cb280"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb280-1"><a href="k-nearest-neighbor.html#cb280-1" tabindex="-1"></a>importance_df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb280-2"><a href="k-nearest-neighbor.html#cb280-2" tabindex="-1"></a>  <span class="st">&#39;Variable&#39;</span>: columnas_seleccionadas, </span>
-<span id="cb280-3"><a href="k-nearest-neighbor.html#cb280-3" tabindex="-1"></a>  <span class="st">&#39;Importance&#39;</span>: importance</span>
-<span id="cb280-4"><a href="k-nearest-neighbor.html#cb280-4" tabindex="-1"></a>  })</span>
-<span id="cb280-5"><a href="k-nearest-neighbor.html#cb280-5" tabindex="-1"></a></span>
-<span id="cb280-6"><a href="k-nearest-neighbor.html#cb280-6" tabindex="-1"></a><span class="co"># Crea la gráfica de barras</span></span>
-<span id="cb280-7"><a href="k-nearest-neighbor.html#cb280-7" tabindex="-1"></a>(</span>
-<span id="cb280-8"><a href="k-nearest-neighbor.html#cb280-8" tabindex="-1"></a>  importance_df <span class="op">&gt;&gt;</span></span>
-<span id="cb280-9"><a href="k-nearest-neighbor.html#cb280-9" tabindex="-1"></a>  ggplot(aes(x<span class="op">=</span> <span class="st">&#39;reorder(Variable, Importance)&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importance&#39;</span>)) <span class="op">+</span> </span>
-<span id="cb280-10"><a href="k-nearest-neighbor.html#cb280-10" tabindex="-1"></a>  geom_bar(stat<span class="op">=</span><span class="st">&#39;identity&#39;</span>, fill<span class="op">=</span><span class="st">&#39;blue&#39;</span>, color <span class="op">=</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span> </span>
-<span id="cb280-11"><a href="k-nearest-neighbor.html#cb280-11" tabindex="-1"></a>  labs(title<span class="op">=</span><span class="st">&#39;Importancia de las Variables&#39;</span>, x<span class="op">=</span><span class="st">&#39;Variable&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importancia&#39;</span>) <span class="op">+</span></span>
-<span id="cb280-12"><a href="k-nearest-neighbor.html#cb280-12" tabindex="-1"></a>  coord_flip()</span>
-<span id="cb280-13"><a href="k-nearest-neighbor.html#cb280-13" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb278"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb278-1"><a href="k-nearest-neighbor.html#cb278-1" tabindex="-1"></a>importance_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb278-2"><a href="k-nearest-neighbor.html#cb278-2" tabindex="-1"></a>  <span class="st">&#39;Variable&#39;</span>: columnas_seleccionadas, </span>
+<span id="cb278-3"><a href="k-nearest-neighbor.html#cb278-3" tabindex="-1"></a>  <span class="st">&#39;Importance&#39;</span>: importance</span>
+<span id="cb278-4"><a href="k-nearest-neighbor.html#cb278-4" tabindex="-1"></a>  })</span>
+<span id="cb278-5"><a href="k-nearest-neighbor.html#cb278-5" tabindex="-1"></a></span>
+<span id="cb278-6"><a href="k-nearest-neighbor.html#cb278-6" tabindex="-1"></a><span class="co"># Crea la gráfica de barras</span></span>
+<span id="cb278-7"><a href="k-nearest-neighbor.html#cb278-7" tabindex="-1"></a>(</span>
+<span id="cb278-8"><a href="k-nearest-neighbor.html#cb278-8" tabindex="-1"></a>  importance_df <span class="op">&gt;&gt;</span></span>
+<span id="cb278-9"><a href="k-nearest-neighbor.html#cb278-9" tabindex="-1"></a>  ggplot(aes(x<span class="op">=</span> <span class="st">&#39;reorder(Variable, Importance)&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importance&#39;</span>)) <span class="op">+</span> </span>
+<span id="cb278-10"><a href="k-nearest-neighbor.html#cb278-10" tabindex="-1"></a>  geom_bar(stat<span class="op">=</span><span class="st">&#39;identity&#39;</span>, fill<span class="op">=</span><span class="st">&#39;blue&#39;</span>, color <span class="op">=</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span> </span>
+<span id="cb278-11"><a href="k-nearest-neighbor.html#cb278-11" tabindex="-1"></a>  labs(title<span class="op">=</span><span class="st">&#39;Importancia de las Variables&#39;</span>, x<span class="op">=</span><span class="st">&#39;Variable&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importancia&#39;</span>) <span class="op">+</span></span>
+<span id="cb278-12"><a href="k-nearest-neighbor.html#cb278-12" tabindex="-1"></a>  coord_flip()</span>
+<span id="cb278-13"><a href="k-nearest-neighbor.html#cb278-13" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-208-15.png" width="614" /></p>
 <p>La gráfica anterior muestra la importancia de una variable cuando se lleva a cabo una permutación. Dado que este resultado fue aleatorio, resulta vital contar con un conjunto de permutaciones que permitan conocer la caída promedio y desviación esperada en el desempeño cuando se elimina una variable o esta se vuelve inservible.</p>
-<div class="sourceCode" id="cb282"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb282-1"><a href="k-nearest-neighbor.html#cb282-1" tabindex="-1"></a>n_permutations <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb282-2"><a href="k-nearest-neighbor.html#cb282-2" tabindex="-1"></a>performance_losses <span class="op">=</span> []</span>
-<span id="cb282-3"><a href="k-nearest-neighbor.html#cb282-3" tabindex="-1"></a></span>
-<span id="cb282-4"><a href="k-nearest-neighbor.html#cb282-4" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>]):</span>
-<span id="cb282-5"><a href="k-nearest-neighbor.html#cb282-5" tabindex="-1"></a>    loss <span class="op">=</span> []</span>
-<span id="cb282-6"><a href="k-nearest-neighbor.html#cb282-6" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_permutations):</span>
-<span id="cb282-7"><a href="k-nearest-neighbor.html#cb282-7" tabindex="-1"></a>        ames_x_test_permuted <span class="op">=</span> ames_x_test[columnas_seleccionadas].copy()</span>
-<span id="cb282-8"><a href="k-nearest-neighbor.html#cb282-8" tabindex="-1"></a>        ames_x_test_permuted.iloc[:, i] <span class="op">=</span> np.random.permutation(ames_x_test_permuted.iloc[:, i])</span>
-<span id="cb282-9"><a href="k-nearest-neighbor.html#cb282-9" tabindex="-1"></a>        y_pred_permuted <span class="op">=</span> final_knn_pipeline.predict(ames_x_test_permuted)</span>
-<span id="cb282-10"><a href="k-nearest-neighbor.html#cb282-10" tabindex="-1"></a>        mse_permuted <span class="op">=</span> mean_squared_error(ames_y_test, y_pred_permuted)</span>
-<span id="cb282-11"><a href="k-nearest-neighbor.html#cb282-11" tabindex="-1"></a>        loss.append(mse_permuted)</span>
-<span id="cb282-12"><a href="k-nearest-neighbor.html#cb282-12" tabindex="-1"></a>    performance_losses.append(loss)</span>
-<span id="cb282-13"><a href="k-nearest-neighbor.html#cb282-13" tabindex="-1"></a></span>
-<span id="cb282-14"><a href="k-nearest-neighbor.html#cb282-14" tabindex="-1"></a>performance_losses <span class="op">=</span> performance_losses<span class="op">/</span>np.<span class="bu">sum</span>(performance_losses, axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb282-15"><a href="k-nearest-neighbor.html#cb282-15" tabindex="-1"></a>mean_losses <span class="op">=</span> np.mean(performance_losses, axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb282-16"><a href="k-nearest-neighbor.html#cb282-16" tabindex="-1"></a>std_losses <span class="op">=</span> np.std(performance_losses, axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb282-17"><a href="k-nearest-neighbor.html#cb282-17" tabindex="-1"></a></span>
-<span id="cb282-18"><a href="k-nearest-neighbor.html#cb282-18" tabindex="-1"></a>importance_df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb282-19"><a href="k-nearest-neighbor.html#cb282-19" tabindex="-1"></a>  <span class="st">&#39;Variable&#39;</span>: columnas_seleccionadas, </span>
-<span id="cb282-20"><a href="k-nearest-neighbor.html#cb282-20" tabindex="-1"></a>  <span class="st">&#39;Mean_Loss&#39;</span>: mean_losses, </span>
-<span id="cb282-21"><a href="k-nearest-neighbor.html#cb282-21" tabindex="-1"></a>  <span class="st">&#39;Std_Loss&#39;</span>: std_losses</span>
-<span id="cb282-22"><a href="k-nearest-neighbor.html#cb282-22" tabindex="-1"></a>  })</span></code></pre></div>
-<div class="sourceCode" id="cb283"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb283-1"><a href="k-nearest-neighbor.html#cb283-1" tabindex="-1"></a>(</span>
-<span id="cb283-2"><a href="k-nearest-neighbor.html#cb283-2" tabindex="-1"></a>  importance_df <span class="op">&gt;&gt;</span></span>
-<span id="cb283-3"><a href="k-nearest-neighbor.html#cb283-3" tabindex="-1"></a>  mutate(</span>
-<span id="cb283-4"><a href="k-nearest-neighbor.html#cb283-4" tabindex="-1"></a>    ymin <span class="op">=</span> _.Mean_Loss <span class="op">-</span> _.Std_Loss,</span>
-<span id="cb283-5"><a href="k-nearest-neighbor.html#cb283-5" tabindex="-1"></a>    ymax <span class="op">=</span> _.Mean_Loss <span class="op">+</span> _.Std_Loss) <span class="op">&gt;&gt;</span></span>
-<span id="cb283-6"><a href="k-nearest-neighbor.html#cb283-6" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&#39;reorder(Variable, Mean_Loss)&#39;</span>, y <span class="op">=</span> <span class="st">&quot;Mean_Loss&quot;</span>)) <span class="op">+</span></span>
-<span id="cb283-7"><a href="k-nearest-neighbor.html#cb283-7" tabindex="-1"></a>  geom_errorbar(aes(ymin<span class="op">=</span><span class="st">&#39;ymin&#39;</span>, ymax<span class="op">=</span><span class="st">&#39;ymax&#39;</span>),</span>
-<span id="cb283-8"><a href="k-nearest-neighbor.html#cb283-8" tabindex="-1"></a>    width<span class="op">=</span><span class="fl">0.2</span>, position<span class="op">=</span>position_dodge(<span class="fl">0.9</span>)) <span class="op">+</span></span>
-<span id="cb283-9"><a href="k-nearest-neighbor.html#cb283-9" tabindex="-1"></a>  geom_point(alpha <span class="op">=</span> <span class="fl">0.65</span>) <span class="op">+</span></span>
-<span id="cb283-10"><a href="k-nearest-neighbor.html#cb283-10" tabindex="-1"></a>  labs(title<span class="op">=</span><span class="st">&#39;Importancia de las Variables&#39;</span>, x<span class="op">=</span><span class="st">&#39;Variable&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importancia&#39;</span>) <span class="op">+</span></span>
-<span id="cb283-11"><a href="k-nearest-neighbor.html#cb283-11" tabindex="-1"></a>  coord_flip()</span>
-<span id="cb283-12"><a href="k-nearest-neighbor.html#cb283-12" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb280-1"><a href="k-nearest-neighbor.html#cb280-1" tabindex="-1"></a>n_permutations <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb280-2"><a href="k-nearest-neighbor.html#cb280-2" tabindex="-1"></a>performance_losses <span class="op">=</span> []</span>
+<span id="cb280-3"><a href="k-nearest-neighbor.html#cb280-3" tabindex="-1"></a></span>
+<span id="cb280-4"><a href="k-nearest-neighbor.html#cb280-4" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ames_x_test[columnas_seleccionadas].shape[<span class="dv">1</span>]):</span>
+<span id="cb280-5"><a href="k-nearest-neighbor.html#cb280-5" tabindex="-1"></a>    loss <span class="op">=</span> []</span>
+<span id="cb280-6"><a href="k-nearest-neighbor.html#cb280-6" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_permutations):</span>
+<span id="cb280-7"><a href="k-nearest-neighbor.html#cb280-7" tabindex="-1"></a>        ames_x_test_permuted <span class="op">=</span> ames_x_test[columnas_seleccionadas].copy()</span>
+<span id="cb280-8"><a href="k-nearest-neighbor.html#cb280-8" tabindex="-1"></a>        ames_x_test_permuted.iloc[:, i] <span class="op">=</span> np.random.permutation(ames_x_test_permuted.iloc[:, i])</span>
+<span id="cb280-9"><a href="k-nearest-neighbor.html#cb280-9" tabindex="-1"></a>        y_pred_permuted <span class="op">=</span> final_knn_pipeline.predict(ames_x_test_permuted)</span>
+<span id="cb280-10"><a href="k-nearest-neighbor.html#cb280-10" tabindex="-1"></a>        mse_permuted <span class="op">=</span> mean_squared_error(ames_y_test, y_pred_permuted)</span>
+<span id="cb280-11"><a href="k-nearest-neighbor.html#cb280-11" tabindex="-1"></a>        loss.append(mse_permuted)</span>
+<span id="cb280-12"><a href="k-nearest-neighbor.html#cb280-12" tabindex="-1"></a>    performance_losses.append(loss)</span>
+<span id="cb280-13"><a href="k-nearest-neighbor.html#cb280-13" tabindex="-1"></a></span>
+<span id="cb280-14"><a href="k-nearest-neighbor.html#cb280-14" tabindex="-1"></a>performance_losses <span class="op">=</span> performance_losses<span class="op">/</span>np.<span class="bu">sum</span>(performance_losses, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb280-15"><a href="k-nearest-neighbor.html#cb280-15" tabindex="-1"></a>mean_losses <span class="op">=</span> np.mean(performance_losses, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb280-16"><a href="k-nearest-neighbor.html#cb280-16" tabindex="-1"></a>std_losses <span class="op">=</span> np.std(performance_losses, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb280-17"><a href="k-nearest-neighbor.html#cb280-17" tabindex="-1"></a></span>
+<span id="cb280-18"><a href="k-nearest-neighbor.html#cb280-18" tabindex="-1"></a>importance_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb280-19"><a href="k-nearest-neighbor.html#cb280-19" tabindex="-1"></a>  <span class="st">&#39;Variable&#39;</span>: columnas_seleccionadas, </span>
+<span id="cb280-20"><a href="k-nearest-neighbor.html#cb280-20" tabindex="-1"></a>  <span class="st">&#39;Mean_Loss&#39;</span>: mean_losses, </span>
+<span id="cb280-21"><a href="k-nearest-neighbor.html#cb280-21" tabindex="-1"></a>  <span class="st">&#39;Std_Loss&#39;</span>: std_losses</span>
+<span id="cb280-22"><a href="k-nearest-neighbor.html#cb280-22" tabindex="-1"></a>  })</span></code></pre></div>
+<div class="sourceCode" id="cb281"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb281-1"><a href="k-nearest-neighbor.html#cb281-1" tabindex="-1"></a>(</span>
+<span id="cb281-2"><a href="k-nearest-neighbor.html#cb281-2" tabindex="-1"></a>  importance_df <span class="op">&gt;&gt;</span></span>
+<span id="cb281-3"><a href="k-nearest-neighbor.html#cb281-3" tabindex="-1"></a>  mutate(</span>
+<span id="cb281-4"><a href="k-nearest-neighbor.html#cb281-4" tabindex="-1"></a>    ymin <span class="op">=</span> _.Mean_Loss <span class="op">-</span> _.Std_Loss,</span>
+<span id="cb281-5"><a href="k-nearest-neighbor.html#cb281-5" tabindex="-1"></a>    ymax <span class="op">=</span> _.Mean_Loss <span class="op">+</span> _.Std_Loss) <span class="op">&gt;&gt;</span></span>
+<span id="cb281-6"><a href="k-nearest-neighbor.html#cb281-6" tabindex="-1"></a>  ggplot(aes(x <span class="op">=</span> <span class="st">&#39;reorder(Variable, Mean_Loss)&#39;</span>, y <span class="op">=</span> <span class="st">&quot;Mean_Loss&quot;</span>)) <span class="op">+</span></span>
+<span id="cb281-7"><a href="k-nearest-neighbor.html#cb281-7" tabindex="-1"></a>  geom_errorbar(aes(ymin<span class="op">=</span><span class="st">&#39;ymin&#39;</span>, ymax<span class="op">=</span><span class="st">&#39;ymax&#39;</span>),</span>
+<span id="cb281-8"><a href="k-nearest-neighbor.html#cb281-8" tabindex="-1"></a>    width<span class="op">=</span><span class="fl">0.2</span>, position<span class="op">=</span>position_dodge(<span class="fl">0.9</span>)) <span class="op">+</span></span>
+<span id="cb281-9"><a href="k-nearest-neighbor.html#cb281-9" tabindex="-1"></a>  geom_point(alpha <span class="op">=</span> <span class="fl">0.65</span>) <span class="op">+</span></span>
+<span id="cb281-10"><a href="k-nearest-neighbor.html#cb281-10" tabindex="-1"></a>  labs(title<span class="op">=</span><span class="st">&#39;Importancia de las Variables&#39;</span>, x<span class="op">=</span><span class="st">&#39;Variable&#39;</span>, y<span class="op">=</span><span class="st">&#39;Importancia&#39;</span>) <span class="op">+</span></span>
+<span id="cb281-11"><a href="k-nearest-neighbor.html#cb281-11" tabindex="-1"></a>  coord_flip()</span>
+<span id="cb281-12"><a href="k-nearest-neighbor.html#cb281-12" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## &lt;Figure Size: (640 x 480)&gt;</code></pre>
 <p><img src="amt23_01intro2dsml_py_files/figure-html/unnamed-chunk-210-17.png" width="614" /></p>
 <p>Si en la gráfica anterior notamos algo raro en cuanto a la(s) variable(s) más importante(s) y la factibilidad de conseguirla(s) o usarla(s)… ¡¡HAY QUE EMPEZAR DESDE CERO SIN CONSIDERAR ESA VARIABLE!!</p>

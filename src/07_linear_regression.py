@@ -68,7 +68,7 @@ def custom_function(X, col):
 custom_transformer = FunctionTransformer(
  custom_function, feature_names_out = 'one-to-one', validate=False,
  kw_args={'col': 'Gr_Liv_Area'}
- )
+ ).set_output(transform ='pandas')
 
 # ColumnTransformer para aplicar transformaciones
 preprocessor = ColumnTransformer(
@@ -81,17 +81,12 @@ preprocessor = ColumnTransformer(
     ],
     remainder = 'passthrough',  # Mantener las columnas restantes sin cambios
     verbose_feature_names_out = True
-)
+).set_output(transform ='pandas')
 
 transformed_data = preprocessor.fit_transform(ames_train_selected)
-new_column_names = preprocessor.get_feature_names_out()
 
-transformed_df = pd.DataFrame(
-  transformed_data, columns=new_column_names
-  )
-
-transformed_df
-transformed_df.info()
+transformed_data
+transformed_data.info()
 
 
 #### PIPELINE Y MODELADO
@@ -100,7 +95,7 @@ transformed_df.info()
 pipeline = Pipeline([
    ('preprocessor', preprocessor),
    ('regressor', LinearRegression())
-])
+]).set_output(transform ='pandas')
 
 # Entrenar el pipeline
 results = pipeline.fit(ames_train_selected, ames_y_train)
@@ -112,7 +107,9 @@ y_pred = pipeline.predict(ames_x_test)
 
 ames_test = (
   ames_x_test >>
-  mutate(Sale_Price_Pred = y_pred, Sale_Price = ames_y_test)
+  mutate(
+   Sale_Price_Pred = y_pred, 
+   Sale_Price = ames_y_test)
 )
 
 ames_test.info()
@@ -125,7 +122,7 @@ ames_test >>
 
 ##### Extracción de coeficientes
 
-X_train_with_intercept = sm.add_constant(transformed_df)
+X_train_with_intercept = sm.add_constant(transformed_data)
 model = sm.OLS(ames_y_train, X_train_with_intercept).fit()
 
 model.summary()

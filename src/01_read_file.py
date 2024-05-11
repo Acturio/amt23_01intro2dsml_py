@@ -1,15 +1,27 @@
-import pickle
 import pandas as pd
+import pandas
 import numpy as np
+from pandas import read_csv, read_excel
 
+import koalas as ko
 #### lectura de archivo .csv ####
 
+#ames_csv = pd.read_csv("~/Documents/Freelance/amat/amt23_01intro2dsml_py/data/ames.csv")
+data_csv = pandas.read_csv("data/ames.csv")
 data_csv = pd.read_csv("data/ames.csv")
+data_csv = read_csv("data/ames.csv")
+
+pd.read_csv
+ko.read_csv
+
+#del data_csv
+data_csv
 
 data_csv.info()
 
 pd.set_option('display.max_columns', 6)
 data_csv.head(5)
+data_csv.tail(5)
 
 data_csv.describe()
 
@@ -28,23 +40,9 @@ ames_xlsx.head(3)
 
 #### lectura de archivo .pkl ####
 
-## escritura
-with open('data/ames200.pkl', 'wb') as f:
-    pickle.dump(ames_xlsx, f, pickle.HIGHEST_PROTOCOL)
+data_csv.to_pickle("data/ames.pkl")
 
-## lectura
-with open('data/ames200.pkl', 'rb') as f:
-    ames_pkl_200 = pickle.load(f)
-
-
-ames_pkl_200.head(5)
-
-
-
-
-
-
-
-
+ames_pkl = pd.read_pickle("data/ames.pkl")
+ames_pkl.head(5)
 
 

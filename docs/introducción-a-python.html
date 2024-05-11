@@ -632,18 +632,12 @@ Figure 2.1: Páneles de trabajo de Rstudio
 <div id="archivos-pickle" class="section level3 hasAnchor" number="2.4.4">
 <h3><span class="header-section-number">2.4.4</span> Archivos pickle<a href="introducción-a-python.html#archivos-pickle" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Un tipo de archivo que resulta de particular interés, es el <em>.pkl</em>. Este archivo comprime cualquier objeto o resultado que sea usado o producido en <em>python</em>. Uno puede almacenar el objeto de interés de la siguiente manera:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="introducción-a-python.html#cb15-1" tabindex="-1"></a><span class="im">import</span> pickle</span>
-<span id="cb15-2"><a href="introducción-a-python.html#cb15-2" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="introducción-a-python.html#cb15-3" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;data/ames.pkl&#39;</span>, <span class="st">&#39;wb&#39;</span>) <span class="im">as</span> f:</span>
-<span id="cb15-4"><a href="introducción-a-python.html#cb15-4" tabindex="-1"></a>    pickle.dump(ames_xlsx, f, pickle.HIGHEST_PROTOCOL)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="introducción-a-python.html#cb15-1" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="introducción-a-python.html#cb15-2" tabindex="-1"></a>ames_xlsx.to_pickle(<span class="st">&#39;data/ames.pkl&#39;</span>)</span></code></pre></div>
 <p>Puede observarse que en el explorador de archivos se encuentra ahora el nuevo archivo con extensión <em>.pkl</em>, el cual puede ser posteriormente incorporado a una sesión de <em>python</em> para seguir trabajando con él.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="introducción-a-python.html#cb16-1" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;data/ames.pkl&#39;</span>, <span class="st">&#39;rb&#39;</span>) <span class="im">as</span> f:</span>
-<span id="cb16-2"><a href="introducción-a-python.html#cb16-2" tabindex="-1"></a>    ames_pkl <span class="op">=</span> pickle.load(f)</span>
-<span id="cb16-3"><a href="introducción-a-python.html#cb16-3" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="introducción-a-python.html#cb16-4" tabindex="-1"></a><span class="co"># alternativa</span></span>
-<span id="cb16-5"><a href="introducción-a-python.html#cb16-5" tabindex="-1"></a><span class="co"># ames_pkl = pd.read_pickle(&#39;data/ames.pkl&#39;)</span></span>
-<span id="cb16-6"><a href="introducción-a-python.html#cb16-6" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="introducción-a-python.html#cb16-7" tabindex="-1"></a>ames_pkl.head(<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="introducción-a-python.html#cb16-1" tabindex="-1"></a>ames_pkl <span class="op">=</span> pd.read_pickle(<span class="st">&#39;data/ames.pkl&#39;</span>)</span>
+<span id="cb16-2"><a href="introducción-a-python.html#cb16-2" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="introducción-a-python.html#cb16-3" tabindex="-1"></a>ames_pkl.head(<span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##                            MS_SubClass                 MS_Zoning  \
 ## 0  One_Story_1946_and_Newer_All_Styles   Residential_Low_Density   
 ## 1  One_Story_1946_and_Newer_All_Styles  Residential_High_Density   

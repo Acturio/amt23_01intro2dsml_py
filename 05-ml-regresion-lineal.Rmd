@@ -308,7 +308,7 @@ ames_x_train, ames_x_test, ames_y_train, ames_y_test = train_test_split(
 from mlxtend.feature_selection import ColumnSelector
 
 # Seleccionamos las variales numéricas de interés
-num_cols = ["Full_Bath", "Half_Bath"]
+num_cols = ["Full_Bath", "Half_Bath", "Gr_Liv_Area"]
 
 # Seleccionamos las variables categóricas de interés
 cat_cols = ["Overall_Cond"]
@@ -326,27 +326,34 @@ ames_train_selected = pd.DataFrame(
 
 ames_train_selected.info()
 
+## TRANSFORMACIÓN DE COLUMNAS
+
+def custom_function(X, col):
+  X[col] = np.log1p(X[col].astype(float)) # esta función calcula el logaritmo de x+1. 
+  # Evita problemas al calcular log(0)
+  return X
+
+custom_transformer = FunctionTransformer(
+ custom_function, feature_names_out = 'one-to-one', validate=False,
+ kw_args={'col': 'Gr_Liv_Area'}
+ ).set_output(transform ='pandas')
+
 # ColumnTransformer para aplicar transformaciones
 preprocessor = ColumnTransformer(
-    transformers = [
-        ('scaler', StandardScaler(), num_cols),
-        ('onehotencoding', OneHotEncoder(drop='first'), cat_cols)
+        transformers = [
+      ('log_std_transform', Pipeline([
+          ('log', custom_transformer), 
+          ('scaler', StandardScaler())]), ['Gr_Liv_Area']),
+      ('scaler', StandardScaler(), list(set(num_cols) - set(["Gr_Liv_Area"]))),
+      ('onehotencoding', OneHotEncoder(drop='first', sparse_output=False), cat_cols)
     ],
-    verbose_feature_names_out = False,
-    remainder = 'passthrough'  # Mantener las columnas restantes sin cambios
-)
+    remainder = 'passthrough',  # Mantener las columnas restantes sin cambios
+    verbose_feature_names_out = True
+).set_output(transform ='pandas')
 
 transformed_data = preprocessor.fit_transform(ames_train_selected)
-new_column_names = preprocessor.get_feature_names_out()
 
-transformed_df = pd.DataFrame(
-  transformed_data.todense(), 
-  columns=new_column_names
-  )
-  
-transformed_df
-
-transformed_df.info()
+transformed_data.info()
 
 ```
 
@@ -358,7 +365,7 @@ transformed_df.info()
 pipeline = Pipeline([
    ('preprocessor', preprocessor),
    ('regressor', LinearRegression())
-])
+]).set_output(transform ='pandas')
 
 # Entrenar el pipeline
 results = pipeline.fit(ames_train_selected, ames_y_train)
@@ -390,7 +397,7 @@ ames_test >>
 ```{python}
 import statsmodels.api as sm
 
-X_train_with_intercept = sm.add_constant(transformed_df)
+X_train_with_intercept = sm.add_constant(transformed_data)
 model = sm.OLS(ames_y_train, X_train_with_intercept).fit()
 
 model.summary()

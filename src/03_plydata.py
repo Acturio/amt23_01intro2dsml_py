@@ -9,6 +9,12 @@ ames_housing = pd.read_csv("data/ames.csv")
 (
   ames_housing >>
   mutate(Antique = _.Year_Sold - _.Year_Remod_Add) >>
+  mutate(Antique_status = if_else(_.Antique < 10, "new", "old") )
+)
+
+(
+  ames_housing >>
+  mutate(Antique = _.Year_Sold - _.Year_Remod_Add) >>
   mutate(Antique_status = if_else(_.Antique < 10, "new", "old") ) >>
   pr.group_by("Antique_status") >>
   pr.tally()
@@ -16,8 +22,8 @@ ames_housing = pd.read_csv("data/ames.csv")
 
 #### pivote horizontal ####
 
-with open('data/loc_mun_cdmx.pkl', 'rb') as f:
-    loc_mun_cdmx = pickle.load(f)
+
+loc_mun_cdmx = pd.read_pickle('data/loc_mun_cdmx.pkl')
 
 
 loc_mun_cdmx
@@ -38,35 +44,41 @@ loc_mun_cdmx >>
 
 
 
-with open('data/us_rent_income.pkl', 'rb') as f:
-    us_rent_income = pickle.load(f)
+# with open('data/us_rent_income.pkl', 'rb') as f:
+#     us_rent_income = pickle.load(f)
 
+us_rent_income = pd.read_pickle('data/us_rent_income.pkl')
 us_rent_income
+
 
 (
 us_rent_income >>
-    select(-_.GEOID) >>
+    select(-_.GEOID)
+)
+
+pd.set_option('display.max_columns', 6)
+(
+us_rent_income >>
+    #select(-_.GEOID) >>
     pivot_wider(
      names_from = "variable", 
-     values_from = ["estimate", "moe"]
+     values_from = ["estimate", "moe"],
+     id_cols = "GEOID"
     )
 )
 
 #### Pivote vertical ####
 
-with open('data/relig_income.pkl', 'rb') as f:
-    relig_income = pickle.load(f)
-
+relig_income = pd.read_pickle('data/relig_income.pkl')
 relig_income
-
 
 (
  relig_income >>
  pivot_longer(
   cols = ['<$10k', '$10-20k', '$20-30k', '$30-40k', '$40-50k', '$50-75k',
           '$75-100k', '$100-150k', '>150k', "Don't know/refused"], 
-  names_to = "income", 
-  values_to = "count")
+  names_to = "rango", 
+  values_to = "casos")
 )
 
 

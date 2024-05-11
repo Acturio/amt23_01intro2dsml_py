@@ -7,7 +7,8 @@ install_python(version = "3.10:latest", list = TRUE)
 ####################
 
 # create a new environment 
-use_python("tu_ruta_instalación_python")
+use_python("/usr/bin/python3.10")
+
 virtualenv_create(envname = "venv_dsml_py3_10", python_version = "python3.10")
 virtualenv_create(envname = "venv_dsml_py3_11", python_version = "python3.11")
 virtualenv_create(envname = "venv_merama", python_version = "python3.9.1")

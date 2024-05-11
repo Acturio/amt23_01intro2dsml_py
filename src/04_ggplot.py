@@ -1,3 +1,4 @@
+import numpy as np
 from siuba import *
 from plotnine import data as p9d
 from plotnine import *
@@ -9,16 +10,32 @@ from sklearn import datasets
 diamonds = p9d.diamonds
 diamonds
 
+(
+ diamonds >>
+ ggplot(aes(x = "cut", y = "price")) +
+ geom_boxplot(aes(color = "cut"), fill = "#0c315e") +
+ labs(title = "Precio por calidad de corte",
+      x = "corte",
+      y = "precio") +
+ guides(color = guide_legend(title = "Calidad de corte")) +
+ theme(axis_text_x=element_text(angle=20, size = 5)) +
+ scale_y_continuous(labels=comma_format(), limits = np.array([0, 20000]))
+)
+
+
+
 
 (
 diamonds >>
   ggplot(aes(x = "price")) +
-  geom_histogram(color = "pink", fill = "purple", bins=100) +
+  geom_histogram(color = "pink", fill = "purple", bins=50) +
   scale_x_continuous(labels=dollar_format(big_mark=',')) + 
   scale_y_continuous(labels=comma_format()) + 
   ggtitle("Distribución de precio") +
-  theme(axis_text_x=element_text(angle=90))
+  labs(x = "Precio", y = "Conteo") + 
+  theme(axis_text_x=element_text(angle=10))
 )
+
 
 
 
@@ -26,7 +43,8 @@ diamonds >>
 (
  diamonds >>
   ggplot(aes(x = "price")) +
-  geom_histogram(aes(y='stat(density)'), bins = 30, fill = 'purple', color = "red") +
+  geom_histogram(aes(y='stat(density)'), 
+  bins = 30, fill = 'purple', color = "red") +
   geom_density(colour = "black", size = 1)
 )
 
@@ -64,6 +82,7 @@ diamonds >>
   geom_bar( color= "darkblue", fill= "cyan", alpha= 0.7) +
   scale_y_continuous(labels = comma_format()) +
   ggtitle("Distribución de calidad de corte") +
+  labs(x = "Corte", y = "Conteo") +
   theme_dark()
 )
 
@@ -77,10 +96,12 @@ diamonds >>
    aes(label=after_stat('count'), group=1),
      stat='count',
      nudge_x=0,
-     nudge_y=0.125,
+     nudge_y=5,
      va='bottom',
+     size = 5,
      format_string='{:,.0f}') +
-  scale_y_continuous(labels = comma_format()) +
+  scale_y_continuous(labels = comma_format(), 
+  limits = np.array([0, 15000])) +
   ggtitle("Distribución claridad") 
 )
 
@@ -88,18 +109,21 @@ diamonds >>
 
 (
 diamonds >> 
-  ggplot( aes( x = "clarity")) + 
-  geom_bar( fill= "darkblue", color= "black", alpha= 0.9) +
+  ggplot(mapping = aes( x = "clarity")) + 
+  geom_bar(aes(fill= "cut"), color= "black", alpha= 0.9) +
   geom_text(
-   aes(label=after_stat('count / sum(count) * 100'), group=1),
-     color = "white",
+   aes(label=after_stat('count / sum(count) * 100'), group="cut"),
+     color = "black",
      stat='count',
      va='bottom',
-     ha='right',
+     #position = position_dodge2(width =1),
+     #ha='center',
+     size = 6,
      format_string='{:.1f}%') +
   scale_y_continuous(labels = comma_format()) +
-  ggtitle("Distribución claridad") +
-  coord_flip() 
+  coord_flip() +
+  facet_wrap("cut", scales = "free", ncol = 2) +
+  ggtitle("Distribución claridad") #+
 )
 
 
@@ -124,7 +148,13 @@ diamonds >>
 (
 diamonds >> 
   ggplot(aes(x = "price" ,fill = "cut"))  + 
-  geom_histogram(position = 'identity', alpha = 0.5)
+  geom_histogram(position = 'identity', alpha = 0.5) +
+  theme(
+   axis_text_x=element_text(size = 5),
+   axis_text_y=element_text(size = 5),
+   ) +
+  facet_wrap("cut", scales = "free_y", ncol =2) +
+  scale_fill_discrete(guide=False)
 )
 
 
@@ -142,7 +172,7 @@ diamonds >>
 diamonds >> 
   ggplot( aes(x = "carat", y = "price")) +
   geom_point(aes(color = "clarity"), size = 0.5, alpha = 0.3 ) +
-  geom_smooth() +
+  geom_smooth(stat='smooth') +
   ylim(0, 20000)
 )
 

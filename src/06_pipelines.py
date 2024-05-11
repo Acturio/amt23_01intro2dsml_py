@@ -68,11 +68,14 @@ X_train_cat = pd.DataFrame({
 X_train_cat
 
 # Crear una instancia de OneHotEncoder
-encoder = OneHotEncoder(drop=None, handle_unknown='ignore', sparse_output=False)
+encoder = OneHotEncoder(
+ drop=None, 
+ handle_unknown='ignore', 
+ sparse_output=False
+ ).set_output(transform ='pandas')
 
 # Ajustar y transformar el encoder en los datos de entrenamiento
 X_train_encoded = encoder.fit_transform(X_train_cat)
-X_train_encoded = pd.DataFrame(X_train_encoded, columns = ['A', 'B', 'C'])
 X_train_encoded
 
 # Datos de prueba
@@ -81,7 +84,7 @@ X_test_cat = pd.DataFrame({
 })
 
 # Transformar los datos de prueba utilizando el encoder ajustado
-X_test_encoded = pd.DataFrame(encoder.transform(X_test_cat), columns = ['A', 'B', 'C'])
+X_test_encoded = encoder.transform(X_test_cat)
 X_test_encoded
 
 ######### IMPUTACIÓN ############
@@ -114,7 +117,7 @@ column_transformer = ColumnTransformer(transformers=[
     ('median_imputer', imputer_median, [1]),
     ('mode_imputer', imputer_mode, [2]),
     ('arbitrary_imputer', imputer_arbitrary, [3]) 
-])
+]).set_output(transform ='pandas')
 
 # Crear el pipeline con el ColumnTransformer
 pipeline = Pipeline(steps=[
@@ -144,7 +147,7 @@ imputer_constant = SimpleImputer(strategy='constant', fill_value='Unknown')
 column_transformer = ColumnTransformer(transformers=[
     ('most_frequent_imputer', imputer_most_frequent, ['Columna1']),  
     ('constant_imputer', imputer_constant, ['Columna2']) 
-])
+]).set_output(transform ='pandas')
 
 # Aplicar el ColumnTransformer a los datos
 imputed_data = column_transformer.fit_transform(data)
@@ -189,7 +192,7 @@ preprocessor = ColumnTransformer(
         ('interactions', interaction_transformer, ['C1', 'C2'])
     ],
     remainder='passthrough'  # Mantener las columnas restantes sin cambios
-)
+).set_output(transform ='pandas')
 
 # Ajustar el pipeline y transformar a los datos
 preprocessor.fit_transform(data)
@@ -218,7 +221,7 @@ ct = ColumnTransformer(
   ('num', StandardScaler(), ['edad', 'ingreso']),
   ('cat', OneHotEncoder(drop='first'), ['sexo', 'educacion'])],
   verbose_feature_names_out = False
-  ) 
+  )
 
 # Ajuste y transformación en data
 transformed_data = ct.fit_transform(data)

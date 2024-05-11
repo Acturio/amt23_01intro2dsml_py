@@ -9,11 +9,15 @@ ames = pd.read_csv("data/ames.csv")
 print("Tamaño de conjunto completo: ", ames.shape)
 
 y = ames >> pull("Sale_Price")
+y = select(ames, "Sale_Price")
+y = pull(ames, "Sale_Price")
+
 X = select(ames, -_.Sale_Price)
 
 X_train, X_test, y_train, y_test = train_test_split(
  X, y, 
  test_size = 0.20, 
+ #train_size = 0.80, 
  random_state = 12345
  )
 
@@ -39,6 +43,7 @@ X_train, X_test, y_train, y_test = train_test_split(
  random_state = 12345, 
  stratify = stratify_variable
  )
+ 
 
 ################################################################################
 
@@ -79,7 +84,8 @@ loo = LeaveOneOut()
 
 # Realiza la validación cruzada LOOCV y obtén los scores de cada iteración
 scores = cross_val_score(
- regressor, X, y, cv = loo, 
+ regressor, X, y, 
+ cv = loo, 
  scoring='neg_mean_squared_error',
  error_score = 'raise'
  )
